@@ -2,7 +2,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
-import UserMenu from "@/components/custom/UserMenu"; // Make sure you have this component
+import Header from "@/components/custom/Header"; // Adjust path if needed
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
@@ -11,17 +11,26 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  const { user } = session;
+  const user = session.user ?? {
+    name: "Anonymous",
+    email: "No email",
+    image: null,
+    login: null,
+  };
 
   return (
-    <main className="p-8">
-      {/* Top Bar */}
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-        <UserMenu user={user ?? {}} />
+    <main>
+      <Header />
+      <div className="p-8">
+        <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+        <p>
+          Welcome,{" "}
+          {user.login
+            ? user.login // ✅ Show GitHub username if present
+            : user.name ?? "Guest"}
+          !
+        </p>
       </div>
-
-      <p>Welcome, {user?.name ?? "Guest"}!</p>
     </main>
   );
 }
