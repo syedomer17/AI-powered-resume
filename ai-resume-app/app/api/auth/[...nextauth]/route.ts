@@ -108,6 +108,7 @@ export const authOptions: AuthOptions = {
             emailVerified: true,
             avatar: user.image || DEFAULT_AVATAR,
             bio: "",
+            githubUsername: user.login,
             // ✅ Optional: If you want to store login in DB, add a field in your User schema
             // githubUsername: user.login,
           });

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation"; // ✅ Import this
 import { Button } from "@/components/ui/button";
 import UserMenu from "@/components/custom/UserMenu"; // adjust import path if needed
+import { Loader2 } from "lucide-react";
 
 export default function Header() {
   const { data: session, status } = useSession();
@@ -26,7 +27,7 @@ export default function Header() {
 
       {status === "loading" ? (
         <div className="animate-pulse">
-          <Button disabled>Loading...</Button>
+          <Button disabled><Loader2 className="animate-spin"/></Button>
         </div>
       ) : user ? (
         <div className="flex items-center gap-3">
