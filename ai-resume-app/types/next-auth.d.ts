@@ -7,6 +7,7 @@ declare module "next-auth" {
       name?: string | null;
       email?: string | null;
       image?: string | null;
+      login?: string | null; // ✅ Add GitHub username
     };
   }
 
@@ -15,6 +16,7 @@ declare module "next-auth" {
     name?: string | null;
     email?: string | null;
     image?: string | null;
+    login?: string | null; // ✅ Add GitHub username
   }
 }
 
@@ -25,6 +27,7 @@ declare module "next-auth/jwt" {
       name?: string | null;
       email?: string | null;
       image?: string | null;
+      login?: string | null; // ✅ Add GitHub username
     };
   }
 }

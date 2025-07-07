@@ -11,7 +11,7 @@ export default function UserMenu({
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const toggleMenu = () => setOpen(!open);
+  const toggleMenu = () => setOpen((prev) => !prev);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -34,9 +34,9 @@ export default function UserMenu({
         <img
           src={
             user.image ||
-            "https://www.gravatar.com/avatar?d=mp"
+            "https://play-lh.googleusercontent.com/nV5JHE9tyyqNcVqh0JLVGoV2ldpAqC8htiBpsbjqxATjXQnpNTKgU99B-euShOJPu-8"
           }
-          alt="User Avatar"
+          alt={user.name ? `${user.name}'s avatar` : "User avatar"}
           className="w-10 h-10 rounded-full border"
         />
       </button>
@@ -46,11 +46,13 @@ export default function UserMenu({
         <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg z-10">
           <div className="p-4">
             <p className="font-semibold">{user.name || "Anonymous"}</p>
-            <p className="text-sm text-gray-500 truncate">{user.email || "No email"}</p>
+            <p className="text-sm text-gray-500 truncate">
+              {user.email || "No email"}
+            </p>
           </div>
           <div className="border-t border-gray-200"></div>
           <button
-            onClick={() => signOut()}
+            onClick={() => signOut({ callbackUrl: "/" })}
             className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
           >
             Sign out

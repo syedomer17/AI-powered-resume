@@ -1,14 +1,15 @@
 "use client";
 
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation"; // ✅ Import this
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import UserMenu from "@/components/custom/UserMenu"; // adjust import path if needed
 
 export default function Header() {
   const { data: session, status } = useSession();
-
+  const pathname = usePathname(); // ✅ Get current path
   const user = session?.user;
 
   return (
@@ -28,27 +29,17 @@ export default function Header() {
           <Button disabled>Loading...</Button>
         </div>
       ) : user ? (
-        <div className="flex items-center gap-2">
-          <Link href="/dashboard">
-            <Button variant="outline">Dashboard</Button>
-          </Link>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Image
-                src={user.image || "/default-avatar.png"}
-                alt="User Avatar"
-                width={40}
-                height={40}
-                className="rounded-full cursor-pointer"
-              />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => signOut()}>
-                Sign Out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <div className="flex items-center gap-3">
+          {pathname === "/dashboard" ? (
+            <Link href="/">
+              <Button variant="outline">Home</Button>
+            </Link>
+          ) : (
+            <Link href="/dashboard">
+              <Button variant="outline">Dashboard</Button>
+            </Link>
+          )}
+          <UserMenu user={user} />
         </div>
       ) : (
         <Button className="bg-[#9f5bff]" onClick={() => signIn()}>

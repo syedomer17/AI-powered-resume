@@ -2,16 +2,21 @@
 
 import { useState, useRef, useEffect } from "react";
 import { signOut } from "next-auth/react";
+import Image from "next/image";
 
 export default function UserMenu({
   user,
 }: {
-  user: { name?: string | null; email?: string | null; image?: string | null };
+  user: {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    login?: string | null; // ✅ Add login
+  };
 }) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Close when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -24,27 +29,39 @@ export default function UserMenu({
     };
   }, []);
 
+  const fallbackImage =
+    "https://play-lh.googleusercontent.com/nV5JHE9tyyqNcVqh0JLVGoV2ldpAqC8htiBpsbjqxATjXQnpNTKgU99B-euShOJPu-8";
+
   return (
     <div className="relative" ref={menuRef}>
       <button
-        onClick={() => setOpen(!open)}
+        onClick={() => setOpen((prev) => !prev)}
         className="focus:outline-none"
       >
-        <img
-          src={
-            user.image ||
-            "https://www.gravatar.com/avatar?d=mp"
+        <Image
+          src={user.image || fallbackImage}
+          alt={
+            user.login
+              ? `${user.login}'s avatar`
+              : user.name
+              ? `${user.name}'s avatar`
+              : "User avatar"
           }
-          alt="Avatar"
-          className="w-10 h-10 rounded-full border"
+          width={40}
+          height={40}
+          className="rounded-full border"
         />
       </button>
 
       {open && (
         <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-md shadow-lg z-10">
           <div className="p-4 border-b">
-            <p className="font-semibold">{user.name || "Anonymous"}</p>
-            <p className="text-sm text-gray-500 truncate">{user.email}</p>
+            <p className="font-semibold">
+              {user.login ?? user.name ?? "Anonymous"}
+            </p>
+            <p className="text-sm text-gray-500 truncate">
+              {user.email ?? "No email"}
+            </p>
           </div>
           <button
             onClick={() => signOut({ callbackUrl: "/login" })}
