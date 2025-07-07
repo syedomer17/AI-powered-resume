@@ -1,3 +1,4 @@
+// app/api/auth/[...nextauth]/route.ts
 import NextAuth from "next-auth";
 import type { AuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
@@ -15,6 +16,16 @@ export const authOptions: AuthOptions = {
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+      profile(profile) {
+        // ✅ Capture GitHub username here
+        return {
+          id: profile.id.toString(),
+          name: profile.name || profile.login,
+          email: profile.email,
+          image: profile.avatar_url,
+          login: profile.login, // ✅ GitHub username
+        };
+      },
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -60,7 +71,14 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.user = user;
+        // ✅ Add login (GitHub username) if available
+        token.user = {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.image,
+          login: user.login, // may be undefined for Google/Credentials
+        };
       }
       return token;
     },
@@ -72,6 +90,7 @@ export const authOptions: AuthOptions = {
           name: token.user.name,
           email: token.user.email,
           image: token.user.image || DEFAULT_AVATAR,
+          login: token.user.login, // may be undefined
         };
       }
       return session;
@@ -84,11 +103,13 @@ export const authOptions: AuthOptions = {
 
         if (!existingUser) {
           await User.create({
-            userName: user.name || "New User",
+            userName: user.name || user.login || "New User",
             email: user.email,
             emailVerified: true,
             avatar: user.image || DEFAULT_AVATAR,
             bio: "",
+            // ✅ Optional: If you want to store login in DB, add a field in your User schema
+            // githubUsername: user.login,
           });
         }
       }
