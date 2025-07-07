@@ -33,3 +33,6 @@ export const createPersonalDetails = (data: {
   phone: string;
   email: string;
 }) => axiosClient.post("/personal-details", data);
+
+export const createSummary = (data: { summary: string }) =>
+  axiosClient.post("/summaries", data);
