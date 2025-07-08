@@ -120,3 +120,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+.rsw-ce ul {
+  list-style: disc;
+  padding-left: 2em;
+}
+
+.rsw-ce ol {
+  list-style: decimal;
+  padding-left: 2em;
+}
