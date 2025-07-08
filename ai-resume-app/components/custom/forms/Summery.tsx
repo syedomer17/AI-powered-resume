@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import React, { useContext, useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { ResumeInfoContext } from "@/context/ResumeInfoConext";
-import { generateSummary,SummaryResponse } from "@/service/AIModel";
+import { generateSummary, SummaryResponse } from "@/service/AIModel";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
@@ -12,8 +12,7 @@ type SummeryProps = {
   enableNext?: (v: boolean) => void;
 };
 
-
-const Summery : React.FC<SummeryProps> = ({ enableNext }) => {
+const Summery: React.FC<SummeryProps> = ({ enableNext }) => {
   const context = useContext(ResumeInfoContext);
   if (!context) return null;
 
@@ -49,6 +48,12 @@ const Summery : React.FC<SummeryProps> = ({ enableNext }) => {
     }
   };
 
+  // ✅ Enable next when summary has value
+  useEffect(() => {
+    enableNext?.(summery.trim().length > 0);
+  }, [summery, enableNext]);
+
+  // Keep context updated
   useEffect(() => {
     setResumeInfo({
       ...resumeInfo,

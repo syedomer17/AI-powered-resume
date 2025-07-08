@@ -1,10 +1,17 @@
+"use client";
+
 import React, { useState } from "react";
 import PersonalDetail from "./forms/PersonalDetail";
 import { Button } from "../ui/button";
 import { ArrowLeft, ArrowRight, LayoutGrid } from "lucide-react";
 import Summery from "./forms/Summery";
+import Experience from "./forms/Experience";
 
-const FormSection = () => {
+interface FormSectionProps {
+  resumeId: string;
+}
+
+const FormSection: React.FC<FormSectionProps> = ({ resumeId }) => {
   const [activeFormIndex, setActiveFormIndex] = useState(1);
   const [enableNext, setEnableNext] = useState(false);
 
@@ -39,11 +46,15 @@ const FormSection = () => {
         </div>
       </div>
 
-      {/* Conditional rendering */}
       {activeFormIndex === 1 && (
         <PersonalDetail enableNext={(v) => setEnableNext(v)} />
       )}
-      {activeFormIndex === 2 && <Summery enableNext={(v) => setEnableNext(v)} />}
+      {activeFormIndex === 2 && (
+        <Summery enableNext={(v) => setEnableNext(v)} />
+      )}
+      {activeFormIndex === 3 && (
+        <Experience enableNext={(v) => setEnableNext(v)} resumeId={resumeId} />
+      )}
     </div>
   );
 };
