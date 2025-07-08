@@ -9,7 +9,7 @@ const SkillsPriview = ({ resumeInfo }: { resumeInfo: ResumeInfoType }) => {
           className="text-center font-bold text-sm mb-2"
           style={{ color: resumeInfo?.themeColor }}
         >
-          Education
+          Skills
         </h2>
         <hr style={{ borderColor: resumeInfo?.themeColor }} />
         <div className="grid grid-cols-2 gap-3 my-4">
