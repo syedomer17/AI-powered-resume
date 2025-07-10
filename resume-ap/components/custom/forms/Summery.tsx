@@ -16,16 +16,20 @@ interface SummeryProps {
 
 const Summery: React.FC<SummeryProps> = ({ enableNext, userId }) => {
   const { resumeInfo, setResumeInfo } = useResumeInfo();
-  const [summary, setSummary] = useState<string>(resumeInfo?.summery || "");
+  const [summary, setSummary] = useState<string>(""); // start empty
   const [loading, setLoading] = useState<boolean>(false);
   const [options, setOptions] = useState<SummaryResponse | null>(null);
 
-  // Enable Next button if text present
+  // Prefill once on mount
   useEffect(() => {
-    enableNext(summary.trim().length > 0);
-  }, [summary, enableNext]);
+    if (resumeInfo?.summery) {
+      setSummary(resumeInfo.summery);
+      enableNext(resumeInfo.summery.trim().length > 0);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // run only once
 
-  // Keep context updated when text changes
+  // Keep context updated when summary changes
   useEffect(() => {
     setResumeInfo((prev) => ({
       ...prev,
@@ -43,7 +47,7 @@ const Summery: React.FC<SummeryProps> = ({ enableNext, userId }) => {
         Based on the job title, create a 3–4 line resume summary in JSON format.
         Keys: fresher, mid-level, experienced, intern.
         Only return the JSON object.
-        Job title: "${resumeInfo.jobTitle}".
+        Job title: "${resumeInfo.jobTitle || ""}".
       `);
 
       setOptions(summaries);
@@ -118,7 +122,10 @@ const Summery: React.FC<SummeryProps> = ({ enableNext, userId }) => {
                 <Button
                   key={level}
                   variant="outline"
-                  onClick={() => setSummary(text)}
+                  onClick={() => {
+                    setSummary(text);
+                    enableNext(true);
+                  }}
                   type="button"
                   className="justify-start whitespace-normal text-left"
                 >
@@ -132,7 +139,11 @@ const Summery: React.FC<SummeryProps> = ({ enableNext, userId }) => {
             className="mt-5"
             value={summary}
             required
-            onChange={(e) => setSummary(e.target.value)}
+            placeholder="Write your summary here..."
+            onChange={(e) => {
+              setSummary(e.target.value);
+              enableNext(e.target.value.trim().length > 0);
+            }}
           />
 
           <div className="mt-2 flex justify-end">

@@ -50,7 +50,7 @@ const Experience: React.FC<ExperienceProps> = ({
 
   const [loading, setLoading] = useState(false);
 
-  // ✅ Prefill form from context when returning
+  // ✅ Prefill ONCE when the component mounts
   useEffect(() => {
     if (
       resumeInfo?.experience &&
@@ -71,14 +71,14 @@ const Experience: React.FC<ExperienceProps> = ({
         }))
       );
     }
-  }, [resumeInfo]);
+  }, []); // <= only on mount
 
   // ✅ Update context whenever experienceList changes
   useEffect(() => {
     setResumeInfo((prev) => ({
       ...prev,
       experience: experienceList.map((exp, i) => ({
-        id: i + 1, // numeric id
+        id: i + 1,
         title: exp.title,
         companyName: exp.companyName,
         city: exp.city,
@@ -91,21 +91,23 @@ const Experience: React.FC<ExperienceProps> = ({
     }));
 
     enableNext?.(experienceList.some((e) => e.title.trim() !== ""));
-  }, [experienceList, setResumeInfo, enableNext]);
+  }, [experienceList]); // no need to include setResumeInfo or enableNext
 
   const handleChange = (
     index: number,
     field: keyof ExperienceType,
     value: string | boolean
   ) => {
-    const updatedList = [...experienceList];
-    updatedList[index][field] = value as never;
-    setExperienceList(updatedList);
+    setExperienceList((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
   };
 
   const handleAdd = () => {
-    setExperienceList([
-      ...experienceList,
+    setExperienceList((prev) => [
+      ...prev,
       {
         id: "",
         title: "",
@@ -121,9 +123,7 @@ const Experience: React.FC<ExperienceProps> = ({
   };
 
   const handleRemove = (index: number) => {
-    const updatedList = [...experienceList];
-    updatedList.splice(index, 1);
-    setExperienceList(updatedList);
+    setExperienceList((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSave = async () => {
@@ -162,7 +162,6 @@ const Experience: React.FC<ExperienceProps> = ({
           <div>
             <label className="text-xs">Position Title</label>
             <Input
-              name="title"
               value={field.title}
               onChange={(e) => handleChange(index, "title", e.target.value)}
             />
@@ -170,7 +169,6 @@ const Experience: React.FC<ExperienceProps> = ({
           <div>
             <label className="text-xs">Company Name</label>
             <Input
-              name="companyName"
               value={field.companyName}
               onChange={(e) =>
                 handleChange(index, "companyName", e.target.value)
@@ -180,7 +178,6 @@ const Experience: React.FC<ExperienceProps> = ({
           <div>
             <label className="text-xs">City</label>
             <Input
-              name="city"
               value={field.city}
               onChange={(e) => handleChange(index, "city", e.target.value)}
             />
@@ -188,7 +185,6 @@ const Experience: React.FC<ExperienceProps> = ({
           <div>
             <label className="text-xs">State</label>
             <Input
-              name="state"
               value={field.state}
               onChange={(e) => handleChange(index, "state", e.target.value)}
             />
@@ -197,7 +193,6 @@ const Experience: React.FC<ExperienceProps> = ({
             <label className="text-xs">Start Date</label>
             <Input
               type="date"
-              name="startDate"
               value={field.startDate}
               onChange={(e) =>
                 handleChange(index, "startDate", e.target.value)
@@ -208,7 +203,6 @@ const Experience: React.FC<ExperienceProps> = ({
             <label className="text-xs">End Date</label>
             <Input
               type="date"
-              name="endDate"
               value={field.endDate}
               onChange={(e) =>
                 handleChange(index, "endDate", e.target.value)
@@ -219,7 +213,6 @@ const Experience: React.FC<ExperienceProps> = ({
             <label className="text-xs">Currently Working</label>
             <Input
               type="checkbox"
-              name="currentlyWorking"
               checked={field.currentlyWorking}
               onChange={(e) =>
                 handleChange(index, "currentlyWorking", e.target.checked)

@@ -41,7 +41,7 @@ const Education: React.FC<EducationProps> = ({ enableNext, userId }) => {
 
   const [loading, setLoading] = useState(false);
 
-  // ✅ Prefill the form if coming back with data in context
+  // ✅ Prefill ONCE on mount
   useEffect(() => {
     if (
       resumeInfo?.education &&
@@ -60,9 +60,9 @@ const Education: React.FC<EducationProps> = ({ enableNext, userId }) => {
         }))
       );
     }
-  }, [resumeInfo]);
+  }, []); // ⬅️ Empty dependency array to avoid loops
 
-  // ✅ Update context live whenever educationalList changes
+  // ✅ Update context when educationalList changes
   useEffect(() => {
     setResumeInfo((prev) => ({
       ...prev,
@@ -73,16 +73,18 @@ const Education: React.FC<EducationProps> = ({ enableNext, userId }) => {
     }));
 
     enableNext(educationalList.some((e) => e.universityName.trim() !== ""));
-  }, [educationalList, setResumeInfo, enableNext]);
+  }, [educationalList]); // No need to depend on setResumeInfo / enableNext
 
   const handleChange = <K extends keyof Omit<EducationType, "id">>(
     index: number,
     field: K,
     value: EducationType[K]
   ) => {
-    const updated = [...educationalList];
-    updated[index][field] = value;
-    setEducationalList(updated);
+    setEducationalList((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
   };
 
   const handleAdd = () => {
@@ -101,9 +103,7 @@ const Education: React.FC<EducationProps> = ({ enableNext, userId }) => {
   };
 
   const handleRemove = (index: number) => {
-    const updated = [...educationalList];
-    updated.splice(index, 1);
-    setEducationalList(updated);
+    setEducationalList((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSave = async () => {
@@ -144,7 +144,6 @@ const Education: React.FC<EducationProps> = ({ enableNext, userId }) => {
           <div>
             <label className="text-xs">University Name</label>
             <Input
-              name="universityName"
               value={item.universityName}
               onChange={(e) =>
                 handleChange(index, "universityName", e.target.value)
@@ -154,7 +153,6 @@ const Education: React.FC<EducationProps> = ({ enableNext, userId }) => {
           <div>
             <label className="text-xs">Degree</label>
             <Input
-              name="degree"
               value={item.degree}
               onChange={(e) => handleChange(index, "degree", e.target.value)}
             />
@@ -162,7 +160,6 @@ const Education: React.FC<EducationProps> = ({ enableNext, userId }) => {
           <div>
             <label className="text-xs">Major</label>
             <Input
-              name="major"
               value={item.major}
               onChange={(e) => handleChange(index, "major", e.target.value)}
             />
@@ -171,7 +168,6 @@ const Education: React.FC<EducationProps> = ({ enableNext, userId }) => {
             <label className="text-xs">Start Date</label>
             <Input
               type="date"
-              name="startDate"
               value={item.startDate}
               onChange={(e) => handleChange(index, "startDate", e.target.value)}
             />
@@ -180,7 +176,6 @@ const Education: React.FC<EducationProps> = ({ enableNext, userId }) => {
             <label className="text-xs">End Date</label>
             <Input
               type="date"
-              name="endDate"
               value={item.endDate}
               onChange={(e) => handleChange(index, "endDate", e.target.value)}
             />
@@ -188,7 +183,6 @@ const Education: React.FC<EducationProps> = ({ enableNext, userId }) => {
           <div className="col-span-2">
             <label className="text-xs">Description</label>
             <Textarea
-              name="description"
               value={item.description}
               onChange={(e) =>
                 handleChange(index, "description", e.target.value)

@@ -26,16 +26,16 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId }) => {
   const [loading, setLoading] = useState(false);
 
   const [skillsList, setSkillsList] = useState<SkillType[]>([
-    {
-      id: undefined,
-      name: "",
-      rating: 0,
-    },
+    { id: undefined, name: "", rating: 0 },
   ]);
 
-  // ✅ Prefill from context when mounting
+  // ✅ Prefill only once when mounting
   useEffect(() => {
-    if (resumeInfo?.skills && Array.isArray(resumeInfo.skills) && resumeInfo.skills.length > 0) {
+    if (
+      resumeInfo?.skills &&
+      Array.isArray(resumeInfo.skills) &&
+      resumeInfo.skills.length > 0
+    ) {
       setSkillsList(
         resumeInfo.skills.map((s) => ({
           id: s.id,
@@ -44,9 +44,9 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId }) => {
         }))
       );
     }
-  }, [resumeInfo]);
+  }, []); // ⬅️ Empty dependency array
 
-  // ✅ Update context and enableNext whenever skills change
+  // ✅ Update context & enableNext when skillsList changes
   useEffect(() => {
     setResumeInfo((prev) => ({
       ...prev,
@@ -58,12 +58,12 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId }) => {
     }));
 
     enableNext(skillsList.some((s) => s.name.trim() !== ""));
-  }, [skillsList, setResumeInfo, enableNext]);
+  }, [skillsList]); // ⬅️ Avoid including setResumeInfo and enableNext
 
   const handleChangeName = (index: number, value: string) => {
     setSkillsList((prev) => {
       const updated = [...prev];
-      updated[index].name = value;
+      updated[index] = { ...updated[index], name: value };
       return updated;
     });
   };
@@ -71,7 +71,7 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId }) => {
   const handleChangeRating = (index: number, value: number) => {
     setSkillsList((prev) => {
       const updated = [...prev];
-      updated[index].rating = value;
+      updated[index] = { ...updated[index], rating: value };
       return updated;
     });
   };
@@ -79,20 +79,12 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId }) => {
   const handleAdd = () => {
     setSkillsList((prev) => [
       ...prev,
-      {
-        id: undefined,
-        name: "",
-        rating: 0,
-      },
+      { id: undefined, name: "", rating: 0 },
     ]);
   };
 
   const handleRemove = (index: number) => {
-    setSkillsList((prev) => {
-      const updated = [...prev];
-      updated.splice(index, 1);
-      return updated;
-    });
+    setSkillsList((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSave = async () => {
@@ -122,42 +114,49 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId }) => {
     <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">
       <h2 className="font-bold text-lg">Skills</h2>
       <p>Add your skills.</p>
-
-      {skillsList.map((item, index) => (
-        <div key={index} className="flex items-center gap-3 my-3">
-          <Input
-            placeholder="Skill name"
-            value={item.name}
-            onChange={(e) => handleChangeName(index, e.target.value)}
-          />
-          <Rating
-            style={{ maxWidth: 150 }}
-            value={item.rating}
-            onChange={(val: number) => handleChangeRating(index, val)}
-          />
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleRemove(index)}
-            disabled={skillsList.length === 1}
+      <div>
+        {skillsList.map((item, index) => (
+          <div
+            key={index}
+            className="flex justify-between items-center border rounded-lg p-3 gap-2"
           >
-            Remove
+            <div className="flex-1">
+              <label className="text-xs">Name</label>
+              <Input
+                placeholder="Skill name"
+                value={item.name}
+                onChange={(e) => handleChangeName(index, e.target.value)}
+              />
+            </div>
+            <Rating
+              style={{ maxWidth: 150 }}
+              value={item.rating}
+              onChange={(val: number) => handleChangeRating(index, val)}
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleRemove(index)}
+              disabled={skillsList.length === 1}
+            >
+              Remove
+            </Button>
+          </div>
+        ))}
+
+        <div className="mt-3 flex gap-2">
+          <Button variant="outline" onClick={handleAdd}>
+            + Add Skill
+          </Button>
+          <Button
+            className="bg-[#9f5bff] text-white flex items-center gap-2"
+            onClick={handleSave}
+            disabled={loading}
+          >
+            {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+            Save
           </Button>
         </div>
-      ))}
-
-      <div className="mt-3 flex gap-2">
-        <Button variant="outline" onClick={handleAdd}>
-          + Add Skill
-        </Button>
-        <Button
-          className="bg-[#9f5bff] text-white flex items-center gap-2"
-          onClick={handleSave}
-          disabled={loading}
-        >
-          {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-          Save
-        </Button>
       </div>
     </div>
   );
