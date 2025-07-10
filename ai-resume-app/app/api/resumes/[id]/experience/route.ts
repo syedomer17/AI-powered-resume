@@ -1,43 +1,56 @@
-import { connectToDB } from "@/lib/mongodb";
-import Resume from "@/models/Resume";
 import { NextResponse } from "next/server";
+import { connectToDB } from "@/lib/mongodb";
+import PersonalDetails from "@/models/PersonalDetails.ts";
 
-export async function PATCH(
-  request: Request,
-  context: { params: { id: string } }
+export async function GET(
+  req: Request,
+  { params }: { params: { id: string } }
 ) {
-  const { id: resumeId } = context.params;
-
-  if (!resumeId) {
-    return NextResponse.json(
-      { success: false, message: "Resume ID is required" },
-      { status: 400 }
-    );
+  const id = params.id;
+  if (!id) {
+    return NextResponse.json({ message: "Resume ID is required." }, { status: 400 });
   }
 
-  const { experience } = await request.json();
+  await connectToDB();
+  const found = await PersonalDetails.findById(id);
+  if (!found) {
+    return NextResponse.json({ message: "Resume not found." }, { status: 404 });
+  }
 
-  if (!experience) {
-    return NextResponse.json(
-      { success: false, message: "Experience is required" },
-      { status: 400 }
-    );
+  return NextResponse.json({
+    success: true,
+    experience: found.experience || [],
+  });
+}
+
+export async function PATCH(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  const id = params.id;
+  if (!id) {
+    return NextResponse.json({ message: "Resume ID is required." }, { status: 400 });
+  }
+
+  const { experience } = await req.json();
+  if (!experience || !Array.isArray(experience)) {
+    return NextResponse.json({ message: "Experience array is required." }, { status: 400 });
   }
 
   await connectToDB();
 
-  const updatedResume = await Resume.findByIdAndUpdate(
-    resumeId,
+  const updated = await PersonalDetails.findByIdAndUpdate(
+    id,
     { experience },
     { new: true }
   );
 
-  if (!updatedResume) {
-    return NextResponse.json(
-      { success: false, message: "Resume not found" },
-      { status: 404 }
-    );
+  if (!updated) {
+    return NextResponse.json({ message: "Resume not found." }, { status: 404 });
   }
 
-  return NextResponse.json({ success: true, experience: updatedResume.experience });
+  return NextResponse.json({
+    success: true,
+    experience: updated.experience,
+  });
 }

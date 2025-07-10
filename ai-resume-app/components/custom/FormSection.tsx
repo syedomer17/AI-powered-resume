@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { ArrowLeft, ArrowRight, LayoutGrid } from "lucide-react";
 import Summery from "./forms/Summery";
 import Experience from "./forms/Experience";
+import Link from "next/link";
 
 interface FormSectionProps {
   resumeId: string;
@@ -43,6 +44,7 @@ const FormSection: React.FC<FormSectionProps> = ({ resumeId }) => {
           >
             Next <ArrowRight />
           </Button>
+
         </div>
       </div>
 
@@ -53,7 +55,7 @@ const FormSection: React.FC<FormSectionProps> = ({ resumeId }) => {
         <Summery enableNext={(v) => setEnableNext(v)} />
       )}
       {activeFormIndex === 3 && (
-        <Experience enableNext={(v) => setEnableNext(v)} resumeId={resumeId} />
+        <Experience enableNext={(v) => setEnableNext(v)}  />
       )}
     </div>
   );

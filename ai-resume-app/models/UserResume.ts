@@ -14,7 +14,7 @@ const UserResumeSchema = new Schema<IUserResume>(
     userEmail: { type: String, required: true },
     userName: { type: String, required: true },
   },
-  { timestamps: true }
+  { timestamps: true,id:true }
 );
 
 export default models.UserResume || model<IUserResume>("UserResume", UserResumeSchema);

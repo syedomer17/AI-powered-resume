@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ResumeInfoContext } from "@/context/ResumeInfoConext";
-import { createPersonalDetails } from "@/service/GlobalApi";
+import axios from "axios";
 import React, { useContext, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -19,7 +19,7 @@ const PersonalDetail = ({ enableNext }: { enableNext: (value: boolean) => void }
     const { name, value } = e.target;
     setResumeInfo({
       ...resumeInfo,
-      [name]: value,
+      [name as keyof typeof resumeInfo]: value,
     });
   };
 
@@ -27,9 +27,9 @@ const PersonalDetail = ({ enableNext }: { enableNext: (value: boolean) => void }
     e.preventDefault();
     setLoading(true);
     try {
-      await createPersonalDetails({
-        ...resumeInfo,
-      });
+      const response = await axios.post("/api/resumes", resumeInfo);
+      const resumeId = response.data._id;
+      localStorage.setItem("resumeId", resumeId);
       enableNext(true);
       toast.success("Details saved successfully!");
     } catch (err) {
@@ -48,7 +48,7 @@ const PersonalDetail = ({ enableNext }: { enableNext: (value: boolean) => void }
       <form onSubmit={onSave}>
         <div className="grid grid-cols-2 mt-5 gap-3">
           <div>
-            <label className="text-sm" defaultValue={resumeInfo?.firstName}>First Name</label>
+            <label className="text-sm">First Name</label>
             <Input
               name="firstName"
               required
@@ -57,7 +57,7 @@ const PersonalDetail = ({ enableNext }: { enableNext: (value: boolean) => void }
             />
           </div>
           <div>
-            <label className="text-sm" defaultValue={resumeInfo?.lastName}>Last Name</label>
+            <label className="text-sm">Last Name</label>
             <Input
               name="lastName"
               required
@@ -66,7 +66,7 @@ const PersonalDetail = ({ enableNext }: { enableNext: (value: boolean) => void }
             />
           </div>
           <div className="col-span-2">
-            <label className="text-sm" defaultValue={resumeInfo?.jobTitle}>Job Title</label>
+            <label className="text-sm">Job Title</label>
             <Input
               name="jobTitle"
               required
@@ -75,7 +75,7 @@ const PersonalDetail = ({ enableNext }: { enableNext: (value: boolean) => void }
             />
           </div>
           <div className="col-span-2">
-            <label className="text-sm" defaultValue={resumeInfo?.address}>Address</label>
+            <label className="text-sm">Address</label>
             <Input
               name="address"
               required
@@ -84,7 +84,7 @@ const PersonalDetail = ({ enableNext }: { enableNext: (value: boolean) => void }
             />
           </div>
           <div>
-            <label className="text-sm" defaultValue={resumeInfo?.phone}>Phone</label>
+            <label className="text-sm">Phone</label>
             <Input
               name="phone"
               required
@@ -93,7 +93,7 @@ const PersonalDetail = ({ enableNext }: { enableNext: (value: boolean) => void }
             />
           </div>
           <div>
-            <label className="text-sm" defaultValue={resumeInfo?.email}>Email</label>
+            <label className="text-sm">Email</label>
             <Input
               type="email"
               name="email"

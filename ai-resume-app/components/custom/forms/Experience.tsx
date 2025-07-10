@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import RichTextEditor from "@/components/RichTextEditor";
 import { ResumeInfoContext } from "@/context/ResumeInfoConext";
 import { Loader2 } from "lucide-react";
+import axios from "axios";
+import { toast } from "sonner";
 
 type ExperienceItem = {
   id: number;
@@ -19,48 +21,18 @@ type ExperienceItem = {
   workSummery: string;
 };
 
-interface ExperienceProps {
-  resumeId: string;
-  enableNext?: (v: boolean) => void;
-}
-
-const Experience: React.FC<ExperienceProps> = ({ resumeId,enableNext }) => {
+const Experience: React.FC<{ enableNext?: (v: boolean) => void }> = ({ enableNext }) => {
   const context = useContext(ResumeInfoContext);
   if (!context) return null;
-  const { resumeInfo, setResumeInfo } = context;
+  const { setResumeInfo } = context;
 
   const [experienceList, setExperienceList] = useState<ExperienceItem[]>([]);
   const [saving, setSaving] = useState(false);
 
-  // Load data
-  useEffect(() => {
-    const fetchExperience = async () => {
-      try {
-        const res = await fetch(`/api/resume/${resumeId}/experience`);
-        const data: { success: boolean; experience: ExperienceItem[] } = await res.json();
-        if (data.success && Array.isArray(data.experience)) {
-          setExperienceList(data.experience.length ? data.experience : [createEmptyExperience()]);
-        } else {
-          setExperienceList([createEmptyExperience()]);
-        }
-      } catch (error) {
-        console.error("Error fetching experience:", error);
-        setExperienceList([createEmptyExperience()]);
-      }
-    };
-    fetchExperience();
-  }, [resumeId]);
-
-  // Sync context
-  useEffect(() => {
-    setResumeInfo((prev) => ({
-      ...prev,
-      experience: experienceList,
-    }));
-  }, [experienceList, setResumeInfo]);
+  const resumeId = typeof window !== "undefined" ? localStorage.getItem("resumeId") : "";
 
   const createEmptyExperience = (): ExperienceItem => ({
-    id: Math.floor(Math.random() * 1000000), // Generate a temp ID
+    id: Math.floor(Math.random() * 1000000),
     title: "",
     companyName: "",
     city: "",
@@ -70,6 +42,43 @@ const Experience: React.FC<ExperienceProps> = ({ resumeId,enableNext }) => {
     currentlyWorking: false,
     workSummery: "",
   });
+
+  useEffect(() => {
+    const fetchExperience = async () => {
+      if (!resumeId) return;
+      try {
+        const res = await axios.get(`/api/resumes/${resumeId}/experience`);
+        if (res.data.success && Array.isArray(res.data.experience)) {
+          setExperienceList(
+            res.data.experience.map((item: any) => ({
+              id: Math.floor(Math.random() * 1000000),
+              title: item.title || "",
+              companyName: item.companyName || "",
+              city: item.city || "",
+              state: item.state || "",
+              startDate: item.startDate || "",
+              endDate: item.endDate || "",
+              currentlyWorking: item.currentlyWorking || false,
+              workSummery: item.workSummery || "",
+            }))
+          );
+        } else {
+          setExperienceList([createEmptyExperience()]);
+        }
+      } catch (err) {
+        console.error("Error fetching experience:", err);
+        setExperienceList([createEmptyExperience()]);
+      }
+    };
+    fetchExperience();
+  }, [resumeId]);
+
+  useEffect(() => {
+    setResumeInfo((prev) => ({
+      ...prev,
+      experience: experienceList,
+    }));
+  }, [experienceList, setResumeInfo]);
 
   const handleChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -98,28 +107,29 @@ const Experience: React.FC<ExperienceProps> = ({ resumeId,enableNext }) => {
   };
 
   const handleSave = async () => {
-  try {
-    setSaving(true);
-    const res = await fetch(`/api/resumes/${resumeId}/experience`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ experience: experienceList }),
-    });
-
-    const data = await res.json();
-    if (data.success) {
-      console.log("Experience saved successfully.");
-    } else {
-      console.error("Failed to save experience:", data.message);
+    if (!resumeId) {
+      toast.error("Resume ID not found. Save personal details first.");
+      return;
     }
-  } catch (error) {
-    console.error("Error saving experience:", error);
-  } finally {
-    setSaving(false);
-  }
-};
+    setSaving(true);
+    try {
+      const payload = experienceList.map(({ id, ...rest }) => rest);
+      const res = await axios.patch(`/api/resumes/${resumeId}/experience`, {
+        experience: payload,
+      });
+      if (res.data.success) {
+        toast.success("Experience saved successfully!");
+        enableNext?.(true);
+      } else {
+        toast.error(res.data.message || "Error saving experience.");
+      }
+    } catch (err) {
+      console.error("Error saving experience:", err);
+      toast.error("Failed to save experience. Please try again.");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">
@@ -202,12 +212,11 @@ const Experience: React.FC<ExperienceProps> = ({ resumeId,enableNext }) => {
 
       <div className="flex justify-between mt-4">
         <div className="flex gap-2">
-          <Button variant="outline" className="text-primary" onClick={addExperience}>
-            + Add More Experience
+          <Button variant="outline" onClick={addExperience}>
+            + Add More
           </Button>
           <Button
             variant="outline"
-            className="text-primary"
             disabled={experienceList.length <= 1}
             onClick={removeExperience}
           >
