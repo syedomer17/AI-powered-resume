@@ -34,6 +34,7 @@
     "react-hot-toast": "^2.5.2",
     "react-quill": "^2.0.0",
     "react-simple-wysiwyg": "^3.4.0",
+    "react-toastify": "^11.0.5",
     "sonner": "^2.0.6",
     "tailwind-merge": "^3.3.1",
     "uuid": "^11.1.0"

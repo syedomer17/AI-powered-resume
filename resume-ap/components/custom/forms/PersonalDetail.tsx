@@ -11,11 +11,13 @@ import { toast } from "sonner";
 interface PersonalDetailProps {
   enableNext?: (value: boolean) => void;
   userId?: string;
+  resumeId?: string;  // <-- Added resumeId here
 }
 
 const PersonalDetail: React.FC<PersonalDetailProps> = ({
   enableNext,
   userId,
+  resumeId,
 }) => {
   const { resumeInfo, setResumeInfo } = useResumeInfo();
   const [loading, setLoading] = useState(false);
@@ -29,7 +31,7 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
     email: "",
   });
 
-  // ✅ Prefill ONCE when mounting
+  // Prefill ONCE when mounting
   useEffect(() => {
     setPersonalDetails({
       firstName: resumeInfo?.firstName || "",
@@ -39,9 +41,9 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
       phone: resumeInfo?.phone || "",
       email: resumeInfo?.email || "",
     });
-  }, []); // <= only on mount
+  }, []); // only on mount
 
-  // ✅ Update context whenever user types
+  // Update context whenever user types
   useEffect(() => {
     setResumeInfo((prev) => ({
       ...prev,
@@ -70,12 +72,17 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
       toast.error("User ID missing. Cannot save.");
       return;
     }
+    if (!resumeId) {
+      toast.error("Resume ID missing. Cannot save.");
+      return;
+    }
 
     setLoading(true);
     try {
       await axios.post("/api/user/personal", {
         userId,
-        personalDetails,
+        resumeId,  // <-- Send resumeId to backend
+        ...personalDetails,
       });
 
       toast.success("Personal details saved!");

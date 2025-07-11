@@ -22,9 +22,10 @@ type EducationType = {
 interface EducationProps {
   enableNext: (value: boolean) => void;
   userId?: string;
+  resumeId: string; // added resumeId here
 }
 
-const Education: React.FC<EducationProps> = ({ enableNext, userId }) => {
+const Education: React.FC<EducationProps> = ({ enableNext, userId, resumeId }) => {
   const { resumeInfo, setResumeInfo } = useResumeInfo();
 
   const [educationalList, setEducationalList] = useState<EducationType[]>([
@@ -41,7 +42,7 @@ const Education: React.FC<EducationProps> = ({ enableNext, userId }) => {
 
   const [loading, setLoading] = useState(false);
 
-  // ✅ Prefill ONCE on mount
+  // Prefill ONCE on mount
   useEffect(() => {
     if (
       resumeInfo?.education &&
@@ -60,9 +61,9 @@ const Education: React.FC<EducationProps> = ({ enableNext, userId }) => {
         }))
       );
     }
-  }, []); // ⬅️ Empty dependency array to avoid loops
+  }, []);
 
-  // ✅ Update context when educationalList changes
+  // Update context when educationalList changes
   useEffect(() => {
     setResumeInfo((prev) => ({
       ...prev,
@@ -73,7 +74,7 @@ const Education: React.FC<EducationProps> = ({ enableNext, userId }) => {
     }));
 
     enableNext(educationalList.some((e) => e.universityName.trim() !== ""));
-  }, [educationalList]); // No need to depend on setResumeInfo / enableNext
+  }, [educationalList]);
 
   const handleChange = <K extends keyof Omit<EducationType, "id">>(
     index: number,
@@ -116,6 +117,7 @@ const Education: React.FC<EducationProps> = ({ enableNext, userId }) => {
     try {
       await axios.post("/api/user/education", {
         userId,
+        resumeId, // pass resumeId here to backend if needed
         education: educationalList,
       });
 
@@ -189,24 +191,29 @@ const Education: React.FC<EducationProps> = ({ enableNext, userId }) => {
               }
             />
           </div>
-          <div className="col-span-2 flex justify-between mt-2">
-            <div className="flex gap-2">
-              <Button variant="outline" onClick={handleAdd}>
-                + Add More
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => handleRemove(index)}
-                disabled={educationalList.length === 1}
-              >
-                - Remove
-              </Button>
-            </div>
+
+          {/* Remove button per block */}
+          <div className="col-span-2 flex justify-end mt-2">
+            <Button
+              variant="outline"
+              onClick={() => handleRemove(index)}
+              disabled={educationalList.length === 1}
+            >
+              - Remove
+            </Button>
           </div>
         </div>
       ))}
 
-      <div className="flex justify-end mt-3">
+      {/* Add More button only once here */}
+      <div className="flex justify-start mt-4">
+        <Button variant="outline" onClick={handleAdd}>
+          + Add More
+        </Button>
+      </div>
+
+      {/* Save button */}
+      <div className="flex justify-end mt-6">
         <Button
           className="bg-fuchsia-500 text-white flex items-center gap-2"
           onClick={handleSave}

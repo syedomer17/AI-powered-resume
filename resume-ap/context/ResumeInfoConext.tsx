@@ -12,31 +12,9 @@ export interface ResumeInfoType {
   email: string;
   themeColor: string;
   summery: string;
-  experience: {
-    id: number;
-    title: string;
-    companyName: string;
-    city: string;
-    state: string;
-    startDate: string;
-    endDate: string;
-    currentlyWorking: boolean;
-    workSummery: string;
-  }[];
-  education: {
-    id: number;
-    universityName: string;
-    startDate: string;
-    endDate: string;
-    degree: string;
-    major: string;
-    description: string;
-  }[];
-  skills: {
-    id: number;
-    name: string;
-    rating: number;
-  }[];
+  experience: any[];
+  education: any[];
+  skills: any[];
 }
 
 interface ResumeInfoContextType {
@@ -48,11 +26,23 @@ const ResumeInfoContext = createContext<ResumeInfoContextType | undefined>(
   undefined
 );
 
-export const ResumeInfoProvider = ({ children }: { children: ReactNode }) => {
-  const [resumeInfo, setResumeInfo] = useState<ResumeInfoType>(dummy);
+export const ResumeInfoProvider = ({
+  children,
+  defaultValue,
+}: {
+  children: ReactNode;
+  defaultValue?: ResumeInfoType;
+}) => {
+  const [resumeInfo, setResumeInfo] = useState<ResumeInfoType>({
+    ...dummy,
+    ...defaultValue,
+    experience: defaultValue?.experience ?? dummy.experience,
+    education: defaultValue?.education ?? dummy.education,
+    skills: defaultValue?.skills ?? dummy.skills,
+  });
 
   return (
-    <ResumeInfoContext.Provider value={{ resumeInfo, setResumeInfo }}>
+    <ResumeInfoContext.Provider value={{ resumeInfo, setResumeInfo } }>
       {children}
     </ResumeInfoContext.Provider>
   );

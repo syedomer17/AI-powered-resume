@@ -7,15 +7,21 @@ import { useSession } from "next-auth/react";
 export default function ResumePage() {
   const params = useParams();
   const resumeId = params.id;
+
   const { data: session, status } = useSession();
 
   if (!resumeId || typeof resumeId !== "string") {
-    return <div>Invalid resume ID.</div>;
+    return <div className="text-red-500">Invalid resume ID.</div>;
   }
 
-  // Handle loading or unauthenticated session
-  if (status === "loading") return <div>Loading...</div>;
-  if (!session?.user?.id) return <div>Unauthorized</div>;
+  if (status === "loading") {
+    return <div>Loading session...</div>;
+  }
+
+  if (!session?.user?.id) {
+    return <div className="text-red-600">You must be logged in to edit experience.</div>;
+    // Or you could redirect to login using useRouter
+  }
 
   const userId = session.user.id;
 

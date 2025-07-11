@@ -31,7 +31,7 @@ const ExperiencePriview = ({ resumeInfo }: { resumeInfo: ResumeInfoType }) => {
             </span>
           </h2>
           <div
-            className="prose prose-sm mt-2 text-xs my-2"
+            className="text-xs my-2"
             dangerouslySetInnerHTML={{
               __html: experience?.workSummery || "",
             }}

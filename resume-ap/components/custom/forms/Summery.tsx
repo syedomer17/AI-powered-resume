@@ -12,9 +12,10 @@ import axios from "axios";
 interface SummeryProps {
   enableNext: (v: boolean) => void;
   userId?: string;
+  resumeId: string;  // Added this line
 }
 
-const Summery: React.FC<SummeryProps> = ({ enableNext, userId }) => {
+const Summery: React.FC<SummeryProps> = ({ enableNext, userId, resumeId }) => {
   const { resumeInfo, setResumeInfo } = useResumeInfo();
   const [summary, setSummary] = useState<string>(""); // start empty
   const [loading, setLoading] = useState<boolean>(false);
@@ -67,11 +68,16 @@ const Summery: React.FC<SummeryProps> = ({ enableNext, userId }) => {
       toast.error("User ID not available.");
       return;
     }
+    if (!resumeId) {
+      toast.error("Resume ID not available.");
+      return;
+    }
 
     setLoading(true);
     try {
       const response = await axios.post("/api/user/summery", {
         userId,
+        resumeId,      // <-- Include resumeId in the request body
         text: summary,
       });
 

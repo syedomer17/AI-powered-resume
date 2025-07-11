@@ -1,24 +1,23 @@
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { connectToDB } from "@/lib/mongodb";
 import User from "@/models/User";
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
-    await connectToDB();
+    const session = await getServerSession(authOptions);
 
-    // Extract userId from query string (e.g., /api/resumes?userId=abc123)
-    const { searchParams } = new URL(req.url);
-    const userId = searchParams.get("userId");
-
-    if (!userId) {
+    if (!session?.user?.email) {
       return NextResponse.json(
-        { message: "Missing userId parameter" },
-        { status: 400 }
+        { message: "Unauthorized" },
+        { status: 401 }
       );
     }
 
-    // Find user by id
-    const user = await User.findById(userId).select("resumes");
+    await connectToDB();
+
+    const user = await User.findOne({ email: session.user.email }).select("resumes");
 
     if (!user) {
       return NextResponse.json(

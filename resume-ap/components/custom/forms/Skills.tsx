@@ -19,9 +19,10 @@ type SkillType = {
 interface SkillsProps {
   enableNext: (value: boolean) => void;
   userId?: string;
+  resumeId: string;  // <-- Added here
 }
 
-const Skills: React.FC<SkillsProps> = ({ enableNext, userId }) => {
+const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
   const { resumeInfo, setResumeInfo } = useResumeInfo();
   const [loading, setLoading] = useState(false);
 
@@ -29,7 +30,7 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId }) => {
     { id: undefined, name: "", rating: 0 },
   ]);
 
-  // ✅ Prefill only once when mounting
+  // Prefill only once when mounting
   useEffect(() => {
     if (
       resumeInfo?.skills &&
@@ -44,9 +45,9 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId }) => {
         }))
       );
     }
-  }, []); // ⬅️ Empty dependency array
+  }, []);
 
-  // ✅ Update context & enableNext when skillsList changes
+  // Update context & enableNext when skillsList changes
   useEffect(() => {
     setResumeInfo((prev) => ({
       ...prev,
@@ -58,7 +59,7 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId }) => {
     }));
 
     enableNext(skillsList.some((s) => s.name.trim() !== ""));
-  }, [skillsList]); // ⬅️ Avoid including setResumeInfo and enableNext
+  }, [skillsList]);
 
   const handleChangeName = (index: number, value: string) => {
     setSkillsList((prev) => {
@@ -97,6 +98,7 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId }) => {
     try {
       await axios.post("/api/user/skills", {
         userId,
+        resumeId, // include resumeId here
         skills: skillsList,
       });
 

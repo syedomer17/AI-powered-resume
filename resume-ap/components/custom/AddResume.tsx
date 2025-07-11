@@ -15,45 +15,43 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
-const AddResume = () => {
+interface AddResumeProps {
+  userId: string;
+  userEmail: string;
+}
+
+const AddResume = ({ userId, userEmail }: AddResumeProps) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
 
   const handleCreateResume = async () => {
-    if (!title.trim() || !session?.user) return;
+    if (!title.trim()) return;
 
     try {
       setLoading(true);
 
-      // ✅ Prepare payload
       const payload = {
         title: title.trim(),
-        userEmail: session.user.email || "",
-        userName: session.user.name || "",
-        // Assuming you stored the MongoDB _id in user.id:
-        userId: session.user.id, 
+        userEmail: userEmail,
+        userName: session?.user?.name || "",
+        userId: userId,
       };
 
-      // ✅ Axios call
       const res = await axios.post("/api/resume", payload);
 
-      const { data } = res;
+      const createdResume = res?.data?.data?.resume;
+      if (!createdResume) throw new Error("Resume creation failed.");
 
-      if (!data?.data?.resume) {
-        throw new Error("Resume creation failed.");
-      }
-
-      // Get the id
-      const resumeId = data.data.resume.id;
+      const resumeIndex = createdResume.id;
 
       setOpenDialog(false);
       setTitle("");
 
-      router.push(`/dashboard/resume/${resumeId}/edit`);
+      router.push(`/dashboard/resume/${userId}/${resumeIndex}/edit`);
     } catch (err) {
       console.error("Failed to create resume:", err);
     } finally {
@@ -63,7 +61,7 @@ const AddResume = () => {
 
   return (
     <div>
-      {/* Add New Resume Button */}
+      {/* Add Resume Button */}
       <div
         onClick={() => setOpenDialog(true)}
         className="p-14 py-24 border items-center flex justify-center bg-secondary rounded-lg h-[280px] hover:scale-105 transition-all hover:shadow-md cursor-pointer border-dotted"
@@ -97,12 +95,7 @@ const AddResume = () => {
               <Button
                 className="bg-[#9f5bff]"
                 onClick={handleCreateResume}
-                disabled={
-                  loading ||
-                  title.trim().length === 0 ||
-                  status === "loading" ||
-                  !session?.user
-                }
+                disabled={loading || title.trim().length === 0}
               >
                 {loading ? <Loader2 className="animate-spin" /> : "Create"}
               </Button>
