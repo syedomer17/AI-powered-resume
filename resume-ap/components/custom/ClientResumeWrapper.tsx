@@ -15,7 +15,8 @@ export default function ClientResumeWrapper({ resumeId }: { resumeId: string }) 
     const fetchResume = async () => {
       try {
         const response = await axios.get(`/api/resumes/${resumeId}`);
-        setResumeData(response.data);
+        console.log(response.data.resume)
+        setResumeData(response.data.resume);
       } catch {
         setResumeData(null);
       } finally {
