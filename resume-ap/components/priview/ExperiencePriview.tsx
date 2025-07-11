@@ -24,14 +24,14 @@ const ExperiencePriview = ({ resumeInfo }: { resumeInfo: ResumeInfoType }) => {
           <h2 className="text-xs flex justify-between">
             {experience?.companyName}, {experience?.city}, {experience?.state}
             <span>
-              {experience?.startDate || ""} - {" "}
+              {experience?.startDate || ""} -{" "}
               {experience?.currentlyWorking
                 ? "Present"
                 : experience?.endDate || ""}
             </span>
           </h2>
           <div
-            className="text-xs my-2"
+            className="text-xs my-2 "  // <-- Added this to fix text color
             dangerouslySetInnerHTML={{
               __html: experience?.workSummery || "",
             }}

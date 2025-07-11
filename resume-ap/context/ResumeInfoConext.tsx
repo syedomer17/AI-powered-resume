@@ -1,6 +1,4 @@
-"use client";
-
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import dummy from "@/data/DefaultResumeData";
 
 export interface ResumeInfoType {
@@ -41,8 +39,20 @@ export const ResumeInfoProvider = ({
     skills: defaultValue?.skills ?? dummy.skills,
   });
 
+  useEffect(() => {
+    if (defaultValue) {
+      setResumeInfo({
+        ...dummy,
+        ...defaultValue,
+        experience: defaultValue.experience ?? dummy.experience,
+        education: defaultValue.education ?? dummy.education,
+        skills: defaultValue.skills ?? dummy.skills,
+      });
+    }
+  }, [defaultValue]);
+
   return (
-    <ResumeInfoContext.Provider value={{ resumeInfo, setResumeInfo } }>
+    <ResumeInfoContext.Provider value={{ resumeInfo, setResumeInfo }}>
       {children}
     </ResumeInfoContext.Provider>
   );

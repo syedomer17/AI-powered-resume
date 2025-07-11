@@ -15,9 +15,28 @@ export default function ClientResumeWrapper({ resumeId }: { resumeId: string }) 
     const fetchResume = async () => {
       try {
         const response = await axios.get(`/api/resumes/${resumeId}`);
-        console.log(response.data.resume)
-        setResumeData(response.data.resume);
-      } catch {
+        const resume = response.data.resume;
+
+        // Transform the data to fit ResumeInfoType shape
+        const personal = resume.personalDetails?.[0] ?? {};
+
+        const transformedData: ResumeInfoType = {
+          firstName: personal.firstName || "",
+          lastName: personal.lastName || "",
+          jobTitle: personal.jobTitle || "",
+          address: personal.address || "",
+          phone: personal.phone || "",
+          email: personal.email || "",
+          themeColor: personal.themeColor || "#ff6666",
+          summery: resume.summary?.[0]?.text || "",
+          experience: resume.experience || [],
+          education: resume.education || [],
+          skills: resume.skills || [],
+        };
+
+        setResumeData(transformedData);
+      } catch (error) {
+        console.error("Failed to fetch resume:", error);
         setResumeData(null);
       } finally {
         setLoading(false);
