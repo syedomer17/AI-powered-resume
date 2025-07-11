@@ -27,7 +27,7 @@ const FormSection: React.FC<FormSectionProps> = ({ resumeId }) => {
       <div className="flex justify-between items-center">
         <div className="flex gap-5">
           <Link href={"/dashboard"}>
-            <Button>
+            <Button className="bg-[#9f5bff]">
               <Home />
             </Button>
           </Link>

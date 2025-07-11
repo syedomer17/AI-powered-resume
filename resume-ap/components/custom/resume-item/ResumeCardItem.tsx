@@ -14,14 +14,28 @@ export default function ResumeCardItem({ resume }: { resume: Resume }) {
   const { data: session } = useSession();
   const userId = session?.user?.id;
 
-  if (!userId) return null; // or loading
+  if (!userId) return null;
 
   return (
-    <Link href={`/dashboard/resume/${userId}/${resume.id}/edit`} className="block w-64">
-      <div className="p-10 bg-gradient-to-b from-pink-100 via-purple-200 to-blue-200 flex justify-center items-center h-[280px] border-t-4 border-[#9f5bff] rounded-lg hover:scale-105 transition-all hover:drop-shadow-[0_0_10px_#9f5bff]">
-        <Image src="/cv.png" width={120} height={120} alt="Resume icon" />
+    <Link
+      href={`/dashboard/resume/${userId}/${resume.id}/edit`}
+      className="relative group w-full max-w-sm mx-auto bg-white rounded-2xl shadow-lg overflow-hidden transition transform hover:scale-105 hover:shadow-2xl border border-gray-200 hover:border-[#9f5bff]"
+    >
+      {/* Gradient Top Banner */}
+      <div className="bg-gradient-to-r from-fuchsia-400 via-purple-400 to-blue-400 h-24 w-full"></div>
+
+      {/* Icon */}
+      <div className="absolute top-12 left-1/2 transform -translate-x-1/2 w-24 h-24 bg-white rounded-full shadow-md flex items-center justify-center group-hover:scale-105 transition">
+        <Image src="/cv.png" width={50} height={50} alt="Resume Icon" />
       </div>
-      <h2 className="text-center my-2 font-medium">{resume.title}</h2>
+
+      {/* Content */}
+      <div className="pt-20 pb-6 px-4 text-center">
+        <h3 className="text-lg font-semibold text-gray-800 group-hover:text-[#9f5bff] transition">
+          {resume.title || "Untitled Resume"}
+        </h3>
+        <p className="text-xs text-gray-500 mt-1">Click to edit</p>
+      </div>
     </Link>
   );
 }

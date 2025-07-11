@@ -1,6 +1,5 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
 import ResumeCardItem from "./resume-item/ResumeCardItem";
 
 interface ResumeType {
@@ -14,17 +13,19 @@ interface ResumeType {
 export default function ResumeGrid({ resumes }: { resumes: ResumeType[] }) {
   if (!resumes || resumes.length === 0) {
     return (
-      <p className="text-gray-500 mt-4 col-span-full">
-        No resumes yet. Create your first resume!
-      </p>
+      <div className="col-span-full text-center py-6">
+        <p className="text-gray-500 text-sm">
+          You haven’t created any resumes yet. Click "Add Resume" to get started!
+        </p>
+      </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 col-span-full">
+    <>
       {resumes.map((resume, index) => (
         <ResumeCardItem key={resume._id} resume={resume} index={index} />
       ))}
-    </div>
+    </>
   );
 }

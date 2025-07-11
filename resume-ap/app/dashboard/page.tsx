@@ -10,7 +10,7 @@ import User from "@/models/User";
 interface IUser {
   _id: string;
   email: string;
-  resumes: any[]; // replace any with your Resume type if available
+  resumes: any[];
 }
 
 export default async function DashboardPage() {
@@ -31,14 +31,21 @@ export default async function DashboardPage() {
   return (
     <>
       <Header />
-      <div className="p-10 md:px-20 lg:px-32">
-        <h2 className="font-bold text-3xl">My Resume</h2>
-        <p>Start Creating AI Resume to your next job</p>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 mt-10 gap-5">
+      <section className="px-6 py-10 md:px-20 lg:px-32 bg-gray-50 min-h-screen">
+        <div className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+            Welcome Back!
+          </h1>
+          <p className="text-gray-600 mt-1">
+            Start creating AI-powered resumes to land your next job.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
           <AddResume userId={user._id.toString()} userEmail={user.email} />
           <ResumeGrid resumes={user.resumes} />
         </div>
-      </div>
+      </section>
     </>
   );
 }
