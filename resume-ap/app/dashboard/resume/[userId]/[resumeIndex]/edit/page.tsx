@@ -55,7 +55,7 @@ export default async function EditPage({ params }: EditPageParams) {
   return (
     <>
       <Header />
-      <ClientResumeWrapper resumeId={resume._id.toString()} />
+      <ClientResumeWrapper userId={userId} resumeId={resume._id.toString()} />
     </>
   );
 }

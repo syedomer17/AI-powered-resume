@@ -19,7 +19,7 @@ type SkillType = {
 interface SkillsProps {
   enableNext: (value: boolean) => void;
   userId?: string;
-  resumeId: string;  // <-- Added here
+  resumeId?: string; // <-- Made optional to handle new resumes
 }
 
 const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
@@ -27,7 +27,7 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
   const [loading, setLoading] = useState(false);
 
   const [skillsList, setSkillsList] = useState<SkillType[]>([
-    { id: undefined, name: "", rating: 0 },
+    { id: undefined, name: "", rating: 1 },
   ]);
 
   // Prefill only once when mounting
@@ -41,7 +41,7 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
         resumeInfo.skills.map((s) => ({
           id: s.id,
           name: s.name || "",
-          rating: s.rating || 0,
+          rating: s.rating || 1,
         }))
       );
     }
@@ -78,10 +78,7 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
   };
 
   const handleAdd = () => {
-    setSkillsList((prev) => [
-      ...prev,
-      { id: undefined, name: "", rating: 0 },
-    ]);
+    setSkillsList((prev) => [...prev, { id: undefined, name: "", rating: 1 }]);
   };
 
   const handleRemove = (index: number) => {
@@ -89,21 +86,25 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
   };
 
   const handleSave = async () => {
-    if (!userId) {
-      toast.error("User ID is missing.");
+    if (!userId || !resumeId) {
+      toast.error("Missing user or resume ID.");
       return;
     }
 
     setLoading(true);
     try {
-      await axios.post("/api/user/skills", {
+      const response = await axios.patch("/api/user/skills", {
         userId,
-        resumeId, // include resumeId here
+        resumeId,
         skills: skillsList,
       });
 
-      toast.success("Skills saved successfully!");
-      enableNext(true);
+      if (response.data?.success) {
+        toast.success("Skills Saved!");
+        enableNext(true);
+      } else {
+        toast.error(response.data?.message || "Failed to update skills.");
+      }
     } catch (err) {
       console.error(err);
       toast.error("Failed to save skills.");

@@ -4,38 +4,55 @@ import React, { useState } from "react";
 import PersonalDetail from "./forms/PersonalDetail";
 import Summery from "./forms/Summery";
 import Experience from "./forms/Experience";
-import Education from "./forms/Education";
-import Skills from "./forms/Skills";
-import { Button } from "../ui/button";
-import { ArrowLeft, ArrowRight, Home, LayoutGrid } from "lucide-react";
-import { useSession } from "next-auth/react";
+import Projects from "./forms/Projects"; // ✅ Projects at step 4
+import Education from "./forms/Education";  // Step 5
+import Skills from "./forms/Skills";        // Step 6
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, ArrowRight, Home } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import ThemeColor from "./ThemeColor";
 import Link from "next/link";
 
 interface FormSectionProps {
   resumeId: string;
+  userId: string;
+  resumeIndex?: number;
 }
 
-const FormSection: React.FC<FormSectionProps> = ({ resumeId }) => {
-  const { data: session } = useSession();
-  const userId = session?.user?.id;
-
+const FormSection: React.FC<FormSectionProps> = ({ resumeId, userId }) => {
   const [activeFormIndex, setActiveFormIndex] = useState(1);
   const [enableNext, setEnableNext] = useState(false);
 
+  const router = useRouter();
+
+  const handleNextClick = () => {
+    const nextIndex = activeFormIndex + 1;
+
+    if (nextIndex === 7) {
+      if (!userId || !resumeId) {
+        toast.error("User or resume ID missing");
+        return;
+      }
+      router.push(`/dashboard/resume/${userId}/${resumeId}/view`);
+    } else {
+      setActiveFormIndex(nextIndex);
+      setEnableNext(false);
+    }
+  };
+
   return (
     <div>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mb-4">
         <div className="flex gap-5">
-          <Link href={"/dashboard"}>
+          <Link href="/dashboard">
             <Button className="bg-[#9f5bff]">
               <Home />
             </Button>
           </Link>
-          <Button variant="outline" size="sm" className="flex gap-2">
-            <LayoutGrid />
-            Theme
-          </Button>
+          <ThemeColor userId={userId} resumeId={resumeId} />
         </div>
+
         <div className="flex gap-2">
           {activeFormIndex > 1 && (
             <Button
@@ -50,10 +67,7 @@ const FormSection: React.FC<FormSectionProps> = ({ resumeId }) => {
             className="flex gap-2 bg-[#9f5bff]"
             disabled={!enableNext}
             size="sm"
-            onClick={() => {
-              setActiveFormIndex(activeFormIndex + 1);
-              setEnableNext(false);
-            }}
+            onClick={handleNextClick}
           >
             Next <ArrowRight />
           </Button>
@@ -61,11 +75,7 @@ const FormSection: React.FC<FormSectionProps> = ({ resumeId }) => {
       </div>
 
       {activeFormIndex === 1 && (
-        <PersonalDetail
-          enableNext={setEnableNext}
-          userId={userId}
-          resumeId={resumeId}
-        />
+        <PersonalDetail enableNext={setEnableNext} userId={userId} resumeId={resumeId} />
       )}
       {activeFormIndex === 2 && (
         <Summery enableNext={setEnableNext} userId={userId} resumeId={resumeId} />
@@ -74,9 +84,12 @@ const FormSection: React.FC<FormSectionProps> = ({ resumeId }) => {
         <Experience enableNext={setEnableNext} userId={userId} resumeId={resumeId} />
       )}
       {activeFormIndex === 4 && (
-        <Education enableNext={setEnableNext} userId={userId} resumeId={resumeId} />
+        <Projects enableNext={setEnableNext} userId={userId} resumeId={resumeId} />
       )}
       {activeFormIndex === 5 && (
+        <Education enableNext={setEnableNext} userId={userId} resumeId={resumeId} />
+      )}
+      {activeFormIndex === 6 && (
         <Skills enableNext={setEnableNext} userId={userId} resumeId={resumeId} />
       )}
     </div>

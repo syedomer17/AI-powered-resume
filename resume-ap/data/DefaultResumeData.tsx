@@ -82,6 +82,28 @@ const DefaultResumeData = {
       rating: 100,
     },
   ],
+  projects: [
+    {
+      id: 1,
+      title: "Portfolio Website",
+      description:
+        "Developed a responsive portfolio website using React and Tailwind CSS.",
+      link: "https://myportfolio.com",
+      startDate: "Jan 2023",
+      endDate: "Feb 2023",
+      currentlyWorking: false,
+    },
+    {
+      id: 2,
+      title: "E-commerce Platform",
+      description:
+        "Built an e-commerce platform with shopping cart, payments, and admin dashboard.",
+      link: "https://myecommerce.com",
+      startDate: "Mar 2023",
+      endDate: "",
+      currentlyWorking: true,
+    },
+  ],
 };
 
 export default DefaultResumeData;

@@ -7,7 +7,15 @@ import FormSection from "./FormSection";
 import ResumePriview from "./ResumePriview";
 import { Loader2 } from "lucide-react";
 
-export default function ClientResumeWrapper({ resumeId }: { resumeId: string }) {
+interface ClientResumeWrapperProps {
+  userId: string; // Add userId here
+  resumeId: string;
+}
+
+export default function ClientResumeWrapper({
+  userId,
+  resumeId,
+}: ClientResumeWrapperProps) {
   const [resumeData, setResumeData] = useState<ResumeInfoType | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -32,6 +40,7 @@ export default function ClientResumeWrapper({ resumeId }: { resumeId: string }) 
           experience: resume.experience || [],
           education: resume.education || [],
           skills: resume.skills || [],
+          projects: resume.projects || [], // ✅ Added this line
         };
 
         setResumeData(transformedData);
@@ -65,7 +74,8 @@ export default function ClientResumeWrapper({ resumeId }: { resumeId: string }) 
   return (
     <ResumeInfoProvider defaultValue={resumeData}>
       <div className="grid grid-cols-1 md:grid-cols-2 p-10 gap-10">
-        <FormSection resumeId={resumeId} />
+        {/* Pass userId here */}
+        <FormSection userId={userId} resumeId={resumeId} />
         <ResumePriview />
       </div>
     </ResumeInfoProvider>

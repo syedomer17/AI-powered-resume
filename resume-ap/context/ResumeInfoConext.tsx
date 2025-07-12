@@ -1,4 +1,12 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+"use client";
+
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 import dummy from "@/data/DefaultResumeData";
 
 export interface ResumeInfoType {
@@ -13,6 +21,8 @@ export interface ResumeInfoType {
   experience: any[];
   education: any[];
   skills: any[];
+  projects: any[]; // ✅ Added projects here
+  hasPersonalDetails?: boolean;
 }
 
 interface ResumeInfoContextType {
@@ -37,6 +47,8 @@ export const ResumeInfoProvider = ({
     experience: defaultValue?.experience ?? dummy.experience,
     education: defaultValue?.education ?? dummy.education,
     skills: defaultValue?.skills ?? dummy.skills,
+    projects: defaultValue?.projects ?? dummy.projects, // ✅ Added here
+    hasPersonalDetails: defaultValue?.hasPersonalDetails ?? false,
   });
 
   useEffect(() => {
@@ -47,6 +59,8 @@ export const ResumeInfoProvider = ({
         experience: defaultValue.experience ?? dummy.experience,
         education: defaultValue.education ?? dummy.education,
         skills: defaultValue.skills ?? dummy.skills,
+        projects: defaultValue.projects ?? dummy.projects, // ✅ Added here
+        hasPersonalDetails: defaultValue.hasPersonalDetails ?? false,
       });
     }
   }, [defaultValue]);
@@ -60,7 +74,7 @@ export const ResumeInfoProvider = ({
 
 export const useResumeInfo = () => {
   const context = useContext(ResumeInfoContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useResumeInfo must be used within a ResumeInfoProvider");
   }
   return context;

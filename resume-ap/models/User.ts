@@ -10,7 +10,7 @@ export interface IExperience {
   startDate: string;
   endDate: string;
   currentlyWorking: boolean;
-  workSummery: string;
+  workSummary: string; // typo fixed here
 }
 
 export interface IEducation {
@@ -46,8 +46,18 @@ export interface ISummary {
   resumeId: string;
 }
 
+export interface IProject {
+  id: number;
+  title: string;
+  description: string;
+  link?: string;
+  startDate: string;
+  endDate: string;
+  currentlyWorking: boolean;
+}
+
 export interface IResume {
-   _id?: mongoose.Types.ObjectId;
+  _id?: mongoose.Types.ObjectId;
   id: number;
   title: string;
   personalDetails: IPersonalDetails[];
@@ -55,6 +65,7 @@ export interface IResume {
   education: IEducation[];
   skills: ISkill[];
   summary: ISummary[];
+  projects: IProject[]; // added projects here
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -76,7 +87,7 @@ export interface IUser extends Document {
 const SummarySchema = new Schema<ISummary>({
   id: Number,
   text: { type: String, required: true },
-   resumeId: { type: String, required: true },
+  resumeId: { type: String, required: true },
 });
 
 const ExperienceSchema = new Schema<IExperience>({
@@ -88,7 +99,7 @@ const ExperienceSchema = new Schema<IExperience>({
   startDate: String,
   endDate: String,
   currentlyWorking: Boolean,
-  workSummery: String,
+  workSummary: String, // typo fixed here
 });
 
 const EducationSchema = new Schema<IEducation>({
@@ -118,31 +129,49 @@ const PersonalDetailsSchema = new Schema<IPersonalDetails>({
   themeColor: { type: String, default: "#ff6666" },
 });
 
-const ResumeSchema = new Schema<IResume>({
-  id: { type: Number, required: true },
-  title: { type: String, required: true },
-  personalDetails: { type: [PersonalDetailsSchema], default: [] },
-  experience: { type: [ExperienceSchema], default: [] },
-  education: { type: [EducationSchema], default: [] },
-  skills: { type: [SkillSchema], default: [] },
-  summary: { type: [SummarySchema], default: [] },
-}, { timestamps: true });
+// Project schema added as requested
+const ProjectSchema = new Schema<IProject>({
+  id: Number,
+  title: String,
+  description: String,
+  link: String,
+  startDate: String,
+  endDate: String,
+  currentlyWorking: Boolean,
+});
 
-/* Main User Schema */
-const UserSchema = new Schema<IUser>({
-  userName: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: String,
-  emailVerified: { type: Boolean, default: false },
-  otp: String,
-  otpCreatedAt: Date,
-  passwordResetVerified: { type: Boolean, default: false },
-  avatar: {
-    type: String,
-    default: "https://play-lh.googleusercontent.com/nV5JHE9tyyqNcVqh0JLVGoV2ldpAqC8htiBpsbjqxATjXQnpNTKgU99B-euShOJPu-8",
+const ResumeSchema = new Schema<IResume>(
+  {
+    id: { type: Number, required: true },
+    title: { type: String, required: true },
+    personalDetails: { type: [PersonalDetailsSchema], default: [] },
+    experience: { type: [ExperienceSchema], default: [] },
+    education: { type: [EducationSchema], default: [] },
+    skills: { type: [SkillSchema], default: [] },
+    summary: { type: [SummarySchema], default: [] },
+    projects: { type: [ProjectSchema], default: [] }, // projects added here
   },
-  bio: { type: String, default: "" },
-  resumes: { type: [ResumeSchema], default: [] },
-}, { timestamps: true });
+  { timestamps: true }
+);
+
+const UserSchema = new Schema<IUser>(
+  {
+    userName: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: String,
+    emailVerified: { type: Boolean, default: false },
+    otp: String,
+    otpCreatedAt: Date,
+    passwordResetVerified: { type: Boolean, default: false },
+    avatar: {
+      type: String,
+      default:
+        "https://play-lh.googleusercontent.com/nV5JHE9tyyqNcVqh0JLVGoV2ldpAqC8htiBpsbjqxATjXQnpNTKgU99B-euShOJPu-8",
+    },
+    bio: { type: String, default: "" },
+    resumes: { type: [ResumeSchema], default: [] },
+  },
+  { timestamps: true }
+);
 
 export default mongoose.models.User || mongoose.model<IUser>("User", UserSchema);

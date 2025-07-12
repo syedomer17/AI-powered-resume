@@ -8,6 +8,7 @@ import { Loader2 } from "lucide-react";
 import axios from "axios";
 import { toast } from "sonner";
 import { useResumeInfo } from "@/context/ResumeInfoConext";
+import { generateExperience, AIExperience } from "@/service/AIModel"; // import your AI function
 
 type ExperienceType = {
   id?: string;
@@ -49,8 +50,8 @@ const Experience: React.FC<ExperienceProps> = ({
   ]);
 
   const [loading, setLoading] = useState(false);
+  const [generating, setGenerating] = useState(false); // for AI generate button
 
-  // ✅ Prefill ONCE when the component mounts
   useEffect(() => {
     if (
       resumeInfo?.experience &&
@@ -71,9 +72,8 @@ const Experience: React.FC<ExperienceProps> = ({
         }))
       );
     }
-  }, []); // <= only on mount
+  }, []); // only on mount
 
-  // ✅ Update context whenever experienceList changes
   useEffect(() => {
     setResumeInfo((prev) => ({
       ...prev,
@@ -91,7 +91,7 @@ const Experience: React.FC<ExperienceProps> = ({
     }));
 
     enableNext?.(experienceList.some((e) => e.title.trim() !== ""));
-  }, [experienceList]); // no need to include setResumeInfo or enableNext
+  }, [experienceList, enableNext, setResumeInfo]);
 
   const handleChange = (
     index: number,
@@ -131,16 +131,25 @@ const Experience: React.FC<ExperienceProps> = ({
       toast.error("User ID missing. Please log in.");
       return;
     }
+    if (!resumeId) {
+      toast.error("Resume ID missing.");
+      return;
+    }
 
     setLoading(true);
     try {
-      await axios.post("/api/user/experience", {
+      const response = await axios.patch("/api/user/experience", {
         userId,
         resumeId,
         experience: experienceList,
       });
-      toast.success("Experience saved!");
-      enableNext?.(true);
+
+      if (response.data?.success) {
+        toast.success("Experience Saved!");
+        enableNext?.(true);
+      } else {
+        toast.error(response.data?.message || "Failed to save experience.");
+      }
     } catch (err) {
       console.error(err);
       toast.error("Failed to save experience.");
@@ -149,10 +158,69 @@ const Experience: React.FC<ExperienceProps> = ({
     }
   };
 
+  // New: handleGenerate to generate experience from AI
+  const handleGenerate = async () => {
+    if (!resumeInfo.jobTitle) {
+      toast.error("Please enter your job title before generating experience.");
+      return;
+    }
+
+    setGenerating(true);
+    try {
+      const generated: AIExperience[] = await generateExperience(`
+        Based on the job title "${resumeInfo.jobTitle}", generate 2-3 relevant past job experiences in JSON array format with fields:
+        title, companyName, city, state, startDate (YYYY-MM-DD), endDate (YYYY-MM-DD), currentlyWorking (boolean), workSummery.
+      `);
+
+      if (generated.length === 0) {
+        toast.error("AI returned no experience data.");
+      } else {
+        setExperienceList(
+          generated.map((exp, i) => ({
+            id: String(i + 1),
+            title: exp.title,
+            companyName: exp.companyName,
+            city: exp.city,
+            state: exp.state,
+            startDate: exp.startDate,
+            endDate: exp.endDate,
+            currentlyWorking: exp.currentlyWorking,
+            workSummery: exp.workSummery,
+          }))
+        );
+        toast.success("Experience generated from AI!");
+        enableNext?.(true);
+      }
+    } catch (err) {
+      console.error("AI generation error:", err);
+      toast.error("Failed to generate experience from AI.");
+    } finally {
+      setGenerating(false);
+    }
+  };
+
   return (
     <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">
       <h2 className="font-bold text-lg">Professional Experience</h2>
       <p>Add your previous job experience.</p>
+
+      <div className="flex justify-end mb-3">
+        <Button
+          variant="outline"
+          onClick={handleGenerate}
+          disabled={generating}
+          className="flex items-center gap-2"
+        >
+          {generating ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Generating...
+            </>
+          ) : (
+            "Generate from AI"
+          )}
+        </Button>
+      </div>
 
       {experienceList.map((field, index) => (
         <div
@@ -194,9 +262,7 @@ const Experience: React.FC<ExperienceProps> = ({
             <Input
               type="date"
               value={field.startDate}
-              onChange={(e) =>
-                handleChange(index, "startDate", e.target.value)
-              }
+              onChange={(e) => handleChange(index, "startDate", e.target.value)}
             />
           </div>
           <div>
@@ -204,20 +270,20 @@ const Experience: React.FC<ExperienceProps> = ({
             <Input
               type="date"
               value={field.endDate}
-              onChange={(e) =>
-                handleChange(index, "endDate", e.target.value)
-              }
+              onChange={(e) => handleChange(index, "endDate", e.target.value)}
             />
           </div>
           <div>
-            <label className="text-xs">Currently Working</label>
-            <Input
-              type="checkbox"
-              checked={field.currentlyWorking}
-              onChange={(e) =>
-                handleChange(index, "currentlyWorking", e.target.checked)
-              }
-            />
+            <label className="text-xs flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={field.currentlyWorking}
+                onChange={(e) =>
+                  handleChange(index, "currentlyWorking", e.target.checked)
+                }
+              />
+              Currently Working
+            </label>
           </div>
           <div className="col-span-2">
             <label className="text-xs">Work Summary</label>

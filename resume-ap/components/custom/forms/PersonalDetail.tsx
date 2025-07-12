@@ -11,7 +11,7 @@ import { toast } from "sonner";
 interface PersonalDetailProps {
   enableNext?: (value: boolean) => void;
   userId?: string;
-  resumeId?: string;  // <-- Added resumeId here
+  resumeId?: string;
 }
 
 const PersonalDetail: React.FC<PersonalDetailProps> = ({
@@ -31,33 +31,32 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
     email: "",
   });
 
-  // Prefill ONCE when mounting
+  // Prefill the form once on component mount with current resumeInfo data
   useEffect(() => {
     setPersonalDetails({
-      firstName: resumeInfo?.firstName || "",
-      lastName: resumeInfo?.lastName || "",
-      jobTitle: resumeInfo?.jobTitle || "",
-      address: resumeInfo?.address || "",
-      phone: resumeInfo?.phone || "",
-      email: resumeInfo?.email || "",
+      firstName: resumeInfo.firstName || "",
+      lastName: resumeInfo.lastName || "",
+      jobTitle: resumeInfo.jobTitle || "",
+      address: resumeInfo.address || "",
+      phone: resumeInfo.phone || "",
+      email: resumeInfo.email || "",
     });
-  }, []); // only on mount
+  }, []);
 
-  // Update context whenever user types
+  // Update the context and notify parent component about form fill state
   useEffect(() => {
+    const isFilled = Object.values(personalDetails).some(
+      (val) => val.trim() !== ""
+    );
+
     setResumeInfo((prev) => ({
       ...prev,
       ...personalDetails,
+      hasPersonalDetails: isFilled,
     }));
 
-    // Enable next if anything is filled
-    if (enableNext) {
-      const filled = Object.values(personalDetails).some(
-        (val) => val.trim() !== ""
-      );
-      enableNext(filled);
-    }
-  }, [personalDetails, setResumeInfo, enableNext]);
+    if (enableNext) enableNext(isFilled);
+  }, [personalDetails, enableNext, setResumeInfo]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -68,27 +67,24 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
   };
 
   const handleSave = async () => {
-    if (!userId) {
-      toast.error("User ID missing. Cannot save.");
-      return;
-    }
-    if (!resumeId) {
-      toast.error("Resume ID missing. Cannot save.");
+    if (!userId || !resumeId) {
+      toast.error("User ID or Resume ID missing");
       return;
     }
 
     setLoading(true);
     try {
-      await axios.post("/api/user/personal", {
+      await axios.patch("/api/user/personal", {
         userId,
-        resumeId,  // <-- Send resumeId to backend
+        resumeId,
         ...personalDetails,
+        themeColor: resumeInfo.themeColor, // Include current themeColor to keep it intact
       });
 
       toast.success("Personal details saved!");
-    } catch (error) {
-      console.error("Failed to save personal details:", error);
-      toast.error("Something went wrong while saving.");
+    } catch (err) {
+      console.error("Save failed:", err);
+      toast.error("Failed to save personal details");
     } finally {
       setLoading(false);
     }
@@ -151,6 +147,7 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
             />
           </div>
         </div>
+
         <div className="mt-3 flex justify-end">
           <Button
             type="button"

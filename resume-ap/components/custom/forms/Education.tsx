@@ -22,10 +22,14 @@ type EducationType = {
 interface EducationProps {
   enableNext: (value: boolean) => void;
   userId?: string;
-  resumeId: string; // added resumeId here
+  resumeId: string;
 }
 
-const Education: React.FC<EducationProps> = ({ enableNext, userId, resumeId }) => {
+const Education: React.FC<EducationProps> = ({
+  enableNext,
+  userId,
+  resumeId,
+}) => {
   const { resumeInfo, setResumeInfo } = useResumeInfo();
 
   const [educationalList, setEducationalList] = useState<EducationType[]>([
@@ -61,7 +65,7 @@ const Education: React.FC<EducationProps> = ({ enableNext, userId, resumeId }) =
         }))
       );
     }
-  }, []);
+  }, []); // only on mount
 
   // Update context when educationalList changes
   useEffect(() => {
@@ -112,17 +116,27 @@ const Education: React.FC<EducationProps> = ({ enableNext, userId, resumeId }) =
       toast.error("User ID is missing");
       return;
     }
+    if (!resumeId) {
+      toast.error("Resume ID is missing");
+      return;
+    }
 
     setLoading(true);
     try {
-      await axios.post("/api/user/education", {
+      const response = await axios.patch("/api/user/education", {
         userId,
-        resumeId, // pass resumeId here to backend if needed
+        resumeId,
         education: educationalList,
       });
 
-      toast.success("Education saved successfully!");
-      enableNext(true);
+      if (response.data?.success) {
+        toast.success("Education Saved!");
+        enableNext(true);
+      } else {
+        toast.error(
+          response.data?.message || "Failed to save education details."
+        );
+      }
     } catch (err: any) {
       console.error(err);
       toast.error(
@@ -192,7 +206,6 @@ const Education: React.FC<EducationProps> = ({ enableNext, userId, resumeId }) =
             />
           </div>
 
-          {/* Remove button per block */}
           <div className="col-span-2 flex justify-end mt-2">
             <Button
               variant="outline"
@@ -205,14 +218,12 @@ const Education: React.FC<EducationProps> = ({ enableNext, userId, resumeId }) =
         </div>
       ))}
 
-      {/* Add More button only once here */}
       <div className="flex justify-start mt-4">
         <Button variant="outline" onClick={handleAdd}>
           + Add More
         </Button>
       </div>
 
-      {/* Save button */}
       <div className="flex justify-end mt-6">
         <Button
           className="bg-fuchsia-500 text-white flex items-center gap-2"
