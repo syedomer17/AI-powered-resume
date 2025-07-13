@@ -7,7 +7,6 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import dummy from "@/data/DefaultResumeData";
 
 export interface ResumeInfoType {
   firstName: string;
@@ -21,7 +20,7 @@ export interface ResumeInfoType {
   experience: any[];
   education: any[];
   skills: any[];
-  projects: any[]; // ✅ Added projects here
+  projects: any[];
   hasPersonalDetails?: boolean;
 }
 
@@ -42,24 +41,36 @@ export const ResumeInfoProvider = ({
   defaultValue?: ResumeInfoType;
 }) => {
   const [resumeInfo, setResumeInfo] = useState<ResumeInfoType>({
-    ...dummy,
-    ...defaultValue,
-    experience: defaultValue?.experience ?? dummy.experience,
-    education: defaultValue?.education ?? dummy.education,
-    skills: defaultValue?.skills ?? dummy.skills,
-    projects: defaultValue?.projects ?? dummy.projects, // ✅ Added here
+    firstName: defaultValue?.firstName ?? "",
+    lastName: defaultValue?.lastName ?? "",
+    jobTitle: defaultValue?.jobTitle ?? "",
+    address: defaultValue?.address ?? "",
+    phone: defaultValue?.phone ?? "",
+    email: defaultValue?.email ?? "",
+    themeColor: defaultValue?.themeColor ?? "#ff6666",
+    summery: defaultValue?.summery ?? "",
+    experience: defaultValue?.experience ?? [],
+    education: defaultValue?.education ?? [],
+    skills: defaultValue?.skills ?? [],
+    projects: defaultValue?.projects ?? [],
     hasPersonalDetails: defaultValue?.hasPersonalDetails ?? false,
   });
 
   useEffect(() => {
     if (defaultValue) {
       setResumeInfo({
-        ...dummy,
-        ...defaultValue,
-        experience: defaultValue.experience ?? dummy.experience,
-        education: defaultValue.education ?? dummy.education,
-        skills: defaultValue.skills ?? dummy.skills,
-        projects: defaultValue.projects ?? dummy.projects, // ✅ Added here
+        firstName: defaultValue.firstName ?? "",
+        lastName: defaultValue.lastName ?? "",
+        jobTitle: defaultValue.jobTitle ?? "",
+        address: defaultValue.address ?? "",
+        phone: defaultValue.phone ?? "",
+        email: defaultValue.email ?? "",
+        themeColor: defaultValue.themeColor ?? "#ff6666",
+        summery: defaultValue.summery ?? "",
+        experience: defaultValue.experience ?? [],
+        education: defaultValue.education ?? [],
+        skills: defaultValue.skills ?? [],
+        projects: defaultValue.projects ?? [],
         hasPersonalDetails: defaultValue.hasPersonalDetails ?? false,
       });
     }

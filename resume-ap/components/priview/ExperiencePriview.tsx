@@ -31,7 +31,7 @@ const ExperiencePriview = ({ resumeInfo }: { resumeInfo: ResumeInfoType }) => {
             </span>
           </h2>
           <div
-            className="text-xs my-2 "  // <-- Added this to fix text color
+            className="text-xs my-2 text-black "  // <-- Added this to fix text color
             dangerouslySetInnerHTML={{
               __html: experience?.workSummery || "",
             }}
