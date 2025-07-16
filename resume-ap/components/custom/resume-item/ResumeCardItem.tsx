@@ -29,7 +29,12 @@ interface Resume {
   title: string;
 }
 
-export default function ResumeCardItem({ resume }: { resume: Resume }) {
+interface ResumeCardItemProps {
+  resume: Resume;
+  index: number;
+}
+
+export default function ResumeCardItem({ resume, index }: ResumeCardItemProps) {
   const { data: session } = useSession();
   const userId = session?.user?.id;
   const router = useRouter();
@@ -38,21 +43,27 @@ export default function ResumeCardItem({ resume }: { resume: Resume }) {
   if (!userId) return null;
 
   const handleDelete = async () => {
+    if (!userId || !resume._id) {
+      console.error("Missing userId or resumeId");
+      return;
+    }
+
     try {
-      const res = await fetch(`/api/resume/${resume._id}`, {
+      const res = await fetch(`/api/user/${userId}/resume/${resume._id}`, {
         method: "DELETE",
       });
+
       if (res.ok) {
         setOpenAlert(false);
-        router.refresh(); // Refresh the list
+        router.refresh();
       } else {
-        console.error("Failed to delete resume");
+        const data = await res.json();
+        console.error("Failed to delete resume:", data?.message);
       }
     } catch (err) {
-      console.error(err);
+      console.error("Error deleting resume:", err);
     }
   };
-
   return (
     <>
       <div className="relative group w-full max-w-sm mx-auto bg-white rounded-2xl shadow-lg overflow-hidden transition transform hover:scale-105 hover:shadow-2xl border border-gray-200 hover:border-[#9f5bff]">
@@ -75,7 +86,13 @@ export default function ResumeCardItem({ resume }: { resume: Resume }) {
               >
                 Edit
               </DropdownMenuItem>
-              <DropdownMenuItem>View</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  router.push(`/dashboard/resume/${userId}/${resume._id}/view`)
+                }
+              >
+                View
+              </DropdownMenuItem>
               <DropdownMenuItem>Download</DropdownMenuItem>
               <DropdownMenuItem
                 onSelect={() => setOpenAlert(true)}
