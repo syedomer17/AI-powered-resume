@@ -30,7 +30,7 @@ const ProjectPreview = ({ resumeInfo }: { resumeInfo: ResumeInfoType }) => {
           >
             {/* Title */}
             <h3
-              className="text-sm font-bold mb-1"
+              className="text-sm font-bold mb-1 capitalize"
               style={{ color: themeColor }}
             >
               {project?.title}

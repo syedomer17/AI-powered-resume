@@ -7,6 +7,9 @@ import { Loader2 } from "lucide-react";
 import { useResumeInfo } from "@/context/ResumeInfoConext";
 import axios from "axios";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 interface PersonalDetailProps {
   enableNext?: (value: boolean) => void;
@@ -31,7 +34,7 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
     email: "",
   });
 
-  // Prefill the form once on component mount with current resumeInfo data
+  // Prefill
   useEffect(() => {
     setPersonalDetails({
       firstName: resumeInfo.firstName || "",
@@ -43,7 +46,7 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
     });
   }, []);
 
-  // Update the context and notify parent component about form fill state
+  // Update context + enableNext
   useEffect(() => {
     const isFilled = Object.values(personalDetails).some(
       (val) => val.trim() !== ""
@@ -66,6 +69,13 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
     }));
   };
 
+  const handlePhoneChange = (value: string) => {
+    setPersonalDetails((prev) => ({
+      ...prev,
+      phone: `+${value}`, // Always prefix +
+    }));
+  };
+
   const handleSave = async () => {
     if (!userId || !resumeId) {
       toast.error("User ID or Resume ID missing");
@@ -78,7 +88,7 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
         userId,
         resumeId,
         ...personalDetails,
-        themeColor: resumeInfo.themeColor, // Include current themeColor to keep it intact
+        themeColor: resumeInfo.themeColor,
       });
 
       toast.success("Personal details saved!");
@@ -91,76 +101,98 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
   };
 
   return (
-    <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">
-      <h2 className="font-bold text-lg">Personal Details</h2>
-      <p>Get started with your basic information.</p>
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl shadow-lg mt-10"
+    >
+      <h2 className="font-semibold text-xl mb-1">👤 Personal Details</h2>
+      <p className="text-sm text-zinc-500 mb-4">
+        Get started with your basic information.
+      </p>
 
       <form>
-        <div className="grid grid-cols-2 mt-5 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="text-sm">First Name</label>
+            <label className="text-xs font-medium capitalize">First Name</label>
             <Input
+            className="capitalize"
               name="firstName"
               value={personalDetails.firstName}
               onChange={handleChange}
+              placeholder="e.g., John"
             />
           </div>
           <div>
-            <label className="text-sm">Last Name</label>
+            <label className="text-xs font-medium capitalize">Last Name</label>
             <Input
+            className="capitalize"
               name="lastName"
               value={personalDetails.lastName}
               onChange={handleChange}
+              placeholder="e.g., Doe"
             />
           </div>
-          <div className="col-span-2">
-            <label className="text-sm">Job Title</label>
+          <div className="sm:col-span-2 capitalize">
+            <label className="text-xs font-medium">Job Title</label>
             <Input
+            className="capitalize"
               name="jobTitle"
               value={personalDetails.jobTitle}
               onChange={handleChange}
+              placeholder="e.g., Software Engineer"
             />
           </div>
-          <div className="col-span-2">
-            <label className="text-sm">Address</label>
+          <div className="sm:col-span-2">
+            <label className="text-xs font-medium">Address</label>
             <Input
+            className="capitalize"
               name="address"
               value={personalDetails.address}
               onChange={handleChange}
+              placeholder="e.g., 123 Main St, City, State"
             />
           </div>
           <div>
-            <label className="text-sm">Phone</label>
-            <Input
-              name="phone"
-              value={personalDetails.phone}
-              onChange={handleChange}
+            <label className="text-xs font-medium">Phone</label>
+            <PhoneInput
+              country={"in"}
+              value={personalDetails.phone.replace("+", "")}
+              onChange={handlePhoneChange}
+              enableSearch
+              inputClass="!w-full !h-10 !text-sm"
+              containerClass="!w-full"
             />
           </div>
           <div>
-            <label className="text-sm">Email</label>
+            <label className="text-xs font-medium">Email</label>
             <Input
               type="email"
               name="email"
               value={personalDetails.email}
               onChange={handleChange}
+              placeholder="e.g., john.doe@example.com"
             />
           </div>
         </div>
 
-        <div className="mt-3 flex justify-end">
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          className="mt-4 flex justify-end"
+        >
           <Button
             type="button"
-            className="bg-[#9f5bff] text-white flex items-center gap-2"
+            className="bg-fuchsia-500 hover:bg-fuchsia-600 text-white flex items-center gap-2 transition"
             onClick={handleSave}
             disabled={loading}
           >
             {loading && <Loader2 className="w-4 h-4 animate-spin" />}
             Save
           </Button>
-        </div>
+        </motion.div>
       </form>
-    </div>
+    </motion.div>
   );
 };
 

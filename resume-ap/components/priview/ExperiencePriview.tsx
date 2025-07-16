@@ -44,7 +44,7 @@ const ExperiencePriview = ({ resumeInfo }: { resumeInfo: ResumeInfoType }) => {
           >
             {/* Job Title */}
             <h3
-              className="text-sm font-semibold mb-1"
+              className="text-sm font-semibold mb-1 capitalize"
               style={{ color: themeColor }}
             >
               {experience?.title}
@@ -55,7 +55,7 @@ const ExperiencePriview = ({ resumeInfo }: { resumeInfo: ResumeInfoType }) => {
               className="
                 flex flex-col gap-1 
                 sm:flex-row sm:justify-between sm:items-center 
-                text-xs text-muted-foreground mb-1
+                text-xs text-muted-foreground mb-1 capitalize
               "
             >
               <span>

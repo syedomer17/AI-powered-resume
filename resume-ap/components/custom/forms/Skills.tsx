@@ -1,36 +1,51 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import React, { useEffect, useState } from "react";
-import { Rating } from "@smastrom/react-rating";
-import "@smastrom/react-rating/style.css";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { Loader2, Trash2, ChevronDown } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 import { useResumeInfo } from "@/context/ResumeInfoConext";
 import axios from "axios";
 import { toast } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect, useState } from "react";
 
 type SkillType = {
   id?: number;
+  category: string;
   name: string;
-  rating: number;
 };
 
 interface SkillsProps {
   enableNext: (value: boolean) => void;
   userId?: string;
-  resumeId?: string; // <-- Made optional to handle new resumes
+  resumeId?: string;
 }
+
+const SKILL_CATEGORIES = [
+  "Frontend",
+  "Backend",
+  "Database",
+  "DevOps",
+  "Mobile",
+  "Data Science",
+  "AI/ML",
+  "Other",
+];
 
 const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
   const { resumeInfo, setResumeInfo } = useResumeInfo();
   const [loading, setLoading] = useState(false);
 
   const [skillsList, setSkillsList] = useState<SkillType[]>([
-    { id: undefined, name: "", rating: 1 },
+    { id: undefined, category: "", name: "" },
   ]);
 
-  // Prefill only once when mounting
   useEffect(() => {
     if (
       resumeInfo?.skills &&
@@ -40,49 +55,78 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
       setSkillsList(
         resumeInfo.skills.map((s) => ({
           id: s.id,
+          category: s.category || "",
           name: s.name || "",
-          rating: s.rating || 1,
         }))
       );
     }
   }, []);
 
-  // Update context & enableNext when skillsList changes
   useEffect(() => {
     setResumeInfo((prev) => ({
       ...prev,
       skills: skillsList.map((skill, i) => ({
         id: i + 1,
+        category: skill.category,
         name: skill.name,
-        rating: skill.rating,
       })),
     }));
 
-    enableNext(skillsList.some((s) => s.name.trim() !== ""));
+    enableNext(skillsList.some((s) => s.category && s.name));
   }, [skillsList]);
 
-  const handleChangeName = (index: number, value: string) => {
-    setSkillsList((prev) => {
-      const updated = [...prev];
-      updated[index] = { ...updated[index], name: value };
-      return updated;
-    });
-  };
-
-  const handleChangeRating = (index: number, value: number) => {
-    setSkillsList((prev) => {
-      const updated = [...prev];
-      updated[index] = { ...updated[index], rating: value };
-      return updated;
-    });
-  };
-
   const handleAdd = () => {
-    setSkillsList((prev) => [...prev, { id: undefined, name: "", rating: 1 }]);
+    setSkillsList((prev) => [
+      ...prev,
+      { id: undefined, category: "", name: "" },
+    ]);
   };
 
-  const handleRemove = (index: number) => {
-    setSkillsList((prev) => prev.filter((_, i) => i !== index));
+  const handleRemove = async (index: number) => {
+    const skillToRemove = skillsList[index];
+
+    if (!skillToRemove?.id) {
+      // Not saved yet—just remove locally
+      setSkillsList((prev) => prev.filter((_, i) => i !== index));
+      return;
+    }
+
+    if (!userId || !resumeId) {
+      toast.error("User or Resume ID missing.");
+      return;
+    }
+
+    try {
+      const res = await axios.delete("/api/user/skills", {
+        data: {
+          userId,
+          resumeId,
+          skillId: skillToRemove.id,
+        },
+      });
+
+      if (res.data?.success) {
+        toast.success("Skill removed.");
+        setSkillsList((prev) => prev.filter((_, i) => i !== index));
+      } else {
+        toast.error(res.data?.message || "Failed to remove skill.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Error removing skill.");
+    }
+  };
+
+  const handleChange = (
+    index: number,
+    field: keyof SkillType,
+    value: string
+  ) => {
+    setSkillsList((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
   };
 
   const handleSave = async () => {
@@ -90,7 +134,6 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
       toast.error("Missing user or resume ID.");
       return;
     }
-
     setLoading(true);
     try {
       const response = await axios.patch("/api/user/skills", {
@@ -114,54 +157,83 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
   };
 
   return (
-    <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">
-      <h2 className="font-bold text-lg">Skills</h2>
-      <p>Add your skills.</p>
-      <div>
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl shadow-lg mt-10"
+    >
+      <h2 className="font-semibold text-xl mb-1">🛠️ Skills</h2>
+      <p className="text-sm text-zinc-500 mb-4">
+        Select categories and specify your skills.
+      </p>
+
+      <AnimatePresence>
         {skillsList.map((item, index) => (
-          <div
+          <motion.div
             key={index}
-            className="flex justify-between items-center border rounded-lg p-3 gap-2"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="flex flex-col sm:flex-row sm:items-center justify-between border border-zinc-200 dark:border-zinc-700 rounded-lg bg-zinc-50 dark:bg-zinc-800 p-3 mb-3 gap-3"
           >
-            <div className="flex-1">
-              <label className="text-xs">Name</label>
+            <div className="flex flex-col sm:flex-row gap-2 w-full flex-1">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="flex justify-between w-full sm:w-40"
+                  >
+                    {item.category || "Select Category"}
+                    <ChevronDown className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  {SKILL_CATEGORIES.map((category) => (
+                    <DropdownMenuItem
+                      key={category}
+                      onSelect={() => handleChange(index, "category", category)}
+                    >
+                      {category}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
               <Input
                 placeholder="Skill name"
                 value={item.name}
-                onChange={(e) => handleChangeName(index, e.target.value)}
+                onChange={(e) => handleChange(index, "name", e.target.value)}
               />
             </div>
-            <Rating
-              style={{ maxWidth: 150 }}
-              value={item.rating}
-              onChange={(val: number) => handleChangeRating(index, val)}
-            />
             <Button
               variant="outline"
               size="sm"
               onClick={() => handleRemove(index)}
               disabled={skillsList.length === 1}
+              className="flex items-center gap-1 hover:bg-red-50 dark:hover:bg-red-900"
             >
+              <Trash2 className="w-4 h-4" />
               Remove
             </Button>
-          </div>
+          </motion.div>
         ))}
+      </AnimatePresence>
 
-        <div className="mt-3 flex gap-2">
-          <Button variant="outline" onClick={handleAdd}>
-            + Add Skill
-          </Button>
-          <Button
-            className="bg-[#9f5bff] text-white flex items-center gap-2"
-            onClick={handleSave}
-            disabled={loading}
-          >
-            {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-            Save
-          </Button>
-        </div>
+      <div className="flex flex-wrap justify-between mt-4 gap-2">
+        <Button variant="outline" onClick={handleAdd}>
+          + Add Skill
+        </Button>
+        <Button
+          className="bg-fuchsia-500 hover:bg-fuchsia-600 text-white flex items-center gap-2 transition"
+          onClick={handleSave}
+          disabled={loading}
+        >
+          {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+          Save
+        </Button>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

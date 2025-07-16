@@ -16,18 +16,21 @@ export default function Header() {
   return (
     <header className="p-3 px-5 flex justify-between items-center shadow-md">
       <Link href="/">
-        <Image
-          src="/logo.svg"
-          alt="Logo"
-          width={100}
-          height={40}
-          className="cursor-pointer"
-        />
+        <div className="relative w-[100px] h-[40px]">
+          <Image
+            src="/logo.svg"
+            alt="Logo"
+            fill
+            style={{ objectFit: "contain" }}
+          />
+        </div>
       </Link>
 
       {status === "loading" ? (
         <div className="animate-pulse">
-          <Button disabled><Loader2 className="animate-spin"/></Button>
+          <Button disabled>
+            <Loader2 className="animate-spin" />
+          </Button>
         </div>
       ) : user ? (
         <div className="flex items-center gap-3">

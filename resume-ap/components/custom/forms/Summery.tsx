@@ -8,6 +8,7 @@ import { generateSummary, SummaryResponse } from "@/service/AIModel";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface SummeryProps {
   enableNext: (v: boolean) => void;
@@ -78,18 +79,25 @@ const Summery: React.FC<SummeryProps> = ({ enableNext, userId, resumeId }) => {
   };
 
   return (
-    <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">
-      <h2 className="font-bold text-lg">Summary</h2>
-      <p>Add a summary for your resume.</p>
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl shadow-lg mt-10"
+    >
+      <h2 className="font-semibold text-xl mb-1">📝 Summary</h2>
+      <p className="text-sm text-zinc-500 mb-4">
+        Add a professional summary for your resume.
+      </p>
 
-      <form className="mt-7" onSubmit={onSave}>
-        <div className="flex justify-between items-end">
-          <label htmlFor="summary-textarea" className="font-semibold">
-            Add Summary
+      <form onSubmit={onSave} className="space-y-4">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+          <label htmlFor="summary-textarea" className="font-medium">
+            Your Summary
           </label>
           <Button
             variant="outline"
-            className="border-primary text-primary"
+            className="border-fuchsia-500 text-fuchsia-500"
             size="sm"
             type="button"
             onClick={handleGenerate}
@@ -107,7 +115,12 @@ const Summery: React.FC<SummeryProps> = ({ enableNext, userId, resumeId }) => {
         </div>
 
         {options && (
-          <div className="grid grid-cols-2 gap-2 mt-4">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-2"
+          >
             {Object.entries(options).map(([level, text]) => (
               <Button
                 key={level}
@@ -115,7 +128,7 @@ const Summery: React.FC<SummeryProps> = ({ enableNext, userId, resumeId }) => {
                 onClick={() => {
                   setSummary(text);
                   enableNext(true);
-                  setOptions(null); // Clear options after selection
+                  setOptions(null);
                 }}
                 type="button"
                 className="justify-start whitespace-normal text-left"
@@ -123,34 +136,34 @@ const Summery: React.FC<SummeryProps> = ({ enableNext, userId, resumeId }) => {
                 {level.charAt(0).toUpperCase() + level.slice(1)}
               </Button>
             ))}
-          </div>
+          </motion.div>
         )}
 
         <Textarea
           id="summary-textarea"
-          className="mt-5"
+          className="mt-2 min-h-[120px]"
           value={summary}
           required
           placeholder="Write your summary here..."
           onChange={(e) => {
             setSummary(e.target.value);
             enableNext(e.target.value.trim().length > 0);
-            setOptions(null); // Clear AI options on manual edit
+            setOptions(null);
           }}
         />
 
-        <div className="mt-2 flex justify-end">
+        <div className="flex justify-end">
           <Button
             type="submit"
-            className="bg-[#9f5bff] text-white"
+            className="bg-fuchsia-500 hover:bg-fuchsia-600 text-white flex items-center gap-2 transition"
             disabled={loading}
           >
-            {loading && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+            {loading && <Loader2 className="w-4 h-4 animate-spin" />}
             Save
           </Button>
         </div>
       </form>
-    </div>
+    </motion.div>
   );
 };
 

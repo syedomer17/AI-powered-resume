@@ -20,11 +20,12 @@ interface FormSectionProps {
   resumeIndex?: number;
 }
 
-const FormSection: React.FC<FormSectionProps> = ({ resumeId, userId }) => {
+const FormSection: React.FC<FormSectionProps> = ({ resumeId, userId,resumeIndex  }) => {
   const [activeFormIndex, setActiveFormIndex] = useState(1);
   const [enableNext, setEnableNext] = useState(false);
 
   const router = useRouter();
+  // console.log(resumeId,'from fromSection')
 
   const handleNextClick = () => {
     const nextIndex = activeFormIndex + 1;

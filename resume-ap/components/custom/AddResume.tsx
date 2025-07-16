@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -22,20 +23,24 @@ interface AddResumeProps {
 
 const AddResume = ({ userId, userEmail }: AddResumeProps) => {
   const [openDialog, setOpenDialog] = useState(false);
-  const [title, setTitle] = useState("");
+  const [selectedTitle, setSelectedTitle] = useState<string>("Full Stack Developer");
+  const [customTitle, setCustomTitle] = useState("");
   const [loading, setLoading] = useState(false);
 
   const { data: session } = useSession();
   const router = useRouter();
 
   const handleCreateResume = async () => {
-    if (!title.trim()) return;
+    const finalTitle =
+      selectedTitle === "Custom" ? customTitle.trim() : selectedTitle;
+
+    if (!finalTitle) return;
 
     try {
       setLoading(true);
 
       const payload = {
-        title: title.trim(),
+        title: finalTitle,
         userEmail: userEmail,
         userName: session?.user?.name || "",
         userId: userId,
@@ -49,7 +54,8 @@ const AddResume = ({ userId, userEmail }: AddResumeProps) => {
       const resumeIndex = createdResume.id;
 
       setOpenDialog(false);
-      setTitle("");
+      setCustomTitle("");
+      setSelectedTitle("Full Stack Developer");
 
       router.push(`/dashboard/resume/${userId}/${resumeIndex}/edit`);
     } catch (err) {
@@ -75,13 +81,36 @@ const AddResume = ({ userId, userEmail }: AddResumeProps) => {
           <DialogHeader>
             <DialogTitle>Create New Resume</DialogTitle>
             <DialogDescription>
-              <p className="mb-2">Add a title for your new resume</p>
-              <Input
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Ex. Full Stack Developer"
-                disabled={loading}
-              />
+              <p className="mb-2">Select a title for your new resume</p>
+
+              {/* Select Dropdown */}
+              <Select
+                value={selectedTitle}
+                onValueChange={(value) => setSelectedTitle(value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a title" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Frontend Developer">Frontend Developer</SelectItem>
+                  <SelectItem value="Backend Developer">Backend Developer</SelectItem>
+                  <SelectItem value="Full Stack Developer">Full Stack Developer</SelectItem>
+                  <SelectItem value="Mobile Developer">Mobile Developer</SelectItem>
+                  <SelectItem value="Data Scientist">Data Scientist</SelectItem>
+                  <SelectItem value="Custom">Custom</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {/* Custom Title Input */}
+              {selectedTitle === "Custom" && (
+                <Input
+                  className="mt-3"
+                  value={customTitle}
+                  onChange={(e) => setCustomTitle(e.target.value)}
+                  placeholder="Enter your custom title"
+                  disabled={loading}
+                />
+              )}
             </DialogDescription>
 
             <div className="flex justify-end gap-5 mt-4">
@@ -95,7 +124,10 @@ const AddResume = ({ userId, userEmail }: AddResumeProps) => {
               <Button
                 className="bg-[#9f5bff]"
                 onClick={handleCreateResume}
-                disabled={loading || title.trim().length === 0}
+                disabled={
+                  loading ||
+                  (selectedTitle === "Custom" && customTitle.trim().length === 0)
+                }
               >
                 {loading ? <Loader2 className="animate-spin" /> : "Create"}
               </Button>

@@ -14,7 +14,7 @@ export default function PersonalDetailPriview({
     <div className="my-4 space-y-1">
       {/* Name */}
       <h2
-        className="font-bold text-xl text-center tracking-tight"
+        className="font-bold text-xl text-center tracking-tight capitalize"
         style={{ color: themeColor }}
       >
         {resumeInfo?.firstName} {resumeInfo?.lastName}
@@ -22,7 +22,7 @@ export default function PersonalDetailPriview({
 
       {/* Job Title */}
       {resumeInfo?.jobTitle && (
-        <h2 className="text-center text-sm font-medium text-zinc-700 dark:text-zinc-300">
+        <h2 className="text-center text-sm font-medium text-zinc-700 dark:text-zinc-300 capitalize">
           {resumeInfo.jobTitle}
         </h2>
       )}
@@ -30,7 +30,7 @@ export default function PersonalDetailPriview({
       {/* Address */}
       {resumeInfo?.address && (
         <h2
-          className="text-center text-xs font-normal"
+          className="text-center text-xs font-normal capitalize"
           style={{ color: themeColor }}
         >
           {resumeInfo.address}
@@ -55,21 +55,21 @@ export default function PersonalDetailPriview({
         )}
 
         {resumeInfo?.email && (
-          <div
-            className="flex items-center gap-1"
+          <a
+            href={`https://mail.google.com/mail/?view=cm&fs=1&to=${resumeInfo.email}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 hover:underline cursor-pointer"
             style={{ color: themeColor }}
           >
             <Mail className="w-3.5 h-3.5" />
             <span>{resumeInfo.email}</span>
-          </div>
+          </a>
         )}
       </div>
 
       {/* Divider */}
-      <hr
-        className="border-[1.5px] mt-3"
-        style={{ borderColor: themeColor }}
-      />
+      <hr className="border-[1.5px] mt-3" style={{ borderColor: themeColor }} />
     </div>
   );
 }

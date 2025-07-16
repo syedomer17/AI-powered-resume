@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import ResumeCardItem from "./resume-item/ResumeCardItem";
+import { json } from "stream/consumers";
 
 interface ResumeType {
   _id: string;
@@ -10,8 +12,14 @@ interface ResumeType {
   updatedAt?: string;
 }
 
-export default function ResumeGrid({ resumes }: { resumes: ResumeType[] }) {
-  if (!resumes || resumes.length === 0) {
+export default function ResumeGrid({
+  resumes,
+  user,
+}: {
+  resumes: ResumeType[];
+  user: any;
+}) {
+    if (!resumes || resumes.length === 0) {
     return (
       <div className="col-span-full text-center py-6">
         <p className="text-gray-500 text-sm">

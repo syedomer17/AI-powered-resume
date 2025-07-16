@@ -8,13 +8,15 @@ import ResumePriview from "./ResumePriview";
 import { Loader2 } from "lucide-react";
 
 interface ClientResumeWrapperProps {
-  userId: string; // Add userId here
+  userId: string;
   resumeId: string;
+  resumeIndex?: number;
 }
 
 export default function ClientResumeWrapper({
   userId,
   resumeId,
+  resumeIndex, // ✅ include this
 }: ClientResumeWrapperProps) {
   const [resumeData, setResumeData] = useState<ResumeInfoType | null>(null);
   const [loading, setLoading] = useState(true);
@@ -25,7 +27,6 @@ export default function ClientResumeWrapper({
         const response = await axios.get(`/api/resumes/${resumeId}`);
         const resume = response.data.resume;
 
-        // Transform the data to fit ResumeInfoType shape
         const personal = resume.personalDetails?.[0] ?? {};
 
         const transformedData: ResumeInfoType = {
@@ -40,7 +41,7 @@ export default function ClientResumeWrapper({
           experience: resume.experience || [],
           education: resume.education || [],
           skills: resume.skills || [],
-          projects: resume.projects || [], // ✅ Added this line
+          projects: resume.projects || [],
         };
 
         setResumeData(transformedData);
@@ -54,6 +55,8 @@ export default function ClientResumeWrapper({
 
     fetchResume();
   }, [resumeId]);
+
+  // console.log(resumeId,'from clientResumeWraper')
 
   if (loading) {
     return (
@@ -74,8 +77,11 @@ export default function ClientResumeWrapper({
   return (
     <ResumeInfoProvider defaultValue={resumeData}>
       <div className="grid grid-cols-1 md:grid-cols-2 p-10 gap-10">
-        {/* Pass userId here */}
-        <FormSection userId={userId} resumeId={resumeId} />
+        <FormSection
+          userId={userId}
+          resumeId={resumeId.toString()}
+          resumeIndex={resumeIndex} // ✅ pass it here
+        />
         <ResumePriview />
       </div>
     </ResumeInfoProvider>
