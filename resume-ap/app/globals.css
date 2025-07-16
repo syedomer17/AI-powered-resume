@@ -4,19 +4,36 @@
 @custom-variant dark (&:is(.dark *));
 
 
+#print-area {
+  background: white;
+  box-shadow: none;
+}
+
 @media print{
   #no-print{
     display: none;
   }
-  #print-area{
-    display: block;
+   body * {
+    visibility: hidden;
   }
-  body{
-    margin: 0;
-    padding: 0;
-    box-shadow: none;
+  #print-area, #print-area * {
+    visibility: visible;
+  }
+  #print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm;
+    box-sizing: border-box;
   }
 }
+
+.page-break {
+  page-break-before: always;
+}
+
 
 @page{
   size:auto;

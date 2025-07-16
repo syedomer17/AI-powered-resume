@@ -62,18 +62,51 @@ export default function ViewPage() {
   }, [userId, resumeId]);
 
   const handleDownload = () => {
-    const element = document.getElementById("print-area");
-    if (!element) return;
+    const waitForElement = () => {
+      const element = document.getElementById("print-area");
+      if (element) {
+        const safeFileName = resumeInfo?.firstName
+          ? `resume-${resumeInfo.firstName
+              .toLowerCase()
+              .replace(/\s+/g, "-")}-${resumeInfo.lastName
+              .toLowerCase()
+              .replace(/\s+/g, "-")}.pdf`
+          : "resume.pdf";
 
-    html2pdf()
-      .from(element)
-      .set({
-        margin: 0,
-        filename: "resume.pdf",
-        html2canvas: { scale: 2 },
-        jsPDF: { orientation: "portrait", unit: "mm", format: "a4" },
-      })
-      .save();
+        html2pdf()
+          .set({
+            margin: 0,
+            filename: safeFileName,
+            html2canvas: {
+              scale: 2,
+              useCORS: true,
+              onclone: (clonedDoc:any) => {
+                const elements = clonedDoc.querySelectorAll("*");
+                elements.forEach((el:any) => {
+                  const style = window.getComputedStyle(el);
+                  if (
+                    style.color?.includes("oklch") ||
+                    style.backgroundColor?.includes("oklch")
+                  ) {
+                    el.style.color = "#000";
+                    el.style.backgroundColor = "#fff";
+                  }
+                });
+              },
+            },
+            jsPDF: { orientation: "portrait", unit: "mm", format: "a4" },
+          })
+          .from(element)
+          .save()
+          .catch((error:any) => {
+            console.error("PDF generation failed:", error);
+          });
+      } else {
+        requestAnimationFrame(waitForElement);
+      }
+    };
+
+    waitForElement();
   };
 
   if (loading) {
