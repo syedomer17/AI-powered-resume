@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 export default function ResumePage() {
   const params = useParams();
   const resumeId = params.id;
+  console.log(resumeId,"hello from resumeid");
 
   const { data: session, status } = useSession();
 

@@ -15,7 +15,7 @@ interface EditPageParams {
 }
 
 export default async function EditPage({ params }: EditPageParams) {
-  const { userId, resumeIndex } = params;
+  const { userId, resumeIndex } =await params;
 
   // Check if userId is a valid ObjectId
   if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -52,10 +52,12 @@ export default async function EditPage({ params }: EditPageParams) {
     notFound();
   }
 
+  // console.log(resume._id,"from edit")
+
   return (
     <>
       <Header />
-      <ClientResumeWrapper userId={userId} resumeId={resume._id.toString()} />
+      <ClientResumeWrapper userId={userId} resumeId={resume._id.toString()} resumeIndex={resume.id}/>
     </>
   );
 }

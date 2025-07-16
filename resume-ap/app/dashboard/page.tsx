@@ -22,7 +22,9 @@ export default async function DashboardPage() {
 
   await connectToDB();
 
-  const user = (await User.findOne({ email: session.user.email }).lean()) as IUser | null;
+  const user = (await User.findOne({
+    email: session.user.email,
+  }).lean()) as IUser | null;
 
   if (!user) {
     redirect("/login");
@@ -43,7 +45,7 @@ export default async function DashboardPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
           <AddResume userId={user._id.toString()} userEmail={user.email} />
-          <ResumeGrid resumes={user.resumes} />
+          <ResumeGrid resumes={user.resumes} user={user} />
         </div>
       </section>
     </>
