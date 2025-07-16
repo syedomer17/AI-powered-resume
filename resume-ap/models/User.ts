@@ -5,6 +5,7 @@ export interface IExperience {
   id: number;
   title: string;
   companyName: string;
+  country: String;
   city: string;
   state: string;
   startDate: string;
@@ -26,7 +27,7 @@ export interface IEducation {
 export interface ISkill {
   id: number;
   name: string;
-  rating: number;
+  category: string;
 }
 
 export interface IPersonalDetails {
@@ -94,6 +95,7 @@ const ExperienceSchema = new Schema<IExperience>({
   id: Number,
   title: String,
   companyName: String,
+  country: String,
   city: String,
   state: String,
   startDate: String,
@@ -115,7 +117,7 @@ const EducationSchema = new Schema<IEducation>({
 const SkillSchema = new Schema<ISkill>({
   id: Number,
   name: String,
-  rating: { type: Number, min: 1, max: 5 },
+   category: { type: String, default: "General" },
 });
 
 const PersonalDetailsSchema = new Schema<IPersonalDetails>({
