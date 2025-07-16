@@ -3,6 +3,20 @@
 import React from "react";
 import { ResumeInfoType } from "@/context/ResumeInfoConext";
 import { motion } from "framer-motion";
+import { Country, State } from "country-state-city";
+
+// Helpers to get full names
+const getCountryName = (code: string) => {
+  if (!code) return "";
+  const country = Country.getCountryByCode(code);
+  return country ? country.name : "";
+};
+
+const getStateName = (countryCode: string, stateCode: string) => {
+  if (!countryCode || !stateCode) return "";
+  const state = State.getStateByCodeAndCountry(stateCode, countryCode);
+  return state ? state.name : "";
+};
 
 const ExperiencePriview = ({ resumeInfo }: { resumeInfo: ResumeInfoType }) => {
   const themeColor = resumeInfo?.themeColor || "#9f5bff";
@@ -36,7 +50,7 @@ const ExperiencePriview = ({ resumeInfo }: { resumeInfo: ResumeInfoType }) => {
               {experience?.title}
             </h3>
 
-            {/* Company and Date - responsive stack on mobile */}
+            {/* Company and Dates */}
             <div
               className="
                 flex flex-col gap-1 
@@ -45,7 +59,14 @@ const ExperiencePriview = ({ resumeInfo }: { resumeInfo: ResumeInfoType }) => {
               "
             >
               <span>
-                {experience?.companyName}, {experience?.city}, {experience?.state}
+                {experience?.companyName}
+                {experience?.city ? `, ${experience.city}` : ""}
+                {experience?.state
+                  ? `, ${getStateName(experience.country, experience.state)}`
+                  : ""}
+                {experience?.country
+                  ? `, ${getCountryName(experience.country)}`
+                  : ""}
               </span>
               <span>
                 {experience?.startDate} –{" "}
@@ -53,7 +74,7 @@ const ExperiencePriview = ({ resumeInfo }: { resumeInfo: ResumeInfoType }) => {
               </span>
             </div>
 
-            {/* Summary (HTML content) */}
+            {/* Summary */}
             {experience?.workSummery && (
               <div
                 className="text-xs mt-2 text-zinc-700 dark:text-zinc-300 leading-relaxed"
