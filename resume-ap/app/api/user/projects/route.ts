@@ -4,10 +4,56 @@ import User, { IResume, IProject } from "@/models/User";
 
 export async function PATCH(req: NextRequest) {
   await connectToDB();
+  const { userId, resumeId, projects } = await req.json();
 
-  const { userId, resumeId, project } = await req.json();
+  if (!userId || !resumeId || !projects || !Array.isArray(projects)) {
+    return NextResponse.json(
+      { success: false, message: "Missing or invalid fields" },
+      { status: 400 }
+    );
+  }
 
-  if (!userId || !resumeId || !project) {
+  const user = await User.findById(userId);
+  if (!user)
+    return NextResponse.json(
+      { success: false, message: "User not found" },
+      { status: 404 }
+    );
+
+  const resumeIndex = user.resumes.findIndex(
+    (r: IResume) => r._id?.toString() === resumeId
+  );
+  if (resumeIndex === -1)
+    return NextResponse.json(
+      { success: false, message: "Resume not found" },
+      { status: 404 }
+    );
+
+  const resume = user.resumes[resumeIndex];
+
+  // Reassign IDs so they are always 1, 2, 3...
+  const normalizedProjects = projects.map((proj: IProject, idx: number) => ({
+    ...proj,
+    id: idx + 1,
+  }));
+
+  resume.projects = normalizedProjects;
+
+  user.markModified(`resumes.${resumeIndex}.projects`);
+  await user.save();
+
+  return NextResponse.json({
+    success: true,
+    message: "Projects updated successfully",
+    projects: resume.projects,
+  });
+}
+
+export async function DELETE(req: NextRequest) {
+  await connectToDB();
+  const { userId, resumeId, projectId } = await req.json();
+
+  if (!userId || !resumeId || !projectId) {
     return NextResponse.json(
       { success: false, message: "Missing required fields" },
       { status: 400 }
@@ -15,51 +61,47 @@ export async function PATCH(req: NextRequest) {
   }
 
   const user = await User.findById(userId);
-  if (!user) {
+  if (!user)
     return NextResponse.json(
       { success: false, message: "User not found" },
       { status: 404 }
     );
-  }
 
-  // Find resume index first for marking modified
   const resumeIndex = user.resumes.findIndex(
     (r: IResume) => r._id?.toString() === resumeId
   );
-
-  if (resumeIndex === -1) {
+  if (resumeIndex === -1)
     return NextResponse.json(
       { success: false, message: "Resume not found" },
       { status: 404 }
     );
-  }
 
   const resume = user.resumes[resumeIndex];
+  const initialLength = resume.projects.length;
 
-  if (!resume.projects) {
-    resume.projects = [];
-  }
-
-  const existingProjectIndex = resume.projects.findIndex(
-    (p: IProject) => p.id === project.id
+  resume.projects = resume.projects.filter(
+    (p: IProject) => String(p.id) !== String(projectId)
   );
 
-  if (existingProjectIndex !== -1) {
-    // Update existing project
-    resume.projects[existingProjectIndex] = project;
-  } else {
-    // Add new project
-    resume.projects.push(project);
+  if (resume.projects.length === initialLength) {
+    return NextResponse.json(
+      { success: false, message: "Project not found" },
+      { status: 404 }
+    );
   }
 
-  // Mark the specific path modified
-  user.markModified(`resumes.${resumeIndex}.projects`);
+  // Reassign IDs again after deletion
+  resume.projects = resume.projects.map((proj: IProject, idx: number) => ({
+    ...proj,
+    id: idx + 1,
+  }));
 
+  user.markModified(`resumes.${resumeIndex}.projects`);
   await user.save();
 
   return NextResponse.json({
     success: true,
-    message: "Project added or updated successfully",
+    message: "Project removed",
     projects: resume.projects,
   });
 }
