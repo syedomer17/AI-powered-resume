@@ -11,7 +11,7 @@ export async function GET(
   try {
     await connectToDB();
 
-    const { resumeId } = params;
+    const { resumeId } =await params;
 
     if (!mongoose.Types.ObjectId.isValid(resumeId)) {
       return NextResponse.json(
