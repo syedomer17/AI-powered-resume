@@ -5,12 +5,15 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import gsap from "gsap";
 import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Login = () => {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ email: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     gsap.set(".form-container", { opacity: 0, y: -100 });
@@ -81,10 +84,10 @@ const Login = () => {
                     autoComplete="off"
                     id="password"
                     name="password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     value={form.password}
                     onChange={handleChange}
-                    className="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-rose-600"
+                    className="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-rose-600 pr-10"
                     placeholder="Password"
                     required
                   />
@@ -94,6 +97,19 @@ const Login = () => {
                   >
                     Password
                   </label>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0 text-gray-500 cursor-pointer"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
+                  </Button>
                 </div>
 
                 <div className="text-right">
@@ -113,7 +129,7 @@ const Login = () => {
                       loading
                         ? "bg-cyan-300 cursor-not-allowed"
                         : "bg-cyan-500 hover:bg-cyan-600"
-                    } text-white rounded-md px-4 py-2 w-full`}
+                    } text-white rounded-md px-4 py-2 w-full cursor-pointer`}
                   >
                     {loading ? "Logging in..." : "Submit"}
                   </button>
@@ -125,7 +141,7 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => signIn("google")}
-                  className="flex items-center justify-center bg-white border border-gray-300 rounded-lg shadow-md px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                  className="flex items-center justify-center bg-white border border-gray-300 rounded-lg shadow-md px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 cursor-pointer"
                 >
                   {/* Google SVG */}
                   <svg
@@ -158,7 +174,7 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => signIn("github")}
-                  className="flex items-center justify-center bg-white border border-gray-300 rounded-lg shadow-md px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                  className="flex items-center justify-center bg-white border border-gray-300 rounded-lg shadow-md px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 cursor-pointer"
                 >
                   {/* GitHub SVG */}
                   <svg
