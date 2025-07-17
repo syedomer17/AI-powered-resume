@@ -142,7 +142,7 @@ export default function VerifyEmailPage() {
               <button
                 type="submit"
                 disabled={resending}
-                className={`w-full py-3 rounded-md text-white font-semibold transition ${
+                className={`w-full py-3 rounded-md text-white font-semibold transition cursor-pointer ${
                   resending
                     ? "bg-indigo-300 cursor-not-allowed"
                     : "bg-indigo-500 hover:bg-indigo-600"
@@ -163,7 +163,7 @@ export default function VerifyEmailPage() {
                 <button
                   disabled={resending}
                   onClick={handleResend}
-                  className="text-indigo-600 hover:text-indigo-800 underline"
+                  className="text-indigo-600 hover:text-indigo-800 underline cursor-pointer"
                 >
                   {resending ? "Resending..." : "Resend OTP"}
                 </button>
