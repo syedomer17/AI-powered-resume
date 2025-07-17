@@ -4,12 +4,16 @@ import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import gsap from "gsap";
+import { Eye, EyeOff } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function ResetPasswordPage() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
   const [form, setForm] = useState({ newPassword: "", confirmPassword: "" });
   const [loading, setLoading] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -84,11 +88,11 @@ export default function ResetPasswordPage() {
                   <input
                     id="newPassword"
                     name="newPassword"
-                    type="password"
+                    type={showNewPassword ? "text" : "password"}
                     required
                     value={form.newPassword}
                     onChange={handleChange}
-                    className="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-indigo-600"
+                    className="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-indigo-600 pr-10"
                     placeholder="New Password"
                   />
                   <label
@@ -97,6 +101,19 @@ export default function ResetPasswordPage() {
                   >
                     New Password
                   </label>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                    className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0 text-gray-500 cursor-pointer"
+                  >
+                    {showNewPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
+                  </Button>
                 </div>
 
                 {/* Confirm Password */}
@@ -104,11 +121,11 @@ export default function ResetPasswordPage() {
                   <input
                     id="confirmPassword"
                     name="confirmPassword"
-                    type="password"
+                    type={showConfirmPassword ? "text" : "password"}
                     required
                     value={form.confirmPassword}
                     onChange={handleChange}
-                    className="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-indigo-600"
+                    className="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-indigo-600 pr-10"
                     placeholder="Confirm Password"
                   />
                   <label
@@ -117,6 +134,19 @@ export default function ResetPasswordPage() {
                   >
                     Confirm Password
                   </label>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0 text-gray-500 cursor-pointer"
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
+                  </Button>
                 </div>
 
                 {/* Submit */}
@@ -128,7 +158,7 @@ export default function ResetPasswordPage() {
                       loading
                         ? "bg-indigo-300 cursor-not-allowed"
                         : "bg-indigo-500 hover:bg-indigo-600"
-                    } text-white rounded-md px-4 py-2 w-full`}
+                    } text-white rounded-md px-4 py-2 w-full cursor-pointer`}
                   >
                     {loading ? "Resetting..." : "Reset Password"}
                   </button>
