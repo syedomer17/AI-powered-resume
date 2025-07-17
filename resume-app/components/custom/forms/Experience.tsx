@@ -142,7 +142,7 @@ const Experience: React.FC<ExperienceProps> = ({
       },
     ]);
   };
-  
+
   const handleRemove = async (index: number) => {
     const experienceToRemove = experienceList[index];
 
@@ -281,7 +281,7 @@ const Experience: React.FC<ExperienceProps> = ({
             <div>
               <label className="text-xs font-medium">Position Title</label>
               <Input
-              className="capitalize"
+                className="capitalize"
                 value={field.title}
                 onChange={(e) => handleChange(index, "title", e.target.value)}
               />
@@ -289,7 +289,7 @@ const Experience: React.FC<ExperienceProps> = ({
             <div>
               <label className="text-xs font-medium">Company Name</label>
               <Input
-              className="capitalize"
+                className="capitalize"
                 value={field.companyName}
                 onChange={(e) =>
                   handleChange(index, "companyName", e.target.value)
@@ -398,6 +398,17 @@ const Experience: React.FC<ExperienceProps> = ({
               {field.state ? ", " : ""}
               {getCountryName(field.country) || "—"}
             </div>
+            <div className="md:col-span-2 flex justify-end mt-2">
+              <Button
+                variant="outline"
+                onClick={() => handleRemove(index)}
+                disabled={experienceList.length === 1}
+                className="flex items-center gap-1 hover:bg-red-50 dark:hover:bg-red-900"
+              >
+                <Trash2 className="w-4 h-4" />
+                Remove
+              </Button>
+            </div>
           </motion.div>
         ))}
       </AnimatePresence>
@@ -406,13 +417,6 @@ const Experience: React.FC<ExperienceProps> = ({
         <div className="flex gap-2">
           <Button variant="outline" onClick={handleAdd}>
             + Add More
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => handleRemove(experienceList.length - 1)}
-            disabled={experienceList.length === 1}
-          >
-            <Trash2 className="w-4 h-4" /> Remove
           </Button>
         </div>
         <Button

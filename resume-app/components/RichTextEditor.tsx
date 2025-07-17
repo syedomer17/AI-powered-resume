@@ -14,7 +14,7 @@ import {
 } from "react-simple-wysiwyg";
 import { Button } from "./ui/button";
 import { Brain, Loader2 } from "lucide-react";
-import { useResumeInfo } from "@/context/ResumeInfoConext"; // ✅ fixed import
+import { useResumeInfo } from "@/context/ResumeInfoConext"; 
 import { toast } from "sonner";
 
 type RichTextEditorProps = {
