@@ -23,7 +23,7 @@ export default function Home() {
                   New
                 </span>{" "}
                 <span className="text-sm font-medium">
-                  Tubeguruji.com All new Apps
+                  syedomerali2006@gmail.com
                 </span>
                 <svg
                   className="ml-2 w-5 h-5"
