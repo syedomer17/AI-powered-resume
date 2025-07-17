@@ -9,24 +9,19 @@
   box-shadow: none;
 }
 
-@media print{
-  #no-print{
-    display: none;
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
-   body * {
-    visibility: hidden;
+
+  #no-print {
+    display: none !important;
   }
-  #print-area, #print-area * {
-    visibility: visible;
-  }
+
   #print-area {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 210mm;
-    min-height: 297mm;
-    padding: 20mm;
-    box-sizing: border-box;
+    box-shadow: none !important;
+    border: none !important;
   }
 }
 
@@ -167,3 +162,5 @@
   list-style: decimal;
   padding-left: 2em;
 }
+
+@layer base{img{display: initial}}

@@ -62,51 +62,41 @@ export default function ViewPage() {
   }, [userId, resumeId]);
 
   const handleDownload = () => {
-    const waitForElement = () => {
-      const element = document.getElementById("print-area");
-      if (element) {
-        const safeFileName = resumeInfo?.firstName
-          ? `resume-${resumeInfo.firstName
-              .toLowerCase()
-              .replace(/\s+/g, "-")}-${resumeInfo.lastName
-              .toLowerCase()
-              .replace(/\s+/g, "-")}.pdf`
-          : "resume.pdf";
+    const element = document.getElementById("print-area");
 
-        html2pdf()
-          .set({
-            margin: 0,
-            filename: safeFileName,
-            html2canvas: {
-              scale: 2,
-              useCORS: true,
-              onclone: (clonedDoc:any) => {
-                const elements = clonedDoc.querySelectorAll("*");
-                elements.forEach((el:any) => {
-                  const style = window.getComputedStyle(el);
-                  if (
-                    style.color?.includes("oklch") ||
-                    style.backgroundColor?.includes("oklch")
-                  ) {
-                    el.style.color = "#000";
-                    el.style.backgroundColor = "#fff";
-                  }
-                });
-              },
-            },
-            jsPDF: { orientation: "portrait", unit: "mm", format: "a4" },
-          })
-          .from(element)
-          .save()
-          .catch((error:any) => {
-            console.error("PDF generation failed:", error);
-          });
-      } else {
-        requestAnimationFrame(waitForElement);
-      }
+    if (!element) {
+      console.error("Resume element not found for PDF generation.");
+      return;
+    }
+
+    const safeFileName = resumeInfo?.firstName
+      ? `resume-${resumeInfo.firstName
+          .toLowerCase()
+          .replace(/\s+/g, "-")}-${resumeInfo.lastName
+          .toLowerCase()
+          .replace(/\s+/g, "-")}.pdf`
+      : "resume.pdf";
+
+    const opt = {
+      margin: 0,
+      filename: safeFileName,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        logging: true,
+      },
+      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
     };
 
-    waitForElement();
+    html2pdf()
+      .set(opt)
+      .from(element)
+      .save()
+      .catch((err: any) => {
+        console.error("PDF generation failed:", err);
+      });
   };
 
   if (loading) {
