@@ -117,4 +117,4 @@ PRs and suggestions are welcome! Open an issue to discuss changes.
 
 ## 📄 License
 
-MIT License © [Your Name](https://github.com/syedomer17)
+MIT License © [syedomer17](https://github.com/syedomer17)
