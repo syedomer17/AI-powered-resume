@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 import gsap from "gsap";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
