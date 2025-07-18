@@ -47,7 +47,7 @@ An intelligent and beautiful resume builder powered by AI, built with the latest
 | ![Next.js](https://img.shields.io/badge/Next.js-000?logo=next.js&logoColor=white) | App framework |
 | ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white) | Type safety |
 | ![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-06B6D4?logo=tailwind-css&logoColor=white) | Styling |
-| `shadcn/ui` | Reusable UI components |
+| ![shadcn/ui](https://img.shields.io/badge/shadcn%2Fui-%23000000?style=for-the-badge&logo=none&logoColor=white) | Reusable UI components |
 | ![Auth.js](https://img.shields.io/badge/Auth.js-000000?logo=next-auth&logoColor=white) | Authentication (Google & GitHub OAuth) |
 | ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=white) | Database to store resumes and user data |
 | ![Framer Motion](https://img.shields.io/badge/Framer--Motion-EF007E?logo=framer&logoColor=white) | Page transitions and component animations |
