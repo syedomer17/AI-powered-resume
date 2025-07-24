@@ -256,6 +256,15 @@ PRs and suggestions are welcome! Open an issue to discuss changes.
 
 ---
 
-## 📄 License
+## 🧑‍💻 Author
 
-MIT License © [syedomer17](https://github.com/syedomer17)
+**Syed Omer Ali**
+🌐 [Portfolio](https://next-js-portfolio-gsb1-cs5pebze5-syedomer17s-projects.vercel.app/)
+🐱 [GitHub](https://github.com/syedomer17)
+📫 [LinkedIn](https://www.linkedin.com/in/syedomerali)
+
+---
+
+## 📝 License
+
+This project is licensed under the [MIT License](./LICENSE).
