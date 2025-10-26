@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -25,6 +26,7 @@ const AddResume = ({ userId, userEmail }: AddResumeProps) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedTitle, setSelectedTitle] = useState<string>("Full Stack Developer");
   const [customTitle, setCustomTitle] = useState("");
+  const [jobDescription, setJobDescription] = useState("");
   const [loading, setLoading] = useState(false);
 
   const { data: session } = useSession();
@@ -44,6 +46,7 @@ const AddResume = ({ userId, userEmail }: AddResumeProps) => {
         userEmail: userEmail,
         userName: session?.user?.name || "",
         userId: userId,
+        jobDescription: jobDescription.trim() || undefined, // Include job description if provided
       };
 
       const res = await axios.post("/api/resume", payload);
@@ -56,6 +59,7 @@ const AddResume = ({ userId, userEmail }: AddResumeProps) => {
       setOpenDialog(false);
       setCustomTitle("");
       setSelectedTitle("Full Stack Developer");
+      setJobDescription("");
 
       router.push(`/dashboard/resume/${userId}/${resumeIndex}/edit`);
     } catch (err) {
@@ -77,7 +81,7 @@ const AddResume = ({ userId, userEmail }: AddResumeProps) => {
 
       {/* Dialog */}
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-        <DialogContent>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Create New Resume</DialogTitle>
             <DialogDescription>
@@ -111,6 +115,24 @@ const AddResume = ({ userId, userEmail }: AddResumeProps) => {
                   disabled={loading}
                 />
               )}
+
+              {/* Job Description Textarea */}
+              <div className="mt-4">
+                <label htmlFor="jobDescription" className="text-sm font-medium text-foreground">
+                  Job Description (Optional)
+                </label>
+                <p className="text-xs text-muted-foreground mb-2">
+                  Paste the job description here to generate a tailored resume using AI
+                </p>
+                <Textarea
+                  id="jobDescription"
+                  value={jobDescription}
+                  onChange={(e) => setJobDescription(e.target.value)}
+                  placeholder="Paste the job description here..."
+                  className="min-h-[150px] mt-1"
+                  disabled={loading}
+                />
+              </div>
             </DialogDescription>
 
             <div className="flex justify-end gap-5 mt-4">

@@ -7,12 +7,14 @@ import Experience from "./forms/Experience";
 import Projects from "./forms/Projects"; // ✅ Projects at step 4
 import Education from "./forms/Education";  // Step 5
 import Skills from "./forms/Skills";        // Step 6
+import ATSScoreDisplay from "./ATSScoreDisplay"; // Step 7
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Home } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import ThemeColor from "./ThemeColor";
 import Link from "next/link";
+import { useResumeInfo } from "@/context/ResumeInfoConext";
 
 interface FormSectionProps {
   resumeId: string;
@@ -23,6 +25,7 @@ interface FormSectionProps {
 const FormSection: React.FC<FormSectionProps> = ({ resumeId, userId,resumeIndex  }) => {
   const [activeFormIndex, setActiveFormIndex] = useState(1);
   const [enableNext, setEnableNext] = useState(false);
+  const { resumeInfo } = useResumeInfo();
 
   const router = useRouter();
   // console.log(resumeId,'from fromSection')
@@ -30,7 +33,7 @@ const FormSection: React.FC<FormSectionProps> = ({ resumeId, userId,resumeIndex 
   const handleNextClick = () => {
     const nextIndex = activeFormIndex + 1;
 
-    if (nextIndex === 7) {
+    if (nextIndex === 8) {
       if (!userId || !resumeId) {
         toast.error("User or resume ID missing");
         return;
@@ -92,6 +95,30 @@ const FormSection: React.FC<FormSectionProps> = ({ resumeId, userId,resumeIndex 
       )}
       {activeFormIndex === 6 && (
         <Skills enableNext={setEnableNext} userId={userId} resumeId={resumeId} />
+      )}
+      {activeFormIndex === 7 && (
+        <div>
+          <ATSScoreDisplay 
+            resumeData={{
+              title: resumeInfo?.jobTitle || "",
+              summary: resumeInfo?.summery || "",
+              experience: resumeInfo?.experience || [],
+              projects: resumeInfo?.projects || [],
+              skills: (resumeInfo?.skills || []).map((s: any) => s.name),
+              education: resumeInfo?.education || [],
+            }}
+            userId={userId}
+            resumeId={resumeId}
+          />
+          <div className="mt-6">
+            <Button
+              className="w-full bg-[#9f5bff]"
+              onClick={() => setEnableNext(true)}
+            >
+              Continue to View Resume
+            </Button>
+          </div>
+        </div>
       )}
     </div>
   );

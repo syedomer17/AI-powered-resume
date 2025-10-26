@@ -57,6 +57,13 @@ export interface IProject {
   currentlyWorking: boolean;
 }
 
+export interface IATSAnalysis {
+  score: number;
+  matchPercentage: number;
+  jobDescription: string;
+  analyzedAt: Date;
+}
+
 export interface IResume {
   _id?: mongoose.Types.ObjectId;
   id: number;
@@ -67,6 +74,7 @@ export interface IResume {
   skills: ISkill[];
   summary: ISummary[];
   projects: IProject[]; // added projects here
+  atsAnalysis?: IATSAnalysis; // ATS score data
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -142,6 +150,13 @@ const ProjectSchema = new Schema<IProject>({
   currentlyWorking: Boolean,
 });
 
+const ATSAnalysisSchema = new Schema<IATSAnalysis>({
+  score: Number,
+  matchPercentage: Number,
+  jobDescription: String,
+  analyzedAt: { type: Date, default: Date.now },
+});
+
 const ResumeSchema = new Schema<IResume>(
   {
     id: { type: Number, required: true },
@@ -152,6 +167,7 @@ const ResumeSchema = new Schema<IResume>(
     skills: { type: [SkillSchema], default: [] },
     summary: { type: [SummarySchema], default: [] },
     projects: { type: [ProjectSchema], default: [] }, // projects added here
+    atsAnalysis: { type: ATSAnalysisSchema, default: undefined }, // ATS analysis
   },
   { timestamps: true }
 );

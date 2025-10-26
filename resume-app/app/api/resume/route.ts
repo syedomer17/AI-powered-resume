@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectToDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import mongoose from "mongoose";
+import { generateResumeFromJobDescription } from "@/service/AIModel";
 
 // 👇 Define only the shape needed for creating a new resume
 interface NewResume {
@@ -15,7 +16,7 @@ export async function POST(req: NextRequest) {
   try {
     await connectToDB();
     const body = await req.json();
-    const { userId, title, userEmail, userName } = body;
+    const { userId, title, userEmail, userName, jobDescription } = body;
 
     if (!title) {
       return NextResponse.json({ message: "Title is required." }, { status: 400 });
@@ -55,12 +56,63 @@ export async function POST(req: NextRequest) {
     }
 
     // Create new resume
-    const newResume: NewResume = {
+    const newResume: any = {
       id: nextId,
       title,
       createdAt: new Date(),
       updatedAt: new Date(),
+      personalDetails: [],
+      experience: [],
+      education: [],
+      skills: [],
+      summary: [],
+      projects: [],
     };
+
+    // If job description is provided, generate AI content
+    if (jobDescription && jobDescription.trim()) {
+      try {
+        const aiContent = await generateResumeFromJobDescription(title, jobDescription);
+        
+        // Add AI-generated summary
+        if (aiContent.summary) {
+          newResume.summary = [{
+            id: 1,
+            text: aiContent.summary,
+            resumeId: String(nextId),
+          }];
+        }
+
+        // Add AI-generated experience
+        if (aiContent.experience && aiContent.experience.length > 0) {
+          newResume.experience = aiContent.experience.map((exp, index) => ({
+            id: index + 1,
+            ...exp,
+            country: exp.state || "", // Default country if not provided
+          }));
+        }
+
+        // Add AI-generated projects
+        if (aiContent.projects && aiContent.projects.length > 0) {
+          newResume.projects = aiContent.projects.map((proj, index) => ({
+            id: index + 1,
+            ...proj,
+          }));
+        }
+
+        // Add AI-generated skills
+        if (aiContent.skills && aiContent.skills.length > 0) {
+          newResume.skills = aiContent.skills.map((skill, index) => ({
+            id: index + 1,
+            name: skill,
+            category: "Technical",
+          }));
+        }
+      } catch (aiError) {
+        console.error("AI generation error:", aiError);
+        // Continue with empty resume if AI fails
+      }
+    }
 
     user.resumes.push(newResume);
     await user.save();
