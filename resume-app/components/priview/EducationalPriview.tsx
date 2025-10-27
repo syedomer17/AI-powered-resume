@@ -5,65 +5,65 @@ import { ResumeInfoType } from "@/context/ResumeInfoConext";
 import { motion } from "framer-motion";
 
 const EducationalPriview = ({ resumeInfo }: { resumeInfo: ResumeInfoType }) => {
-  const themeColor = resumeInfo?.themeColor || "#9f5bff";
+  // Function to format date from YYYY-MM-DD to "Mon YYYY"
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const month = date.toLocaleDateString('en-US', { month: 'short' });
+    const year = date.getFullYear();
+    return `${month} ${year}`;
+  };
 
   return (
-    <div className="my-6">
+    <div className="mb-3">
       {/* Section Title */}
-      <h2
-        className="text-center font-bold text-sm tracking-wide mb-2"
-        style={{ color: themeColor }}
-      >
+      <h2 className="font-bold text-[12px] tracking-wider mb-1 uppercase text-black border-b border-black pb-0.5">
         Education
       </h2>
-      <hr
-        style={{ borderColor: themeColor }}
-        className="mb-6 border-t-2"
-      />
 
       {resumeInfo?.education?.length > 0 ? (
         resumeInfo.education.map((education, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: index * 0.1 }}
-            className="mb-5 px-4 py-3 rounded-md bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 shadow-sm"
-          >
-            {/* University */}
-            <h3
-              className="text-sm font-semibold mb-1"
-              style={{ color: themeColor }}
-            >
-              {education.universityName}
-            </h3>
-
-            {/* Degree + Dates */}
-            <div
-              className="
-                flex flex-col gap-1
-                sm:flex-row sm:justify-between sm:items-center
-                text-xs text-muted-foreground mb-1
-              "
-            >
-              <span>
-                {education.degree} in {education.major}
-              </span>
-              <span>
-                {education.startDate} – {education.endDate}
+          <div key={index} className="mt-2 mb-2.5">
+            {/* Bullet + University and Dates */}
+            <div className="flex justify-between items-baseline">
+              <div className="flex-1">
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-[10px]">•</span>
+                  <h3 className="text-[10px] font-bold text-black">
+                    {education.universityName}
+                  </h3>
+                </div>
+              </div>
+              <span className="text-[9px] text-black italic text-right ml-3 whitespace-nowrap">
+                {formatDate(education.startDate)} – {formatDate(education.endDate)}
               </span>
             </div>
 
-            {/* Description */}
+            {/* Degree and Location on same line */}
+            <div className="flex justify-between items-baseline">
+              <div className="ml-3.5 text-[10px] text-black italic leading-[1.4]">
+                {education.degree} in {education.major}
+              </div>
+              {(education.city || education.country) && (
+                <div className="text-[10px] text-black text-right leading-[1.4]">
+                  {education.city && education.country 
+                    ? `${education.city}, ${education.country}`
+                    : education.city || education.country
+                  }
+                </div>
+              )}
+            </div>
+
+            {/* Relevant Coursework - Indented */}
             {education.description && (
-              <p className="text-xs mt-2 text-zinc-700 dark:text-zinc-300 leading-relaxed">
-                {education.description}
-              </p>
+              <div className="ml-3.5 text-[10px] text-black leading-[1.4] mt-0.5">
+                <span className="font-bold">◦ Relevant Coursework:</span> {education.description}
+              </div>
             )}
-          </motion.div>
+          </div>
         ))
       ) : (
-        <p className="text-xs text-center text-muted-foreground">
+        <p className="text-[10px] text-black mt-1">
           No education details available.
         </p>
       )}

@@ -38,10 +38,22 @@ export default function ClientResumeWrapper({
           email: personal.email || "",
           themeColor: personal.themeColor || "#ff6666",
           summery: resume.summary?.[0]?.text || "",
+          country: personal.country || "",
+          state: personal.state || "",
+          city: personal.city || "",
+          linkedIn: personal.linkedIn || "",
+          linkedInUsername: personal.linkedInUsername || "",
+          github: personal.github || "",
+          githubUsername: personal.githubUsername || "",
+          twitter: personal.twitter || "",
+          twitterUsername: personal.twitterUsername || "",
+          medium: personal.medium || "",
+          mediumUsername: personal.mediumUsername || "",
           experience: resume.experience || [],
           education: resume.education || [],
           skills: resume.skills || [],
           projects: resume.projects || [],
+          certifications: resume.certifications || [],
         };
 
         setResumeData(transformedData);

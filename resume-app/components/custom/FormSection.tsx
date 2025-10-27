@@ -7,7 +7,8 @@ import Experience from "./forms/Experience";
 import Projects from "./forms/Projects"; // ✅ Projects at step 4
 import Education from "./forms/Education";  // Step 5
 import Skills from "./forms/Skills";        // Step 6
-import ATSScoreDisplay from "./ATSScoreDisplay"; // Step 7
+import Certifications from "./forms/Certifications"; // Step 7
+import ATSScoreDisplay from "./ATSScoreDisplay"; // Step 8
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Home } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -33,7 +34,7 @@ const FormSection: React.FC<FormSectionProps> = ({ resumeId, userId,resumeIndex 
   const handleNextClick = () => {
     const nextIndex = activeFormIndex + 1;
 
-    if (nextIndex === 8) {
+    if (nextIndex === 9) {
       if (!userId || !resumeId) {
         toast.error("User or resume ID missing");
         return;
@@ -97,6 +98,9 @@ const FormSection: React.FC<FormSectionProps> = ({ resumeId, userId,resumeIndex 
         <Skills enableNext={setEnableNext} userId={userId} resumeId={resumeId} />
       )}
       {activeFormIndex === 7 && (
+        <Certifications enableNext={setEnableNext} userId={userId} resumeId={resumeId} />
+      )}
+      {activeFormIndex === 8 && (
         <div>
           <ATSScoreDisplay 
             resumeData={{

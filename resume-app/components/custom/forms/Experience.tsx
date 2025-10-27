@@ -10,16 +10,19 @@ import { toast } from "sonner";
 import { useResumeInfo } from "@/context/ResumeInfoConext";
 import { generateExperience, AIExperience } from "@/service/AIModel";
 import { motion, AnimatePresence } from "framer-motion";
-import { Country, State, City } from "country-state-city";
-import { Combobox } from "@/components/ui/combobox";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type ExperienceType = {
   id?: string;
   title: string;
   companyName: string;
-  country: string; // ISO code
-  state: string; // ISO code
-  city: string; // full city name
+  workType: string; // Remote, Hybrid, In-office
   startDate: string;
   endDate: string;
   currentlyWorking: boolean;
@@ -31,19 +34,6 @@ interface ExperienceProps {
   userId?: string;
   resumeId?: string;
 }
-
-// Helpers to get full names
-const getCountryName = (code: string) => {
-  if (!code) return "";
-  const country = Country.getCountryByCode(code);
-  return country ? country.name : "";
-};
-
-const getStateName = (countryCode: string, stateCode: string) => {
-  if (!countryCode || !stateCode) return "";
-  const state = State.getStateByCodeAndCountry(stateCode, countryCode);
-  return state ? state.name : "";
-};
 
 const Experience: React.FC<ExperienceProps> = ({
   enableNext,
@@ -57,9 +47,7 @@ const Experience: React.FC<ExperienceProps> = ({
       id: "",
       title: "",
       companyName: "",
-      country: "",
-      state: "",
-      city: "",
+      workType: "",
       startDate: "",
       endDate: "",
       currentlyWorking: false,
@@ -81,9 +69,7 @@ const Experience: React.FC<ExperienceProps> = ({
           id: String(exp.id ?? ""),
           title: exp.title || "",
           companyName: exp.companyName || "",
-          country: exp.country || "",
-          state: exp.state || "",
-          city: exp.city || "",
+          workType: exp.workType || "",
           startDate: exp.startDate || "",
           endDate: exp.endDate || "",
           currentlyWorking: exp.currentlyWorking || false,
@@ -100,9 +86,7 @@ const Experience: React.FC<ExperienceProps> = ({
         id: i + 1,
         title: exp.title,
         companyName: exp.companyName,
-        country: exp.country,
-        state: exp.state,
-        city: exp.city,
+        workType: exp.workType,
         startDate: exp.startDate,
         endDate: exp.endDate,
         currentlyWorking: exp.currentlyWorking,
@@ -132,9 +116,7 @@ const Experience: React.FC<ExperienceProps> = ({
         id: "",
         title: "",
         companyName: "",
-        country: "",
-        state: "",
-        city: "",
+        workType: "",
         startDate: "",
         endDate: "",
         currentlyWorking: false,
@@ -220,9 +202,7 @@ const Experience: React.FC<ExperienceProps> = ({
           id: String(i + 1),
           title: exp.title,
           companyName: exp.companyName,
-          country: "",
-          state: "",
-          city: "",
+          workType: "",
           startDate: exp.startDate,
           endDate: exp.endDate,
           currentlyWorking: exp.currentlyWorking,
@@ -296,61 +276,25 @@ const Experience: React.FC<ExperienceProps> = ({
                 }
               />
             </div>
+            
+            {/* Work Type Dropdown */}
             <div>
-              <label className="text-xs font-medium">Country</label>
-              <Combobox
-                options={Country.getAllCountries().map((c) => ({
-                  label: c.name,
-                  value: c.isoCode,
-                }))}
-                value={field.country}
-                onChange={(value) => {
-                  handleChange(index, "country", value);
-                  handleChange(index, "state", "");
-                  handleChange(index, "city", "");
-                }}
-                placeholder="Select country"
-              />
+              <label className="text-xs font-medium">Work Type</label>
+              <Select
+                value={field.workType}
+                onValueChange={(value) => handleChange(index, "workType", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select work type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Remote">Remote</SelectItem>
+                  <SelectItem value="Hybrid">Hybrid</SelectItem>
+                  <SelectItem value="In-office">In-office</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <div>
-              <label className="text-xs font-medium">State</label>
-              <Combobox
-                options={
-                  field.country
-                    ? State.getStatesOfCountry(field.country).map((s) => ({
-                        label: s.name,
-                        value: s.isoCode,
-                      }))
-                    : []
-                }
-                value={field.state}
-                onChange={(value) => {
-                  handleChange(index, "state", value);
-                  handleChange(index, "city", "");
-                }}
-                placeholder="Select state"
-                disabled={!field.country}
-              />
-            </div>
-            <div>
-              <label className="text-xs font-medium">City</label>
-              <Combobox
-                options={
-                  field.country && field.state
-                    ? City.getCitiesOfState(field.country, field.state).map(
-                        (c) => ({
-                          label: c.name,
-                          value: c.name,
-                        })
-                      )
-                    : []
-                }
-                value={field.city}
-                onChange={(value) => handleChange(index, "city", value)}
-                placeholder="Select city"
-                disabled={!field.state}
-              />
-            </div>
+
             <div className="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-xs font-medium">Start Date</label>
@@ -390,13 +334,6 @@ const Experience: React.FC<ExperienceProps> = ({
                 value={field.workSummery}
                 onChange={(val) => handleChange(index, "workSummery", val)}
               />
-            </div>
-            <div className="sm:col-span-2 mt-2 text-sm text-zinc-500">
-              <strong>Location:</strong> {field.city || "—"}
-              {field.city ? ", " : ""}
-              {getStateName(field.country, field.state) || "—"}
-              {field.state ? ", " : ""}
-              {getCountryName(field.country) || "—"}
             </div>
             <div className="md:col-span-2 flex justify-end mt-2">
               <Button

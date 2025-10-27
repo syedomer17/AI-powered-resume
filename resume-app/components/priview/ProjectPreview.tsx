@@ -3,76 +3,109 @@
 import React from "react";
 import { ResumeInfoType } from "@/context/ResumeInfoConext";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink } from "lucide-react";
 
 const ProjectPreview = ({ resumeInfo }: { resumeInfo: ResumeInfoType }) => {
-  const themeColor = resumeInfo?.themeColor || "#9f5bff";
+  // Format project details to have nested bullets
+  const formatProjectDetails = (description: string) => {
+    if (!description) return "";
+    
+    // Split by newlines or HTML breaks
+    const lines = description
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<\/p><p>/gi, '\n')
+      .replace(/<\/?p>/gi, '')
+      .split('\n')
+      .filter(line => line.trim());
+    
+    return lines
+      .map(line => {
+        const trimmed = line.trim();
+        // If it already starts with ◦ or •, keep it
+        if (trimmed.startsWith('◦') || trimmed.startsWith('•')) {
+          return trimmed;
+        }
+        // Otherwise add the nested bullet
+        return `◦ ${trimmed}`;
+      })
+      .join('\n');
+  };
 
   return (
-    <div className="my-6">
-      <h2
-        className="text-center font-bold text-sm mb-2 tracking-wide"
-        style={{ color: themeColor }}
+    <div className="mb-3">
+      <h2 
+        className="font-bold text-[12px] tracking-wider mb-1.5 uppercase text-black border-b border-black pb-0.5"
+        style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
       >
         Projects
       </h2>
-      <hr style={{ borderColor: themeColor }} className="mb-4" />
 
       <AnimatePresence>
         {resumeInfo?.projects?.map((project, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3, delay: index * 0.05 }}
-            className="my-4 border-b pb-4 last:border-none"
-          >
-            {/* Title */}
-            <h3
-              className="text-sm font-bold mb-1 capitalize"
-              style={{ color: themeColor }}
-            >
-              {project?.title}
-            </h3>
-
-            {/* Link and Dates */}
-            <div
-              className="
-                flex flex-col gap-1
-                sm:flex-row sm:justify-between sm:items-center
-                text-xs mb-1
-              "
-            >
-              {project?.link ? (
+          <div key={index} className="mb-2.5">
+            {/* Bullet + Project Title and View Project Link */}
+            <div className="flex justify-between items-baseline">
+              <div className="flex items-baseline gap-1.5">
+                <span 
+                  className="text-[10px] leading-[1.4]"
+                  style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
+                >
+                  •
+                </span>
+                <h3 
+                  className="text-[10px] font-bold text-black leading-[1.4]"
+                  style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
+                >
+                  {project?.title}
+                </h3>
+              </div>
+              {project?.link && (
                 <a
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-blue-600 hover:underline font-medium"
+                  className="text-[9px] text-blue-600 hover:underline leading-[1.4]"
+                  style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
                 >
-                  <ExternalLink className="w-3.5 h-3.5" />
                   View Project
                 </a>
-              ) : (
-                <span />
               )}
-              <span className="text-zinc-600 dark:text-zinc-400">
-                {project?.startDate || ""} -{" "}
-                {project?.currentlyWorking ? "Present" : project?.endDate || ""}
-              </span>
             </div>
 
-            {/* Description */}
-            {project?.description && (
-              <div
-                className="text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed"
-                dangerouslySetInnerHTML={{
-                  __html: project.description,
-                }}
-              />
+            {/* Tech Stack - Indented, Italic */}
+            {project?.techStack && (
+              <div 
+                className="ml-3.5 text-[10px] text-black italic leading-[1.4] mt-0.5"
+                style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
+              >
+                {project.techStack}
+              </div>
             )}
-          </motion.div>
+
+            {/* Project Details - Indented with nested bullets */}
+            {project?.description && (
+              <div 
+                className="ml-3.5 text-[10px] text-black leading-[1.4] mt-0.5"
+                style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
+              >
+                {formatProjectDetails(project.description).split('\n').map((line, i) => {
+                  // Check if line has bold labels like "Personalization:" or "Security:"
+                  const match = line.match(/^(◦\s*)([^:]+)(:)/);
+                  if (match) {
+                    return (
+                      <div key={i} className="flex items-start gap-1">
+                        <span>{match[1]}</span>
+                        <span>
+                          <span className="font-bold">{match[2]}:</span>
+                          {line.substring(match[0].length)}
+                        </span>
+                      </div>
+                    );
+                  }
+                  return <div key={i}>{line}</div>;
+                })}
+              </div>
+            )}
+          </div>
         ))}
       </AnimatePresence>
     </div>

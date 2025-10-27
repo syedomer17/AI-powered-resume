@@ -7,6 +7,7 @@ import ExperiencePriview from "../priview/ExperiencePriview";
 import EducationalPriview from "../priview/EducationalPriview";
 import SkillsPriview from "../priview/SkillsPriview";
 import ProjectPreview from "../priview/ProjectPreview";
+import CertificationsPreview from "../priview/CertificationsPreview";
 import { motion } from "framer-motion";
 
 export default function ResumePriview() {
@@ -14,19 +15,20 @@ export default function ResumePriview() {
 
   return (
     <motion.div
-      className="shadow-lg h-full p-8 sm:p-14 border-t-[20px] bg-white rounded-md"
-      style={{ borderColor: resumeInfo?.themeColor || "#000" }}
+      className="shadow-lg h-full px-12 py-8 bg-white rounded-md border border-gray-300"
+      style={{ fontFamily: 'Georgia, "Times New Roman", Times, serif' }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
-      <div className="space-y-6">
+      <div className="space-y-3">
         <PersonalDetailPriview resumeInfo={resumeInfo} />
         <Summery resumeInfo={resumeInfo} />
         <ExperiencePriview resumeInfo={resumeInfo} />
         <ProjectPreview resumeInfo={resumeInfo} />
         <EducationalPriview resumeInfo={resumeInfo} />
         <SkillsPriview resumeInfo={resumeInfo} />
+        <CertificationsPreview resumeInfo={resumeInfo} />
       </div>
     </motion.div>
   );

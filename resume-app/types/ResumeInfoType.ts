@@ -7,6 +7,15 @@ export interface ResumeInfoType {
   email: string;
   themeColor: string;
   summery: string;
+  // Address fields
+  country: string;
+  state: string;
+  city: string;
+  // Social media links
+  linkedIn: string;
+  github: string;
+  twitter: string;
+  medium: string;
   experience: {
     id: number;
     title: string;

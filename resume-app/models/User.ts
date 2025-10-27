@@ -5,9 +5,7 @@ export interface IExperience {
   id: number;
   title: string;
   companyName: string;
-  country: String;
-  city: string;
-  state: string;
+  workType: string; // Remote, Hybrid, In-office
   startDate: string;
   endDate: string;
   currentlyWorking: boolean;
@@ -22,6 +20,8 @@ export interface IEducation {
   degree: string;
   major: string;
   description: string;
+  city: string;
+  country: string;
 }
 
 export interface ISkill {
@@ -39,6 +39,17 @@ export interface IPersonalDetails {
   phone: string;
   email: string;
   themeColor: string;
+  country?: string;
+  state?: string;
+  city?: string;
+  linkedIn?: string;
+  linkedInUsername?: string;
+  github?: string;
+  githubUsername?: string;
+  twitter?: string;
+  twitterUsername?: string;
+  medium?: string;
+  mediumUsername?: string;
 }
 
 export interface ISummary {
@@ -50,11 +61,20 @@ export interface ISummary {
 export interface IProject {
   id: number;
   title: string;
+  techStack: string;
   description: string;
   link?: string;
   startDate: string;
   endDate: string;
   currentlyWorking: boolean;
+}
+
+export interface ICertification {
+  id: number;
+  name: string;
+  link?: string;
+  imageUrl?: string;
+  date: string;
 }
 
 export interface IATSAnalysis {
@@ -74,6 +94,7 @@ export interface IResume {
   skills: ISkill[];
   summary: ISummary[];
   projects: IProject[]; // added projects here
+  certifications: ICertification[]; // added certifications
   atsAnalysis?: IATSAnalysis; // ATS score data
   createdAt?: Date;
   updatedAt?: Date;
@@ -103,9 +124,7 @@ const ExperienceSchema = new Schema<IExperience>({
   id: Number,
   title: String,
   companyName: String,
-  country: String,
-  city: String,
-  state: String,
+  workType: String, // Remote, Hybrid, In-office
   startDate: String,
   endDate: String,
   currentlyWorking: Boolean,
@@ -120,6 +139,8 @@ const EducationSchema = new Schema<IEducation>({
   degree: String,
   major: String,
   description: String,
+  city: String,
+  country: String,
 });
 
 const SkillSchema = new Schema<ISkill>({
@@ -137,17 +158,37 @@ const PersonalDetailsSchema = new Schema<IPersonalDetails>({
   phone: String,
   email: String,
   themeColor: { type: String, default: "#ff6666" },
+  country: String,
+  state: String,
+  city: String,
+  linkedIn: String,
+  linkedInUsername: String,
+  github: String,
+  githubUsername: String,
+  twitter: String,
+  twitterUsername: String,
+  medium: String,
+  mediumUsername: String,
 });
 
 // Project schema added as requested
 const ProjectSchema = new Schema<IProject>({
   id: Number,
   title: String,
+  techStack: String,
   description: String,
   link: String,
   startDate: String,
   endDate: String,
   currentlyWorking: Boolean,
+});
+
+const CertificationSchema = new Schema<ICertification>({
+  id: Number,
+  name: String,
+  link: String,
+  imageUrl: String,
+  date: String,
 });
 
 const ATSAnalysisSchema = new Schema<IATSAnalysis>({
@@ -167,6 +208,7 @@ const ResumeSchema = new Schema<IResume>(
     skills: { type: [SkillSchema], default: [] },
     summary: { type: [SummarySchema], default: [] },
     projects: { type: [ProjectSchema], default: [] }, // projects added here
+    certifications: { type: [CertificationSchema], default: [] }, // certifications added
     atsAnalysis: { type: ATSAnalysisSchema, default: undefined }, // ATS analysis
   },
   { timestamps: true }

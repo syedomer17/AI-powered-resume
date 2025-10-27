@@ -17,10 +17,24 @@ export interface ResumeInfoType {
   email: string;
   themeColor: string;
   summery: string;
+  // Address fields
+  country: string;
+  state: string;
+  city: string;
+  // Social media links
+  linkedIn: string;
+  linkedInUsername: string;
+  github: string;
+  githubUsername: string;
+  twitter: string;
+  twitterUsername: string;
+  medium: string;
+  mediumUsername: string;
   experience: any[];
   education: any[];
   skills: any[];
   projects: any[];
+  certifications: any[];
   hasPersonalDetails?: boolean;
 }
 
@@ -49,10 +63,22 @@ export const ResumeInfoProvider = ({
     email: defaultValue?.email ?? "",
     themeColor: defaultValue?.themeColor ?? "#ff6666",
     summery: defaultValue?.summery ?? "",
+    country: defaultValue?.country ?? "",
+    state: defaultValue?.state ?? "",
+    city: defaultValue?.city ?? "",
+    linkedIn: defaultValue?.linkedIn ?? "",
+    linkedInUsername: defaultValue?.linkedInUsername ?? "",
+    github: defaultValue?.github ?? "",
+    githubUsername: defaultValue?.githubUsername ?? "",
+    twitter: defaultValue?.twitter ?? "",
+    twitterUsername: defaultValue?.twitterUsername ?? "",
+    medium: defaultValue?.medium ?? "",
+    mediumUsername: defaultValue?.mediumUsername ?? "",
     experience: defaultValue?.experience ?? [],
     education: defaultValue?.education ?? [],
     skills: defaultValue?.skills ?? [],
     projects: defaultValue?.projects ?? [],
+    certifications: defaultValue?.certifications ?? [],
     hasPersonalDetails: defaultValue?.hasPersonalDetails ?? false,
   });
 
@@ -67,10 +93,22 @@ export const ResumeInfoProvider = ({
         email: defaultValue.email ?? "",
         themeColor: defaultValue.themeColor ?? "#ff6666",
         summery: defaultValue.summery ?? "",
+        country: defaultValue.country ?? "",
+        state: defaultValue.state ?? "",
+        city: defaultValue.city ?? "",
+        linkedIn: defaultValue.linkedIn ?? "",
+        linkedInUsername: defaultValue.linkedInUsername ?? "",
+        github: defaultValue.github ?? "",
+        githubUsername: defaultValue.githubUsername ?? "",
+        twitter: defaultValue.twitter ?? "",
+        twitterUsername: defaultValue.twitterUsername ?? "",
+        medium: defaultValue.medium ?? "",
+        mediumUsername: defaultValue.mediumUsername ?? "",
         experience: defaultValue.experience ?? [],
         education: defaultValue.education ?? [],
         skills: defaultValue.skills ?? [],
         projects: defaultValue.projects ?? [],
+        certifications: defaultValue.certifications ?? [],
         hasPersonalDetails: defaultValue.hasPersonalDetails ?? false,
       });
     }

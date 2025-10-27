@@ -20,6 +20,7 @@ export type AIExperience = {
 
 export type AIProject = {
   title: string;
+  techStack: string;
   description: string;
   link?: string;
   startDate: string; // YYYY-MM-DD

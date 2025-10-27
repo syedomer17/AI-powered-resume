@@ -18,6 +18,8 @@ type EducationType = {
   startDate: string;
   endDate: string;
   description: string;
+  city: string;
+  country: string;
 };
 
 interface EducationProps {
@@ -42,6 +44,8 @@ const Education: React.FC<EducationProps> = ({
       startDate: "",
       endDate: "",
       description: "",
+      city: "",
+      country: "",
     },
   ]);
 
@@ -62,6 +66,8 @@ const Education: React.FC<EducationProps> = ({
           startDate: edu.startDate || "",
           endDate: edu.endDate || "",
           description: edu.description || "",
+          city: edu.city || "",
+          country: edu.country || "",
         }))
       );
     }
@@ -102,6 +108,8 @@ const Education: React.FC<EducationProps> = ({
         startDate: "",
         endDate: "",
         description: "",
+        city: "",
+        country: "",
       },
     ]);
   };
@@ -223,6 +231,22 @@ const Education: React.FC<EducationProps> = ({
                 value={item.major}
                 onChange={(e) => handleChange(index, "major", e.target.value)}
                 placeholder="e.g., Computer Science"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-medium">City</label>
+              <Input
+                value={item.city}
+                onChange={(e) => handleChange(index, "city", e.target.value)}
+                placeholder="e.g., Hyderabad"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-medium">Country</label>
+              <Input
+                value={item.country}
+                onChange={(e) => handleChange(index, "country", e.target.value)}
+                placeholder="e.g., India"
               />
             </div>
             <div className="md:col-span-2 flex flex-col md:flex-row gap-4">

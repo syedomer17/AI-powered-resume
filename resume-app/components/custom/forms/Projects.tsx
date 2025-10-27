@@ -14,6 +14,7 @@ import { motion, AnimatePresence } from "framer-motion";
 type ProjectType = {
   id?: string | number;
   title: string;
+  techStack: string;
   description: string;
   link?: string;
   startDate: string;
@@ -38,6 +39,7 @@ const Projects: React.FC<ProjectsProps> = ({
     {
       id: 1,
       title: "",
+      techStack: "",
       description: "",
       link: "",
       startDate: "",
@@ -60,6 +62,7 @@ const Projects: React.FC<ProjectsProps> = ({
         resumeInfo.projects.map((proj, i) => ({
           id: proj.id ?? i + 1,
           title: proj.title || "",
+          techStack: proj.techStack || "",
           description: proj.description || "",
           link: proj.link || "",
           startDate: proj.startDate || "",
@@ -76,6 +79,7 @@ const Projects: React.FC<ProjectsProps> = ({
       projects: projectList.map((proj, i) => ({
         id: i + 1,
         title: proj.title,
+        techStack: proj.techStack,
         description: proj.description,
         link: proj.link,
         startDate: proj.startDate,
@@ -110,6 +114,7 @@ const Projects: React.FC<ProjectsProps> = ({
       {
         id: newId,
         title: "",
+        techStack: "",
         description: "",
         link: "",
         startDate: "",
@@ -152,6 +157,7 @@ const Projects: React.FC<ProjectsProps> = ({
           res.data.projects.map((proj: any) => ({
             id: proj.id,
             title: proj.title,
+            techStack: proj.techStack,
             description: proj.description,
             link: proj.link,
             startDate: proj.startDate,
@@ -187,6 +193,7 @@ const Projects: React.FC<ProjectsProps> = ({
           response.data.projects.map((proj: any) => ({
             id: proj.id,
             title: proj.title,
+            techStack: proj.techStack,
             description: proj.description,
             link: proj.link,
             startDate: proj.startDate,
@@ -216,7 +223,7 @@ const Projects: React.FC<ProjectsProps> = ({
     try {
       const prompt = `
         Based on the job title "${resumeInfo.jobTitle}", generate 2-3 relevant projects in JSON array format.
-        Each project should have: title, description, link (optional), startDate (YYYY-MM-DD), endDate (YYYY-MM-DD), currentlyWorking (boolean).
+        Each project should have: title, techStack (comma-separated technologies), description, link (optional), startDate (YYYY-MM-DD), endDate (YYYY-MM-DD), currentlyWorking (boolean).
         Return only the JSON array.
       `;
       const generated = await generateProjects(prompt);
@@ -236,6 +243,7 @@ const Projects: React.FC<ProjectsProps> = ({
       {
         id: "",
         title: project.title,
+        techStack: project.techStack || "",
         description: project.description,
         link: project.link || "",
         startDate: project.startDate,
@@ -324,6 +332,16 @@ const Projects: React.FC<ProjectsProps> = ({
                 value={field.link}
                 onChange={(e) => handleChange(index, "link", e.target.value)}
                 placeholder="https://..."
+              />
+            </div>
+
+            {/* Tech Stack */}
+            <div className="sm:col-span-2">
+              <label className="text-xs font-medium">Tech Stack</label>
+              <Input
+                value={field.techStack}
+                onChange={(e) => handleChange(index, "techStack", e.target.value)}
+                placeholder="e.g., Next.js, TailwindCSS, Auth.js, MongoDB, Shadcn, Gemini AI"
               />
             </div>
 

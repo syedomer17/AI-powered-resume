@@ -104,6 +104,7 @@ const DefaultResumeData = {
       currentlyWorking: true,
     },
   ],
+  certifications: [],
 };
 
 export default DefaultResumeData;

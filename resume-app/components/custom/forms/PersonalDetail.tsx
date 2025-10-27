@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Loader2 } from "lucide-react";
 import { useResumeInfo } from "@/context/ResumeInfoConext";
 import axios from "axios";
@@ -10,6 +10,14 @@ import { toast } from "sonner";
 import { motion } from "framer-motion";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { Country, State, City } from "country-state-city";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface PersonalDetailProps {
   enableNext?: (value: boolean) => void;
@@ -24,6 +32,7 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
 }) => {
   const { resumeInfo, setResumeInfo } = useResumeInfo();
   const [loading, setLoading] = useState(false);
+  const initialLoadRef = useRef(true);
 
   const [personalDetails, setPersonalDetails] = useState({
     firstName: "",
@@ -32,19 +41,54 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
     address: "",
     phone: "",
     email: "",
+    country: "",
+    state: "",
+    city: "",
+    linkedIn: "",
+    linkedInUsername: "",
+    github: "",
+    githubUsername: "",
+    twitter: "",
+    twitterUsername: "",
+    medium: "",
+    mediumUsername: "",
   });
 
-  // Prefill
+  // Get countries, states, and cities
+  const countries = Country.getAllCountries();
+  const states = personalDetails.country
+    ? State.getStatesOfCountry(personalDetails.country)
+    : [];
+  const cities =
+    personalDetails.country && personalDetails.state
+      ? City.getCitiesOfState(personalDetails.country, personalDetails.state)
+      : [];
+
+  // Prefill - only on initial load or when resumeInfo has actual data
   useEffect(() => {
-    setPersonalDetails({
-      firstName: resumeInfo.firstName || "",
-      lastName: resumeInfo.lastName || "",
-      jobTitle: resumeInfo.jobTitle || "",
-      address: resumeInfo.address || "",
-      phone: resumeInfo.phone || "",
-      email: resumeInfo.email || "",
-    });
-  }, []);
+    if (initialLoadRef.current && resumeInfo.firstName) {
+      setPersonalDetails({
+        firstName: resumeInfo.firstName || "",
+        lastName: resumeInfo.lastName || "",
+        jobTitle: resumeInfo.jobTitle || "",
+        address: resumeInfo.address || "",
+        phone: resumeInfo.phone || "",
+        email: resumeInfo.email || "",
+        country: resumeInfo.country || "",
+        state: resumeInfo.state || "",
+        city: resumeInfo.city || "",
+        linkedIn: resumeInfo.linkedIn || "",
+        linkedInUsername: resumeInfo.linkedInUsername || "",
+        github: resumeInfo.github || "",
+        githubUsername: resumeInfo.githubUsername || "",
+        twitter: resumeInfo.twitter || "",
+        twitterUsername: resumeInfo.twitterUsername || "",
+        medium: resumeInfo.medium || "",
+        mediumUsername: resumeInfo.mediumUsername || "",
+      });
+      initialLoadRef.current = false;
+    }
+  }, [resumeInfo]);
 
   // Update context + enableNext
   useEffect(() => {
@@ -114,10 +158,11 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
 
       <form>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Name */}
           <div>
             <label className="text-xs font-medium capitalize">First Name</label>
             <Input
-            className="capitalize"
+              className="capitalize"
               name="firstName"
               value={personalDetails.firstName}
               onChange={handleChange}
@@ -127,33 +172,27 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
           <div>
             <label className="text-xs font-medium capitalize">Last Name</label>
             <Input
-            className="capitalize"
+              className="capitalize"
               name="lastName"
               value={personalDetails.lastName}
               onChange={handleChange}
               placeholder="e.g., Doe"
             />
           </div>
-          <div className="sm:col-span-2 capitalize">
+
+          {/* Job Title */}
+          <div className="sm:col-span-2">
             <label className="text-xs font-medium">Job Title</label>
             <Input
-            className="capitalize"
+              className="capitalize"
               name="jobTitle"
               value={personalDetails.jobTitle}
               onChange={handleChange}
               placeholder="e.g., Software Engineer"
             />
           </div>
-          <div className="sm:col-span-2">
-            <label className="text-xs font-medium">Address</label>
-            <Input
-            className="capitalize"
-              name="address"
-              value={personalDetails.address}
-              onChange={handleChange}
-              placeholder="e.g., 123 Main St, City, State"
-            />
-          </div>
+
+          {/* Contact */}
           <div>
             <label className="text-xs font-medium">Phone</label>
             <PhoneInput
@@ -172,7 +211,179 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
               name="email"
               value={personalDetails.email}
               onChange={handleChange}
-              placeholder="e.g., john.doe@example.com"
+              placeholder="omerali.code@gmail.com"
+            />
+          </div>
+
+          {/* Address Section */}
+          <div className="sm:col-span-2">
+            <h3 className="text-sm font-semibold mb-3">📍 Location</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {/* Country */}
+              <div>
+                <label className="text-xs font-medium">Country</label>
+                <Select
+                  value={personalDetails.country}
+                  onValueChange={(val) =>
+                    setPersonalDetails((prev) => ({
+                      ...prev,
+                      country: val,
+                      state: "",
+                      city: "",
+                    }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select Country" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {countries.map((c) => (
+                      <SelectItem key={c.isoCode} value={c.isoCode}>
+                        {c.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* State */}
+              <div>
+                <label className="text-xs font-medium">State</label>
+                <Select
+                  value={personalDetails.state}
+                  onValueChange={(val) =>
+                    setPersonalDetails((prev) => ({
+                      ...prev,
+                      state: val,
+                      city: "",
+                    }))
+                  }
+                  disabled={!personalDetails.country}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select State" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {states.map((s) => (
+                      <SelectItem key={s.isoCode} value={s.isoCode}>
+                        {s.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* City */}
+              <div>
+                <label className="text-xs font-medium">City</label>
+                <Select
+                  value={personalDetails.city}
+                  onValueChange={(val) =>
+                    setPersonalDetails((prev) => ({
+                      ...prev,
+                      city: val,
+                    }))
+                  }
+                  disabled={!personalDetails.state}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select City" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {cities.map((c) => (
+                      <SelectItem key={c.name} value={c.name}>
+                        {c.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+
+          {/* Social Media Section */}
+          <div className="sm:col-span-2">
+            <h3 className="text-sm font-semibold mb-2 mt-4 border-t pt-4">🔗 Social Media</h3>
+            <p className="text-xs text-zinc-500 mb-3">Add your social media profile links and display names</p>
+          </div>
+
+          {/* LinkedIn */}
+          <div>
+            <label className="text-xs font-medium">LinkedIn Username</label>
+            <Input
+              name="linkedInUsername"
+              value={personalDetails.linkedInUsername}
+              onChange={handleChange}
+              placeholder="e.g., Syed Omer Ali"
+            />
+          </div>
+          <div>
+            <label className="text-xs font-medium">LinkedIn Profile URL</label>
+            <Input
+              name="linkedIn"
+              value={personalDetails.linkedIn}
+              onChange={handleChange}
+              placeholder="e.g., https://linkedin.com/in/syed-omer-ali"
+            />
+          </div>
+
+          {/* GitHub */}
+          <div>
+            <label className="text-xs font-medium">GitHub Username</label>
+            <Input
+              name="githubUsername"
+              value={personalDetails.githubUsername}
+              onChange={handleChange}
+              placeholder="e.g., Syed Omer Ali"
+            />
+          </div>
+          <div>
+            <label className="text-xs font-medium">GitHub Profile URL</label>
+            <Input
+              name="github"
+              value={personalDetails.github}
+              onChange={handleChange}
+              placeholder="e.g., https://github.com/syedomer17"
+            />
+          </div>
+
+          {/* Twitter */}
+          <div>
+            <label className="text-xs font-medium">Twitter Username</label>
+            <Input
+              name="twitterUsername"
+              value={personalDetails.twitterUsername}
+              onChange={handleChange}
+              placeholder="e.g., Syed Omer Ali"
+            />
+          </div>
+          <div>
+            <label className="text-xs font-medium">Twitter Profile URL</label>
+            <Input
+              name="twitter"
+              value={personalDetails.twitter}
+              onChange={handleChange}
+              placeholder="e.g., https://twitter.com/syedomerali"
+            />
+          </div>
+
+          {/* Medium */}
+          <div>
+            <label className="text-xs font-medium">Medium Username</label>
+            <Input
+              name="mediumUsername"
+              value={personalDetails.mediumUsername}
+              onChange={handleChange}
+              placeholder="e.g., Syed Omer Ali"
+            />
+          </div>
+          <div>
+            <label className="text-xs font-medium">Medium Profile URL</label>
+            <Input
+              name="medium"
+              value={personalDetails.medium}
+              onChange={handleChange}
+              placeholder="e.g., https://medium.com/@syedomerali"
             />
           </div>
         </div>

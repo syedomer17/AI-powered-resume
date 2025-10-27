@@ -15,6 +15,17 @@ export async function PATCH(req: NextRequest) {
     phone,
     email,
     themeColor,
+    country,
+    state,
+    city,
+    linkedIn,
+    linkedInUsername,
+    github,
+    githubUsername,
+    twitter,
+    twitterUsername,
+    medium,
+    mediumUsername,
   } = body;
 
   if (!userId || !resumeId) {
@@ -52,6 +63,17 @@ export async function PATCH(req: NextRequest) {
     phone: "",
     email: "",
     themeColor: "#ff6666",
+    country: "",
+    state: "",
+    city: "",
+    linkedIn: "",
+    linkedInUsername: "",
+    github: "",
+    githubUsername: "",
+    twitter: "",
+    twitterUsername: "",
+    medium: "",
+    mediumUsername: "",
   };
 
   // Update personalDetails array with one object, merging fields and themeColor
@@ -65,6 +87,17 @@ export async function PATCH(req: NextRequest) {
       phone: phone ?? existingDetails.phone,
       email: email ?? existingDetails.email,
       themeColor: themeColor ?? existingDetails.themeColor,
+      country: country ?? existingDetails.country,
+      state: state ?? existingDetails.state,
+      city: city ?? existingDetails.city,
+      linkedIn: linkedIn ?? existingDetails.linkedIn,
+      linkedInUsername: linkedInUsername ?? existingDetails.linkedInUsername,
+      github: github ?? existingDetails.github,
+      githubUsername: githubUsername ?? existingDetails.githubUsername,
+      twitter: twitter ?? existingDetails.twitter,
+      twitterUsername: twitterUsername ?? existingDetails.twitterUsername,
+      medium: medium ?? existingDetails.medium,
+      mediumUsername: mediumUsername ?? existingDetails.mediumUsername,
     },
   ];
 
