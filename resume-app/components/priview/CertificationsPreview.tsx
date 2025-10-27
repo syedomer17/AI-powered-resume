@@ -15,8 +15,6 @@ const CertificationsPreview = ({ resumeInfo }: { resumeInfo: ResumeInfoType }) =
     });
   };
 
-//   console.log("CertificationsPreview - resumeInfo.certifications:", resumeInfo?.certifications);
-
   if (!resumeInfo?.certifications || resumeInfo.certifications.length === 0) {
     return null;
   }
@@ -35,49 +33,52 @@ const CertificationsPreview = ({ resumeInfo }: { resumeInfo: ResumeInfoType }) =
       <div className="mt-0.5">
         <AnimatePresence>
           {resumeInfo.certifications.map((cert, index) => {
-            console.log("Rendering cert:", cert);
+            // Determine the URL to use: imageUrl if available, otherwise link
+            const certUrl = cert?.imageUrl || cert?.link;
+            
             return (
-            <div key={index} className="mb-0.5">
-              <div className="flex justify-between items-baseline">
-                {/* Bullet + Certification Name */}
-                <div className="flex items-baseline gap-1.5">
-                  <span 
-                    className="text-[10px] leading-[1.4]"
-                    style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
-                  >
-                    •
-                  </span>
-                  {cert?.link ? (
-                    <a
-                      href={cert.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[10px] text-blue-600 hover:underline leading-[1.4]"
-                      style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
-                    >
-                      {cert?.name}
-                    </a>
-                  ) : (
+              <div key={index} className="mb-0.5">
+                <div className="flex justify-between items-baseline">
+                  {/* Bullet + Certification Name */}
+                  <div className="flex items-baseline gap-1.5">
                     <span 
-                      className="text-[10px] text-black leading-[1.4]"
+                      className="text-[10px] leading-[1.4]"
                       style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
                     >
-                      {cert?.name}
+                      •
+                    </span>
+                    {certUrl ? (
+                      <a
+                        href={certUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[10px] text-blue-600 hover:underline leading-[1.4]"
+                        style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
+                      >
+                        {cert?.name}
+                      </a>
+                    ) : (
+                      <span 
+                        className="text-[10px] text-blue-600 leading-[1.4]"
+                        style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
+                      >
+                        {cert?.name}
+                      </span>
+                    )}
+                  </div>
+                  {/* Date on the right in italic */}
+                  {cert?.date && (
+                    <span 
+                      className="text-[9px] text-black italic leading-[1.4]"
+                      style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
+                    >
+                      {formatDate(cert.date)}
                     </span>
                   )}
                 </div>
-                {/* Date on the right in italic */}
-                {cert?.date && (
-                  <span 
-                    className="text-[9px] text-black italic leading-[1.4]"
-                    style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
-                  >
-                    {formatDate(cert.date)}
-                  </span>
-                )}
               </div>
-            </div>
-          )})}
+            );
+          })}
         </AnimatePresence>
       </div>
     </div>
