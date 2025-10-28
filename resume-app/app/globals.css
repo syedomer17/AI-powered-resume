@@ -36,6 +36,14 @@
 #print-area {
   background: white;
   box-shadow: none;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+/* PDF Export Optimizations */
+#print-area * {
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+  color-adjust: exact !important;
 }
 
 @media print {
@@ -51,6 +59,7 @@
   #print-area {
     box-shadow: none !important;
     border: none !important;
+    page-break-inside: avoid !important;
   }
 }
 

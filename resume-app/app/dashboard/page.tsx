@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "../../lib/authOptions";
 import { redirect } from "next/navigation";
 import Header from "@/components/custom/Header";
 import AddResume from "@/components/custom/AddResume";

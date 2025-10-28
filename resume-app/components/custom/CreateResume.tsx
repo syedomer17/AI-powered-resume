@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 export default function CreateResume({ userId, userEmail }: { userId?: string; userEmail?: string }) {
   const [title, setTitle] = useState("");

@@ -16,12 +16,15 @@ export default function ResumePriview() {
   return (
     <motion.div
       className="shadow-lg h-full px-12 py-8 bg-white rounded-md border border-gray-300"
-      style={{ fontFamily: 'Georgia, "Times New Roman", Times, serif' }}
+      style={{ 
+        fontFamily: 'Georgia, "Times New Roman", Times, serif',
+        pageBreakInside: 'avoid'
+      }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
-      <div className="space-y-3">
+      <div className="space-y-3" style={{ pageBreakInside: 'avoid' }}>
         <PersonalDetailPriview resumeInfo={resumeInfo} />
         <Summery resumeInfo={resumeInfo} />
         <ExperiencePriview resumeInfo={resumeInfo} />

@@ -19,6 +19,7 @@ export default function ViewPage() {
 
   const [resumeInfo, setResumeInfo] = useState<ResumeInfoType | null>(null);
   const [loading, setLoading] = useState(true);
+  const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
     const fetchResume = async () => {
@@ -81,33 +82,142 @@ export default function ViewPage() {
       return;
     }
 
+    setDownloading(true);
+
     const safeFileName = resumeInfo?.firstName
-      ? `resume-${resumeInfo.firstName
+      ? `${resumeInfo.firstName}-${resumeInfo.lastName}-Resume.pdf`
           .toLowerCase()
-          .replace(/\s+/g, "-")}-${resumeInfo.lastName
-          .toLowerCase()
-          .replace(/\s+/g, "-")}.pdf`
+          .replace(/\s+/g, "-")
       : "resume.pdf";
 
     const opt = {
-      margin: 0,
+      margin: [10, 10, 10, 10], // top, right, bottom, left in mm
       filename: safeFileName,
-      image: { type: "jpeg", quality: 0.98 },
+      image: { type: "jpeg", quality: 1 },
       html2canvas: {
-        scale: 2,
+        scale: 3, // Higher scale for better quality
         useCORS: true,
-        allowTaint: true,
-        logging: true,
+        allowTaint: false,
+        logging: false,
+        letterRendering: true,
+        scrollY: 0,
+        scrollX: 0,
+        backgroundColor: "#ffffff",
       },
-      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+      jsPDF: { 
+        unit: "mm", 
+        format: "a4", 
+        orientation: "portrait",
+        compress: true 
+      },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
     };
 
+    // Clone the element to avoid affecting the displayed version
+    const clonedElement = element.cloneNode(true) as HTMLElement;
+    
+    // Comprehensive color and style replacement
+    const sanitizeForPDF = (elem: HTMLElement) => {
+      // Get all elements including the root
+      const allElements = [elem, ...Array.from(elem.querySelectorAll('*'))] as HTMLElement[];
+      
+      allElements.forEach((el) => {
+        // Remove all class names that might trigger Tailwind/oklch styles
+        el.removeAttribute('class');
+        
+        // Get computed styles before removing classes
+        const styles = window.getComputedStyle(el);
+        
+        // Apply only essential inline styles with safe colors
+        const tagName = el.tagName.toLowerCase();
+        
+        // Base styles for all elements
+        el.style.fontFamily = 'Georgia, "Times New Roman", serif';
+        el.style.boxSizing = 'border-box';
+        
+        // Copy essential layout properties
+        if (styles.display) el.style.display = styles.display;
+        if (styles.position && styles.position !== 'static') el.style.position = styles.position;
+        if (styles.width && !styles.width.includes('auto')) el.style.width = styles.width;
+        if (styles.height && !styles.height.includes('auto')) el.style.height = styles.height;
+        if (styles.margin) el.style.margin = styles.margin;
+        if (styles.padding) el.style.padding = styles.padding;
+        if (styles.flexDirection) el.style.flexDirection = styles.flexDirection;
+        if (styles.justifyContent) el.style.justifyContent = styles.justifyContent;
+        if (styles.alignItems) el.style.alignItems = styles.alignItems;
+        if (styles.gap) el.style.gap = styles.gap;
+        if (styles.textAlign) el.style.textAlign = styles.textAlign;
+        
+        // Font properties
+        if (styles.fontSize) el.style.fontSize = styles.fontSize;
+        if (styles.fontWeight) el.style.fontWeight = styles.fontWeight;
+        if (styles.fontStyle) el.style.fontStyle = styles.fontStyle;
+        if (styles.lineHeight) el.style.lineHeight = styles.lineHeight;
+        if (styles.letterSpacing) el.style.letterSpacing = styles.letterSpacing;
+        if (styles.textTransform) el.style.textTransform = styles.textTransform;
+        if (styles.textDecoration) el.style.textDecoration = styles.textDecoration;
+        
+        // Colors - force to safe values
+        const color = styles.color;
+        if (color && !color.includes('oklch')) {
+          el.style.color = color;
+        } else {
+          el.style.color = '#000000'; // Black fallback
+        }
+        
+        const bgColor = styles.backgroundColor;
+        if (bgColor && bgColor !== 'rgba(0, 0, 0, 0)' && !bgColor.includes('oklch')) {
+          el.style.backgroundColor = bgColor;
+        } else if (tagName === 'div' || elem === el) {
+          el.style.backgroundColor = '#ffffff'; // White background
+        }
+        
+        // Borders
+        if (styles.borderTopWidth && styles.borderTopWidth !== '0px') {
+          el.style.borderTop = `${styles.borderTopWidth} ${styles.borderTopStyle} #000000`;
+        }
+        if (styles.borderBottomWidth && styles.borderBottomWidth !== '0px') {
+          el.style.borderBottom = `${styles.borderBottomWidth} ${styles.borderBottomStyle} #000000`;
+        }
+        if (styles.borderLeftWidth && styles.borderLeftWidth !== '0px') {
+          el.style.borderLeft = `${styles.borderLeftWidth} ${styles.borderLeftStyle} #000000`;
+        }
+        if (styles.borderRightWidth && styles.borderRightWidth !== '0px') {
+          el.style.borderRight = `${styles.borderRightWidth} ${styles.borderRightStyle} #000000`;
+        }
+        
+        // Handle links specially
+        if (tagName === 'a') {
+          el.style.color = '#2563eb'; // Blue color for links
+          el.style.textDecoration = 'underline';
+        }
+      });
+    };
+    
+    // Apply print-specific styles
+    clonedElement.style.width = "210mm"; // A4 width
+    clonedElement.style.padding = "48px";
+    clonedElement.style.backgroundColor = "#ffffff";
+    clonedElement.style.color = "#000000";
+    clonedElement.style.fontFamily = 'Georgia, "Times New Roman", serif';
+    clonedElement.style.boxShadow = "none";
+    clonedElement.style.border = "none";
+    clonedElement.style.borderRadius = "0";
+    
+    // Sanitize all elements
+    sanitizeForPDF(clonedElement);
+    
     html2pdf()
       .set(opt)
-      .from(element)
+      .from(clonedElement)
       .save()
+      .then(() => {
+        console.log("PDF generated successfully");
+        setDownloading(false);
+      })
       .catch((err: any) => {
         console.error("PDF generation failed:", err);
+        setDownloading(false);
       });
   };
 
@@ -147,7 +257,16 @@ export default function ViewPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 my-6">
-              <Button onClick={handleDownload}>Download as PDF</Button>
+              <Button onClick={handleDownload} disabled={downloading}>
+                {downloading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Generating PDF...
+                  </>
+                ) : (
+                  "Download as PDF"
+                )}
+              </Button>
               <RWebShare
                 data={{
                   text: "Hello Everyone, This is my Resume",

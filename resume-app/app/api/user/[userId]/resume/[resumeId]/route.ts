@@ -5,12 +5,12 @@ import { NextResponse } from "next/server";
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { userId: string; resumeId: string } }
+  { params }: { params: Promise<{ userId: string; resumeId: string }> }
 ) {
   try {
     await connectToDB();
 
-    const { userId, resumeId } = params;
+    const { userId, resumeId } = await params;
     console.log(resumeId,userId);
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -56,12 +56,12 @@ export async function DELETE(
 
 export async function GET(
   req: Request,
-  { params }: { params: { userId: string; resumeId: string } }
+  { params }: { params: Promise<{ userId: string; resumeId: string }> }
 ) {
   try {
     await connectToDB();
 
-    const { userId, resumeId } =await params;
+    const { userId, resumeId } = await params;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return NextResponse.json(

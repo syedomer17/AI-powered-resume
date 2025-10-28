@@ -2,15 +2,15 @@ import { notFound } from "next/navigation";
 import { connectToDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 import Header from "@/components/custom/Header";
 import JobSearch from "@/components/custom/JobSearch";
 import mongoose from "mongoose";
 
 interface JobSearchPageParams {
-  params: {
+  params: Promise<{
     userId: string;
-  };
+  }>;
 }
 
 export default async function JobSearchPage({ params }: JobSearchPageParams) {

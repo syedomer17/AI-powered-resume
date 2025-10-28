@@ -2,20 +2,20 @@ import { notFound } from "next/navigation";
 import { connectToDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "../../../../../../lib/authOptions";
 import Header from "@/components/custom/Header";
 import ClientResumeWrapper from "@/components/custom/ClientResumeWrapper";
 import mongoose from "mongoose";
 
 interface EditPageParams {
-  params: {
+  params: Promise<{
     userId: string;
     resumeIndex: string;
-  };
+  }>;
 }
 
 export default async function EditPage({ params }: EditPageParams) {
-  const { userId, resumeIndex } =await params;
+  const { userId, resumeIndex } = await params;
 
   // Check if userId is a valid ObjectId
   if (!mongoose.Types.ObjectId.isValid(userId)) {

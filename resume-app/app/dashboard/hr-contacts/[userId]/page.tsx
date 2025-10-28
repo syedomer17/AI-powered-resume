@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { connectToDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 import Header from "@/components/custom/Header";
 import SendToHR from "@/components/custom/SendToHR";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,9 +11,9 @@ import { Mail, Building2, Users, Send } from "lucide-react";
 import mongoose from "mongoose";
 
 interface HRPageParams {
-  params: {
+  params: Promise<{
     userId: string;
-  };
+  }>;
 }
 
 export default async function HRContactsPage({ params }: HRPageParams) {

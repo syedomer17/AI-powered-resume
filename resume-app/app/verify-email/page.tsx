@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import gsap from "gsap";
 
-export default function VerifyEmailPage() {
+function VerifyEmailForm() {
   const [otp, setOtp] = useState(Array(6).fill(""));
   const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
   const router = useRouter();
@@ -173,5 +173,13 @@ export default function VerifyEmailPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function VerifyEmailPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-100 flex items-center justify-center">Loading...</div>}>
+      <VerifyEmailForm />
+    </Suspense>
   );
 }

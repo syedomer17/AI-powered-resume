@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import gsap from "gsap";
 
-export default function VerifyOtpPage() {
+function VerifyOtpForm() {
   const [otp, setOtp] = useState(Array(6).fill(""));
   const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
   const searchParams = useSearchParams();
@@ -171,5 +171,13 @@ export default function VerifyOtpPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function VerifyOtpPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-100 flex items-center justify-center">Loading...</div>}>
+      <VerifyOtpForm />
+    </Suspense>
   );
 }

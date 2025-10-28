@@ -6,12 +6,12 @@ import mongoose from "mongoose";
 
 export async function GET(
   req: Request,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
     await connectToDB();
 
-    const { userId } =await params;
+    const { userId } = await params;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return NextResponse.json(

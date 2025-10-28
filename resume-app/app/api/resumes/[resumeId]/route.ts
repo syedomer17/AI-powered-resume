@@ -1,17 +1,18 @@
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { connectToDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import { IResume } from "@/models/User";
 import mongoose from "mongoose";
 
 export async function GET(
-  req: Request,
-  { params }: { params: { resumeId: string } }
+  req: NextRequest,
+  context: { params: Promise<Record<string, string>> }
 ) {
   try {
     await connectToDB();
 
-    const { resumeId } =await params;
+    const params = await context.params;
+    const resumeId = params.resumeId;
 
     if (!mongoose.Types.ObjectId.isValid(resumeId)) {
       return NextResponse.json(
