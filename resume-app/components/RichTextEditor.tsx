@@ -1,30 +1,107 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Editor,
-  EditorProvider,
-  Toolbar,
-  BtnBold,
-  BtnItalic,
-  BtnUnderline,
-  BtnStrikeThrough,
-  BtnLink,
-  Separator,
-} from "react-simple-wysiwyg";
+import { LexicalComposer, InitialConfigType } from "@lexical/react/LexicalComposer";
+import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
+import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
+import { CheckListPlugin } from "@lexical/react/LexicalCheckListPlugin";
+import { EditorState } from "lexical";
+import { $generateHtmlFromNodes, $generateNodesFromDOM } from "@lexical/html";
+import { $getRoot, $insertNodes } from "lexical";
+
+import { ContentEditable } from "@/components/editor/editor-ui/content-editable";
+import { editorTheme } from "@/components/editor/themes/editor-theme";
+import { ToolbarPlugin } from "@/components/editor/plugins/toolbar/toolbar-plugin";
+import { BlockFormatDropDown } from "@/components/editor/plugins/toolbar/block-format-toolbar-plugin";
+import { FormatParagraph } from "@/components/editor/plugins/toolbar/block-format/format-paragraph";
+import { FormatHeading } from "@/components/editor/plugins/toolbar/block-format/format-heading";
+import { FormatNumberedList } from "@/components/editor/plugins/toolbar/block-format/format-numbered-list";
+import { FormatBulletedList } from "@/components/editor/plugins/toolbar/block-format/format-bulleted-list";
+import { FormatCheckList } from "@/components/editor/plugins/toolbar/block-format/format-check-list";
+import { FormatQuote } from "@/components/editor/plugins/toolbar/block-format/format-quote";
+import { FontFamilyToolbarPlugin } from "@/components/editor/plugins/toolbar/font-family-toolbar-plugin";
+import { FontFormatToolbarPlugin } from "@/components/editor/plugins/toolbar/font-format-toolbar-plugin";
+import { FontSizeToolbarPlugin } from "@/components/editor/plugins/toolbar/font-size-toolbar-plugin";
+import { LinkToolbarPlugin } from "@/components/editor/plugins/toolbar/link-toolbar-plugin";
+import { AutoLinkPlugin } from "@/components/editor/plugins/auto-link-plugin";
+import { LinkPlugin } from "@/components/editor/plugins/link-plugin";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { Button } from "./ui/button";
 import { Brain, Loader2 } from "lucide-react";
-import { useResumeInfo } from "@/context/ResumeInfoConext"; 
+import { useResumeInfo } from "@/context/ResumeInfoConext";
 import { toast } from "sonner";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+
+import { HeadingNode, QuoteNode } from "@lexical/rich-text";
+import { ListItemNode, ListNode } from "@lexical/list";
+import { CodeHighlightNode, CodeNode } from "@lexical/code";
+import { AutoLinkNode, LinkNode } from "@lexical/link";
 
 type RichTextEditorProps = {
   value: string;
   onChange: (value: string) => void;
 };
 
+const nodes = [
+  HeadingNode,
+  ListNode,
+  ListItemNode,
+  QuoteNode,
+  CodeNode,
+  CodeHighlightNode,
+  AutoLinkNode,
+  LinkNode,
+];
+
+const editorConfig: InitialConfigType = {
+  namespace: "RichTextEditor",
+  theme: editorTheme,
+  nodes,
+  onError: (error: Error) => {
+    console.error(error);
+  },
+};
+
+function HtmlToEditorPlugin({ html }: { html: string }) {
+  const [editor] = useLexicalComposerContext();
+
+  React.useEffect(() => {
+    if (!html) return;
+    
+    editor.update(() => {
+      const parser = new DOMParser();
+      const dom = parser.parseFromString(html, "text/html");
+      const nodes = $generateNodesFromDOM(editor, dom);
+      
+      const root = $getRoot();
+      root.clear();
+      root.select();
+      $insertNodes(nodes);
+    });
+  }, [html, editor]);
+
+  return null;
+}
+
+function HtmlOutputPlugin({ onChange }: { onChange: (html: string) => void }) {
+  const [editor] = useLexicalComposerContext();
+
+  const handleChange = (editorState: EditorState) => {
+    editorState.read(() => {
+      const htmlString = $generateHtmlFromNodes(editor, null);
+      onChange(htmlString);
+    });
+  };
+
+  return <OnChangePlugin onChange={handleChange} ignoreSelectionChange={true} />;
+}
+
 const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange }) => {
   const [loading, setLoading] = useState(false);
-  const { resumeInfo } = useResumeInfo(); // ✅ use hook
+  const [isLinkEditMode, setIsLinkEditMode] = useState(false);
+  const { resumeInfo } = useResumeInfo();
 
   const handleGenerate = async () => {
     if (!resumeInfo?.summery) {
@@ -88,35 +165,93 @@ Generate 3–4 number points summarizing this experience in professional resume 
   };
 
   return (
-    <div className="border rounded-lg p-2">
-      <div className="flex justify-between my-2">
-        <label className="text-sm">Summary</label>
+    <div className="space-y-2">
+      <div className="flex justify-between items-center">
+        <label className="text-sm font-medium">Work Summary</label>
         <Button
           variant="outline"
-          className="flex gap-2 border-b-fuchsia-500 text-fuchsia-500"
+          size="sm"
+          className="gap-2 text-fuchsia-600 border-fuchsia-200 hover:bg-fuchsia-50 hover:text-fuchsia-700"
           onClick={handleGenerate}
           disabled={loading}
+          type="button"
         >
           {loading ? (
             <Loader2 className="h-4 w-4 animate-spin" />
           ) : (
             <Brain className="h-4 w-4" />
           )}
-          {loading ? "Generating..." : "Generate from Summary"}
+          <span className="hidden sm:inline">
+            {loading ? "Generating..." : "Generate from Summary"}
+          </span>
+          <span className="sm:hidden">Generate</span>
         </Button>
       </div>
-      <EditorProvider>
-        <Editor value={value} onChange={(e) => onChange(e.target.value)} />
-        <Toolbar>
-          <Separator />
-          <BtnBold />
-          <BtnItalic />
-          <BtnUnderline />
-          <BtnStrikeThrough />
-          <Separator />
-          <BtnLink />
-        </Toolbar>
-      </EditorProvider>
+
+      <div className="bg-background rounded-lg border shadow-sm overflow-hidden">
+        <LexicalComposer initialConfig={editorConfig}>
+          <TooltipProvider>
+            <ToolbarPlugin>
+              {({ blockType }) => (
+                <div className="flex flex-wrap items-center gap-2 border-b p-2 bg-muted/20">
+                  {/* Block Format Dropdown */}
+                  <BlockFormatDropDown>
+                    <FormatParagraph />
+                    <FormatHeading levels={["h1", "h2", "h3"]} />
+                    <FormatNumberedList />
+                    <FormatBulletedList />
+                    <FormatCheckList />
+                    <FormatQuote />
+                  </BlockFormatDropDown>
+                  
+                  {/* Divider */}
+                  <div className="h-6 w-px bg-border" />
+                  
+                  {/* Font Family */}
+                  <FontFamilyToolbarPlugin />
+                  
+                  {/* Font Size */}
+                  <FontSizeToolbarPlugin />
+                  
+                  {/* Divider */}
+                  <div className="h-6 w-px bg-border" />
+                  
+                  {/* Text Formatting */}
+                  <FontFormatToolbarPlugin />
+                  
+                  {/* Divider */}
+                  <div className="h-6 w-px bg-border" />
+                  
+                  {/* Link */}
+                  <LinkToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />
+                </div>
+              )}
+            </ToolbarPlugin>
+
+            <div className="relative">
+              <RichTextPlugin
+                contentEditable={
+                  <div className="editor-scroller min-h-[140px] max-h-[400px] overflow-y-auto">
+                    <div className="editor p-4">
+                      <ContentEditable 
+                        placeholder="Start typing..." 
+                        className="min-h-[100px] outline-none"
+                      />
+                    </div>
+                  </div>
+                }
+                ErrorBoundary={LexicalErrorBoundary}
+              />
+              <HtmlOutputPlugin onChange={onChange} />
+              <HtmlToEditorPlugin html={value} />
+              <ListPlugin />
+              <CheckListPlugin />
+              <AutoLinkPlugin />
+              <LinkPlugin />
+            </div>
+          </TooltipProvider>
+        </LexicalComposer>
+      </div>
     </div>
   );
 };

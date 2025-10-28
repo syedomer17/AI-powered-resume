@@ -201,4 +201,91 @@
   padding-left: 2em;
 }
 
+/* Lexical Editor Styles */
+.editor ul {
+  list-style: disc;
+  padding-left: 1.5em;
+  margin: 0.5em 0;
+}
+
+.editor ol {
+  list-style: decimal;
+  padding-left: 1.5em;
+  margin: 0.5em 0;
+}
+
+.editor li {
+  margin: 0.25em 0;
+}
+
+.editor strong, .editor b {
+  font-weight: bold;
+}
+
+.editor em, .editor i {
+  font-style: italic;
+}
+
+.editor u {
+  text-decoration: underline;
+}
+
+.editor s {
+  text-decoration: line-through;
+}
+
+.editor h1 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 0.5em 0;
+}
+
+.editor h2 {
+  font-size: 1.3em;
+  font-weight: bold;
+  margin: 0.5em 0;
+}
+
+.editor h3 {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin: 0.5em 0;
+}
+
+.editor p {
+  margin: 0.5em 0;
+}
+
+.editor a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* Resume Preview Styles - Ensure HTML renders correctly */
+#print-area ul {
+  list-style: disc !important;
+  padding-left: 1.25rem !important;
+}
+
+#print-area ol {
+  list-style: decimal !important;
+  padding-left: 1.25rem !important;
+}
+
+#print-area strong, #print-area b {
+  font-weight: bold !important;
+}
+
+#print-area em, #print-area i {
+  font-style: italic !important;
+}
+
+#print-area u {
+  text-decoration: underline !important;
+}
+
+#print-area s {
+  text-decoration: line-through !important;
+}
+
 @layer base{img{display: initial}}

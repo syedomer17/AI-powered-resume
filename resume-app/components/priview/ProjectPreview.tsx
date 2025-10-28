@@ -5,29 +5,39 @@ import { ResumeInfoType } from "@/context/ResumeInfoConext";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ProjectPreview = ({ resumeInfo }: { resumeInfo: ResumeInfoType }) => {
-  // Format project details to have nested bullets
-  const formatProjectDetails = (description: string) => {
-    if (!description) return "";
+  // Function to format project description HTML with inline styles
+  const formatProjectDetails = (html: string) => {
+    if (!html) return "";
     
-    // Split by newlines or HTML breaks
-    const lines = description
-      .replace(/<br\s*\/?>/gi, '\n')
-      .replace(/<\/p><p>/gi, '\n')
-      .replace(/<\/?p>/gi, '')
-      .split('\n')
-      .filter(line => line.trim());
+    // Decode HTML entities if they exist (in case it's double-encoded)
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = html;
+    let decoded = textarea.value;
     
-    return lines
-      .map(line => {
-        const trimmed = line.trim();
-        // If it already starts with ◦ or •, keep it
-        if (trimmed.startsWith('◦') || trimmed.startsWith('•')) {
-          return trimmed;
-        }
-        // Otherwise add the nested bullet
-        return `◦ ${trimmed}`;
-      })
-      .join('\n');
+    // Style the HTML elements with inline styles
+    let formatted = decoded
+      // Style list items
+      .replace(/<li>/g, '<li style="margin-bottom: 0.25rem;">')
+      // Style unordered lists  
+      .replace(/<ul>/g, '<ul style="list-style: disc !important; padding-left: 1.25rem !important; margin: 0.5rem 0;">')
+      // Style ordered lists
+      .replace(/<ol>/g, '<ol style="list-style: decimal !important; padding-left: 1.25rem !important; margin: 0.5rem 0;">')
+      // Remove paragraph margins
+      .replace(/<p>/g, '<p style="margin: 0.25rem 0;">')
+      // Style headings if any
+      .replace(/<h1>/g, '<h1 style="font-size: 10px; font-weight: bold; margin: 0.25rem 0;">')
+      .replace(/<h2>/g, '<h2 style="font-size: 10px; font-weight: bold; margin: 0.25rem 0;">')
+      .replace(/<h3>/g, '<h3 style="font-size: 10px; font-weight: bold; margin: 0.25rem 0;">')
+      // Ensure strong tags have bold weight
+      .replace(/<strong>/g, '<strong style="font-weight: 700 !important;">')
+      // Ensure em/italic tags
+      .replace(/<em>/g, '<em style="font-style: italic !important;">')
+      // Ensure underline
+      .replace(/<u>/g, '<u style="text-decoration: underline !important;">')
+      // Ensure strikethrough
+      .replace(/<s>/g, '<s style="text-decoration: line-through !important;">');
+    
+    return formatted;
   };
 
   return (
@@ -81,29 +91,16 @@ const ProjectPreview = ({ resumeInfo }: { resumeInfo: ResumeInfoType }) => {
               </div>
             )}
 
-            {/* Project Details - Indented with nested bullets */}
+            {/* Project Details - Indented with HTML rendering */}
             {project?.description && (
               <div 
-                className="ml-3.5 text-[10px] text-black leading-[1.4] mt-0.5"
-                style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
-              >
-                {formatProjectDetails(project.description).split('\n').map((line, i) => {
-                  // Check if line has bold labels like "Personalization:" or "Security:"
-                  const match = line.match(/^(◦\s*)([^:]+)(:)/);
-                  if (match) {
-                    return (
-                      <div key={i} className="flex items-start gap-1">
-                        <span>{match[1]}</span>
-                        <span>
-                          <span className="font-bold">{match[2]}:</span>
-                          {line.substring(match[0].length)}
-                        </span>
-                      </div>
-                    );
-                  }
-                  return <div key={i}>{line}</div>;
-                })}
-              </div>
+                className="ml-3.5 text-[10px] text-black leading-[1.4] mt-0.5 prose prose-sm max-w-none"
+                style={{ 
+                  textAlign: 'justify',
+                  fontFamily: 'Georgia, "Times New Roman", serif'
+                }}
+                dangerouslySetInnerHTML={{ __html: formatProjectDetails(project.description) }}
+              />
             )}
           </div>
         ))}

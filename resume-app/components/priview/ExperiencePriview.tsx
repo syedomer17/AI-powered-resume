@@ -18,18 +18,33 @@ const ExperiencePriview = ({ resumeInfo }: { resumeInfo: ResumeInfoType }) => {
   const formatWorkSummary = (html: string) => {
     if (!html) return "";
     
-    // Replace bullet points with ◦ and format bold labels
-    let formatted = html
-      .replace(/<li>/g, '<li style="margin-bottom: 0.25rem;">')
-      .replace(/•/g, '◦')
-      .replace(/<ul>/g, '<ul style="list-style: none; padding-left: 0; margin: 0;">')
-      .replace(/<p>/g, '<p style="margin: 0;">');
+    // Decode HTML entities if they exist (in case it's double-encoded)
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = html;
+    let decoded = textarea.value;
     
-    // Format patterns like "Label:" to be bold
-    formatted = formatted.replace(
-      /([A-Za-z\s&]+):/g,
-      '<strong>$1:</strong>'
-    );
+    // Style the HTML elements with inline styles
+    let formatted = decoded
+      // Style list items
+      .replace(/<li>/g, '<li style="margin-bottom: 0.25rem;">')
+      // Style unordered lists  
+      .replace(/<ul>/g, '<ul style="list-style: disc !important; padding-left: 1.25rem !important; margin: 0.5rem 0;">')
+      // Style ordered lists
+      .replace(/<ol>/g, '<ol style="list-style: decimal !important; padding-left: 1.25rem !important; margin: 0.5rem 0;">')
+      // Remove paragraph margins
+      .replace(/<p>/g, '<p style="margin: 0.25rem 0;">')
+      // Style headings if any
+      .replace(/<h1>/g, '<h1 style="font-size: 10px; font-weight: bold; margin: 0.25rem 0;">')
+      .replace(/<h2>/g, '<h2 style="font-size: 10px; font-weight: bold; margin: 0.25rem 0;">')
+      .replace(/<h3>/g, '<h3 style="font-size: 10px; font-weight: bold; margin: 0.25rem 0;">')
+      // Ensure strong tags have bold weight
+      .replace(/<strong>/g, '<strong style="font-weight: 700 !important;">')
+      // Ensure em/italic tags
+      .replace(/<em>/g, '<em style="font-style: italic !important;">')
+      // Ensure underline
+      .replace(/<u>/g, '<u style="text-decoration: underline !important;">')
+      // Ensure strikethrough
+      .replace(/<s>/g, '<s style="text-decoration: line-through !important;">');
     
     return formatted;
   };
@@ -77,8 +92,11 @@ const ExperiencePriview = ({ resumeInfo }: { resumeInfo: ResumeInfoType }) => {
             {/* Work Summary with ◦ bullets - Indented */}
             {experience?.workSummery && (
               <div
-                className="ml-3.5 text-[10px] text-black leading-[1.4] mt-0.5"
-                style={{ textAlign: 'justify' }}
+                className="ml-3.5 text-[10px] text-black leading-[1.4] mt-0.5 prose prose-sm max-w-none"
+                style={{ 
+                  textAlign: 'justify',
+                  fontFamily: 'Georgia, "Times New Roman", serif'
+                }}
                 dangerouslySetInnerHTML={{ __html: formatWorkSummary(experience.workSummery) }}
               />
             )}
