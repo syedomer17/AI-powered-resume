@@ -2,6 +2,14 @@ import { Toaster } from "sonner";
 import "./globals.css";
 import { Providers } from "./providers"; // only global providers like next-auth, react-hot-toast
 import type { Metadata } from "next";
+import { Manrope } from "next/font/google";
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  weight: ["200", "300", "400", "500", "600", "700", "800"],
+  variable: "--font-manrope",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "HireAI",
@@ -16,7 +24,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>
+      <body className={manrope.className}>
         <Providers>
           <Toaster />
           {children}
