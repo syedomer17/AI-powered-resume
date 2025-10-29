@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "NEXT_IGNORE_TYPE_CHECKING=true next build",
-    "start": "next start -p 5010",
+    "start": "next start ",
     "lint": "next lint",
     "type-check": "tsc --noEmit"
   },
