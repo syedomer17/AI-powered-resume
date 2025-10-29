@@ -94,7 +94,9 @@ export default function ClientResumeWrapper({
           resumeId={resumeId.toString()}
           resumeIndex={resumeIndex} // ✅ pass it here
         />
-        <ResumePriview />
+        <div className="overflow-x-auto">
+          <ResumePriview />
+        </div>
       </div>
     </ResumeInfoProvider>
   );

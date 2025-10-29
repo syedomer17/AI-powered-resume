@@ -15,15 +15,30 @@ export default function ResumePriview() {
 
   return (
     <motion.div
-      className="shadow-lg h-full px-12 py-8 bg-white rounded-md border border-gray-300"
+      id="resume-preview"
+      className="shadow-lg h-full bg-white border border-gray-300 mx-auto overflow-x-auto"
       style={{ 
         fontFamily: 'Georgia, "Times New Roman", Times, serif',
-        pageBreakInside: 'avoid'
+        pageBreakInside: 'avoid',
+        padding: '48px',
+        minWidth: '800px',
+        width: '800px',
+        maxWidth: '800px',
       }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
+      <style jsx global>{`
+        @media print {
+          #resume-preview {
+            box-shadow: none !important;
+            border: none !important;
+            border-radius: 0 !important;
+            margin: 0 !important;
+          }
+        }
+      `}</style>
       <div className="space-y-3" style={{ pageBreakInside: 'avoid' }}>
         <PersonalDetailPriview resumeInfo={resumeInfo} />
         <Summery resumeInfo={resumeInfo} />
