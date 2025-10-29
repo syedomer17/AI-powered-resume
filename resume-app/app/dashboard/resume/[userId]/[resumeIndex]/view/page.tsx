@@ -86,16 +86,138 @@ export default function ViewPage() {
     setDownloading(true);
 
     try {
+      // Clone the element to avoid modifying the original
+      const clonedElement = element.cloneNode(true) as HTMLElement;
+      
+      // Create a temporary container
+      const tempContainer = document.createElement("div");
+      tempContainer.style.position = "absolute";
+      tempContainer.style.left = "-9999px";
+      tempContainer.style.top = "0";
+      tempContainer.style.width = element.offsetWidth + "px";
+      document.body.appendChild(tempContainer);
+      tempContainer.appendChild(clonedElement);
+
+      // Function to copy computed styles and sanitize colors
+      const copyAndSanitizeStyles = (sourceEl: Element, targetEl: HTMLElement) => {
+        const computed = window.getComputedStyle(sourceEl as HTMLElement);
+        
+        // Copy all important layout and visual styles
+        const stylesToCopy = [
+          'display', 'position', 'width', 'height', 'maxWidth', 'maxHeight', 'minWidth', 'minHeight',
+          'margin', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft',
+          'padding', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
+          'fontSize', 'fontFamily', 'fontWeight', 'fontStyle', 'lineHeight', 'letterSpacing',
+          'textAlign', 'textDecoration', 'textTransform', 'whiteSpace',
+          'borderWidth', 'borderStyle', 'borderRadius',
+          'flexDirection', 'flexWrap', 'justifyContent', 'alignItems', 'gap', 'flex', 'flexGrow', 'flexShrink',
+          'gridTemplateColumns', 'gridTemplateRows', 'gridGap',
+          'boxSizing', 'overflow', 'overflowX', 'overflowY',
+          'opacity', 'visibility', 'zIndex'
+        ];
+        
+        stylesToCopy.forEach(prop => {
+          const value = computed.getPropertyValue(prop);
+          if (value && value !== 'normal' && value !== 'none' && value !== 'auto') {
+            (targetEl.style as any)[prop] = value;
+          }
+        });
+        
+        // Handle colors - convert oklch to safe values
+        let color = computed.color;
+        if (color.includes('oklch')) {
+          targetEl.style.color = '#000000';
+        } else if (color && color !== 'rgba(0, 0, 0, 0)') {
+          targetEl.style.color = color;
+        }
+        
+        let bgColor = computed.backgroundColor;
+        if (bgColor.includes('oklch')) {
+          // Keep transparent backgrounds, only set white for main container
+          if (targetEl.id === 'print-area' || targetEl.tagName.toLowerCase() === 'body') {
+            targetEl.style.backgroundColor = '#ffffff';
+          }
+        } else if (bgColor && bgColor !== 'rgba(0, 0, 0, 0)') {
+          targetEl.style.backgroundColor = bgColor;
+        }
+        
+        // Handle border colors
+        ['borderTopColor', 'borderRightColor', 'borderBottomColor', 'borderLeftColor'].forEach(prop => {
+          let borderColor = computed.getPropertyValue(prop);
+          if (borderColor && borderColor.includes('oklch')) {
+            (targetEl.style as any)[prop] = '#000000';
+          } else if (borderColor && borderColor !== 'rgba(0, 0, 0, 0)') {
+            (targetEl.style as any)[prop] = borderColor;
+          }
+        });
+      };
+
+      // Recursively copy styles from original to cloned element
+      const processElement = (originalEl: Element, clonedEl: Element) => {
+        if (clonedEl instanceof HTMLElement) {
+          copyAndSanitizeStyles(originalEl, clonedEl);
+        }
+        
+        // Process children
+        const originalChildren = Array.from(originalEl.children);
+        const clonedChildren = Array.from(clonedEl.children);
+        
+        originalChildren.forEach((origChild, index) => {
+          if (clonedChildren[index]) {
+            processElement(origChild, clonedChildren[index]);
+          }
+        });
+      };
+
+      // Process all elements
+      processElement(element, clonedElement);
+
+      // Wait a bit for styles to be applied
+      await new Promise(resolve => setTimeout(resolve, 100));
+
       // Generate canvas from HTML element
-      const canvas = await html2canvas(element, {
+      const canvas = await html2canvas(clonedElement, {
         scale: 2, // Higher scale for better quality
         useCORS: true,
         allowTaint: false,
         logging: false,
         backgroundColor: "#ffffff",
-        windowWidth: element.scrollWidth,
-        windowHeight: element.scrollHeight,
+        windowWidth: clonedElement.scrollWidth,
+        windowHeight: clonedElement.scrollHeight,
+        onclone: (clonedDoc) => {
+          // Final pass: sanitize any remaining oklch colors in the cloned document
+          const allElements = clonedDoc.querySelectorAll('*') as NodeListOf<HTMLElement>;
+          allElements.forEach((el) => {
+            const computed = clonedDoc.defaultView?.getComputedStyle(el);
+            if (!computed) return;
+            
+            // Check and fix color
+            if (computed.color.includes('oklch')) {
+              el.style.setProperty('color', '#000000', 'important');
+            }
+            
+            // Check and fix background color
+            if (computed.backgroundColor.includes('oklch')) {
+              if (el.id === 'print-area') {
+                el.style.setProperty('background-color', '#ffffff', 'important');
+              } else {
+                el.style.setProperty('background-color', 'transparent', 'important');
+              }
+            }
+            
+            // Check and fix border colors
+            ['border-top-color', 'border-right-color', 'border-bottom-color', 'border-left-color'].forEach(prop => {
+              const value = computed.getPropertyValue(prop);
+              if (value && value.includes('oklch')) {
+                el.style.setProperty(prop, '#000000', 'important');
+              }
+            });
+          });
+        }
       });
+
+      // Clean up temporary container
+      document.body.removeChild(tempContainer);
 
       // Get canvas dimensions
       const imgWidth = 210; // A4 width in mm
