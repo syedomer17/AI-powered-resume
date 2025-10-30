@@ -39,6 +39,7 @@ export default function ResumeCardItem({ resume, index }: ResumeCardItemProps) {
   const userId = session?.user?.id;
   const router = useRouter();
   const [openAlert, setOpenAlert] = useState(false);
+  const [downloading, setDownloading] = useState(false);
 
   if (!userId) return null;
 
@@ -62,6 +63,35 @@ export default function ResumeCardItem({ resume, index }: ResumeCardItemProps) {
       }
     } catch (err) {
       console.error("Error deleting resume:", err);
+    }
+  };
+
+  const handleDownload = async () => {
+    if (!userId || !resume._id) {
+      // Fallback: if _id is missing, navigate to view page
+      router.push(`/dashboard/resume/${userId}/${resume._id || resume.id}/view`);
+      return;
+    }
+
+    try {
+      setDownloading(true);
+      const res = await fetch(`/api/generate-pdf?userId=${userId}&resumeId=${resume._id}`);
+      if (!res.ok) throw new Error(`PDF API failed: ${res.status}`);
+      const blob = await res.blob();
+
+      const fileNameBase = (resume.title || "resume").toLowerCase().replace(/\s+/g, "-");
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${fileNameBase}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error("Failed to download PDF:", e);
+    } finally {
+      setDownloading(false);
     }
   };
   return (
@@ -93,7 +123,9 @@ export default function ResumeCardItem({ resume, index }: ResumeCardItemProps) {
               >
                 View
               </DropdownMenuItem>
-              <DropdownMenuItem>Download</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDownload} disabled={downloading}>
+                {downloading ? "Downloading..." : "Download"}
+              </DropdownMenuItem>
               <DropdownMenuItem
                 onSelect={() => setOpenAlert(true)}
                 className="text-red-500"

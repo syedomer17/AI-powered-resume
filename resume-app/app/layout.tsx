@@ -15,9 +15,8 @@ export const metadata: Metadata = {
   title: "HireAI",
   description: "AI-Powered Resume Builder - Create professional resumes with artificial intelligence",
   icons: {
-    icon: [
-      { url: "favicon.ico" },
-    ],
+    // Use an existing SVG from public to avoid dynamic favicon route issues
+    icon: "favicon.ico",
   },
 };
 

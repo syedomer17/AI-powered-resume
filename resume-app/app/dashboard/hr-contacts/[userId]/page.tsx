@@ -4,7 +4,7 @@ import User from "@/models/User";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import Header from "@/components/custom/Header";
-import SendToHR from "@/components/custom/SendToHR";
+import HRSendPanel from "@/components/custom/HRSendPanel";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getCategorizedHREmails, getTotalHRCount } from "@/data/hrEmails";
 import { Mail, Building2, Users, Send } from "lucide-react";
@@ -46,9 +46,8 @@ export default async function HRContactsPage({ params }: HRPageParams) {
   // Get the first resume ID if available
   const firstResumeId = user.resumes.length > 0 ? user.resumes[0]._id.toString() : undefined;
 
-  // Get HR emails
-  const categorizedEmails = getCategorizedHREmails();
   const totalHRCount = getTotalHRCount();
+  const categoryCount = Object.keys(getCategorizedHREmails()).length;
 
   return (
     <>
@@ -84,9 +83,7 @@ export default async function HRContactsPage({ params }: HRPageParams) {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">
-                {Object.keys(categorizedEmails).length}
-              </div>
+              <div className="text-3xl font-bold">{categoryCount}</div>
             </CardContent>
           </Card>
 
@@ -109,51 +106,28 @@ export default async function HRContactsPage({ params }: HRPageParams) {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* HR Email List */}
+          {/* Overview only (no email list) */}
           <div className="lg:col-span-2 space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>HR Email Database</CardTitle>
+                <CardTitle>HR Outreach</CardTitle>
                 <CardDescription>
-                  Browse {totalHRCount} HR contacts across various industries
+                  Choose how many HR contacts to reach. Upload your resume first, then send.
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-6">
-                  {Object.entries(categorizedEmails).map(([category, emails]) => (
-                    <div key={category}>
-                      <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
-                        <Building2 className="w-5 h-5 text-primary" />
-                        {category}
-                        <span className="text-sm font-normal text-gray-500">
-                          ({emails.length} contacts)
-                        </span>
-                      </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        {emails.map((email, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center gap-2 p-2 bg-gray-50 rounded border hover:bg-gray-100 transition-colors"
-                          >
-                            <Mail className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                            <span className="text-sm text-gray-700 truncate">
-                              {email}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <p className="text-sm text-gray-600">
+                  For privacy and anti-spam reasons, we don’t display the emails. We maintain a vetted list of {totalHRCount} HR contacts across multiple industries. You can choose how many to reach and we’ll take care of the delivery.
+                </p>
               </CardContent>
             </Card>
           </div>
 
-          {/* Send to HR Section */}
+          {/* Upload + Send to HR Section */}
           <div className="lg:col-span-1">
             {firstResumeId ? (
               <div className="sticky top-8">
-                <SendToHR resumeId={firstResumeId} />
+                <HRSendPanel resumeId={firstResumeId} />
               </div>
             ) : (
               <Card className="sticky top-8">
@@ -167,7 +141,7 @@ export default async function HRContactsPage({ params }: HRPageParams) {
                   <div className="text-center py-8">
                     <Mail className="w-12 h-12 text-gray-300 mx-auto mb-4" />
                     <p className="text-gray-600 mb-4">
-                      You need to create a resume first before sending to HR contacts.
+                      You need to create a resume and upload a PDF before sending to HR contacts.
                     </p>
                     <a
                       href={`/dashboard`}

@@ -12,10 +12,11 @@ import { toast } from "sonner";
 
 interface SendToHRProps {
   resumeId: string;
+  resumePdfUrl?: string; // optional uploaded resume link
   onClose?: () => void;
 }
 
-const SendToHR = ({ resumeId, onClose }: SendToHRProps) => {
+const SendToHR = ({ resumeId, resumePdfUrl, onClose }: SendToHRProps) => {
   const [jobTitle, setJobTitle] = useState("Software Developer");
   const [hrCount, setHRCount] = useState(50);
   const [totalHRs, setTotalHRs] = useState(100);
@@ -74,6 +75,7 @@ const SendToHR = ({ resumeId, onClose }: SendToHRProps) => {
         resumeId,
         jobTitle,
         hrCount,
+        resumePdfUrl,
       });
 
       clearInterval(progressInterval);

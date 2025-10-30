@@ -11,6 +11,7 @@ interface SendToHRRequest {
   resumeId: string;
   jobTitle?: string;
   hrCount?: number; // Number of HRs to send to (default: all)
+  resumePdfUrl?: string; // Optional uploaded resume URL
 }
 
 export async function POST(req: NextRequest) {
@@ -25,7 +26,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body: SendToHRRequest = await req.json();
-    const { resumeId, jobTitle = "Software Developer", hrCount } = body;
+  const { resumeId, jobTitle = "Software Developer", hrCount, resumePdfUrl } = body;
 
     if (!resumeId) {
       return NextResponse.json(
@@ -70,9 +71,10 @@ export async function POST(req: NextRequest) {
       : allHREmails;
 
     // Generate resume URL (you can customize this)
-    const resumeUrl = process.env.NEXT_PUBLIC_APP_URL 
+    // Prefer the uploaded PDF URL if provided; otherwise fall back to app view URL
+    const resumeUrl = resumePdfUrl || (process.env.NEXT_PUBLIC_APP_URL 
       ? `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/resume/${resumeId}/view`
-      : undefined;
+      : undefined);
 
     // Generate email HTML
     const emailHTML = generateJobApplicationEmail(
