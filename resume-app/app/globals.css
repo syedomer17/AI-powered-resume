@@ -51,6 +51,12 @@ body {
   color-adjust: exact !important;
 }
 
+/* Ensure links are visibly blue and underlined both on screen and in PDF */
+#print-area a {
+  color: #2563eb !important; /* tailwind blue-600 */
+  text-decoration: underline !important;
+}
+
 @media print {
   body {
     -webkit-print-color-adjust: exact;
