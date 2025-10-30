@@ -6,7 +6,7 @@ import { authOptions } from "@/lib/authOptions";
 import Header from "@/components/custom/Header";
 import SendToHR from "@/components/custom/SendToHR";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getAllHREmails, getTotalHRCount } from "@/data/hrEmails";
+import { getCategorizedHREmails, getTotalHRCount } from "@/data/hrEmails";
 import { Mail, Building2, Users, Send } from "lucide-react";
 import mongoose from "mongoose";
 
@@ -47,38 +47,8 @@ export default async function HRContactsPage({ params }: HRPageParams) {
   const firstResumeId = user.resumes.length > 0 ? user.resumes[0]._id.toString() : undefined;
 
   // Get HR emails
-  const hrEmails = getAllHREmails();
+  const categorizedEmails = getCategorizedHREmails();
   const totalHRCount = getTotalHRCount();
-
-  // Organize HR emails by category (based on domain)
-  const categorizedEmails: { [key: string]: string[] } = {
-    "Tech Companies": [],
-    "Startups": [],
-    "Finance & Banking": [],
-    "Healthcare & Biotech": [],
-    "Other Industries": [],
-  };
-
-  hrEmails.forEach((email) => {
-    if (
-      email.includes("tech") ||
-      email.includes("software") ||
-      email.includes("digital") ||
-      email.includes("cloud") ||
-      email.includes("ai") ||
-      email.includes("code")
-    ) {
-      categorizedEmails["Tech Companies"].push(email);
-    } else if (email.includes("startup") || email.includes("innovation") || email.includes("venture")) {
-      categorizedEmails["Startups"].push(email);
-    } else if (email.includes("finance") || email.includes("banking") || email.includes("insurance")) {
-      categorizedEmails["Finance & Banking"].push(email);
-    } else if (email.includes("health") || email.includes("bio") || email.includes("medical")) {
-      categorizedEmails["Healthcare & Biotech"].push(email);
-    } else {
-      categorizedEmails["Other Industries"].push(email);
-    }
-  });
 
   return (
     <>

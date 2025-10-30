@@ -123,6 +123,13 @@ export default function ViewPage() {
           }
         });
         
+        // Special handling for links - always make them blue
+        if (targetEl.tagName.toLowerCase() === 'a') {
+          targetEl.style.color = '#2563eb';
+          targetEl.style.textDecoration = 'underline';
+          return; // Skip normal color handling for links
+        }
+        
         // Handle colors - convert oklch to safe values
         let color = computed.color;
         if (color.includes('oklch')) {
@@ -175,6 +182,14 @@ export default function ViewPage() {
       // Wait a bit for styles to be applied
       await new Promise(resolve => setTimeout(resolve, 100));
 
+      // Ensure all links are blue and properly styled
+      const allLinks = clonedElement.querySelectorAll('a') as NodeListOf<HTMLAnchorElement>;
+      allLinks.forEach((link) => {
+        link.style.color = '#2563eb'; // Blue color for all links
+        link.style.textDecoration = 'underline';
+        link.style.fontWeight = 'normal';
+      });
+
       // Generate canvas from HTML element
       const canvas = await html2canvas(clonedElement, {
         scale: 2, // Higher scale for better quality
@@ -190,6 +205,12 @@ export default function ViewPage() {
           allElements.forEach((el) => {
             const computed = clonedDoc.defaultView?.getComputedStyle(el);
             if (!computed) return;
+            
+            // Ensure links are blue
+            if (el.tagName.toLowerCase() === 'a') {
+              el.style.setProperty('color', '#2563eb', 'important');
+              el.style.setProperty('text-decoration', 'underline', 'important');
+            }
             
             // Check and fix color
             if (computed.color.includes('oklch')) {
@@ -225,7 +246,7 @@ export default function ViewPage() {
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       let heightLeft = imgHeight;
 
-      // Create PDF
+      // Create PDF with clickable links
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
@@ -240,6 +261,25 @@ export default function ViewPage() {
 
       // Add image to PDF (handle multiple pages if needed)
       pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      
+      // Add clickable link annotations
+      const links = element.querySelectorAll('a') as NodeListOf<HTMLAnchorElement>;
+      links.forEach((link) => {
+        const rect = link.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+        
+        // Calculate relative position
+        const x = ((rect.left - elementRect.left) / element.offsetWidth) * imgWidth;
+        const y = ((rect.top - elementRect.top) / element.offsetHeight) * imgHeight;
+        const width = (rect.width / element.offsetWidth) * imgWidth;
+        const height = (rect.height / element.offsetHeight) * imgHeight;
+        
+        // Add link annotation to PDF
+        if (link.href) {
+          pdf.link(x, y, width, height, { url: link.href });
+        }
+      });
+      
       heightLeft -= pageHeight;
 
       while (heightLeft >= 0) {
