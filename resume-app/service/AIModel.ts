@@ -262,7 +262,7 @@ Skills: ${resumeData.skills.join(", ")}
 Education: ${resumeData.education ? JSON.stringify(resumeData.education, null, 2) : "Not provided"}
   `.trim();
 
-  const prompt = `You are an ATS (Applicant Tracking System) expert. Analyze the following resume against the job description and provide a detailed ATS score and improvement suggestions.
+  const prompt = `You are an ATS (Applicant Tracking System) expert. Analyze the following resume (raw text) against the job description and provide a detailed ATS score and improvement suggestions.
 
 Job Description:
 ${jobDescription}
@@ -280,30 +280,29 @@ Analyze the resume and provide:
 
 Return ONLY valid JSON in this exact format:
 {
-  "score": 75,
-  "matchPercentage": 68,
+  "score": number,
+  "matchPercentage": number,
   "strengths": [
-    "Strong technical skills matching job requirements",
-    "Relevant work experience in similar roles"
+    "example strength 1",
+    "example strength 2"
   ],
   "improvements": [
-    "Add more quantifiable achievements",
-    "Include specific technologies mentioned in job description"
+    "example improvement 1",
+    "example improvement 2"
   ],
   "missingKeywords": [
-    "keyword1",
-    "keyword2",
-    "keyword3"
+    "exampleKeyword1",
+    "exampleKeyword2"
   ],
   "suggestions": [
     {
       "category": "Skills",
-      "recommendation": "Add React.js and Node.js to your skills section as they are mentioned in the job description",
+      "recommendation": "example recommendation",
       "priority": "high"
     },
     {
       "category": "Experience",
-      "recommendation": "Quantify your achievements with metrics (e.g., 'Increased performance by 30%')",
+      "recommendation": "example recommendation",
       "priority": "medium"
     }
   ]
@@ -340,3 +339,92 @@ Return ONLY valid JSON in this exact format:
 
   return parsed;
 }
+
+export async function analyzeResumeTextATS(
+  resumeText: string,
+  jobDescription: string
+): Promise<ATSScoreResponse> {
+  const ai = new GoogleGenAI({
+    apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY!,
+  });
+
+  const prompt = `
+You are an ATS (Applicant Tracking System) expert. Analyze the following resume (raw text) against the job description and provide a detailed ATS score and improvement suggestions.
+
+Job Description:
+${jobDescription}
+
+Resume (raw text):
+${resumeText}
+
+Analyze the resume and provide:
+1. An ATS score (0-100) based on keyword matching, formatting, and relevance.
+2. A match percentage (0-100) showing how well the resume aligns with the job description.
+3. List of strengths (what the resume does well).
+4. List of improvements needed.
+5. Missing keywords that should be added.
+6. Specific actionable suggestions with priority levels.
+
+Return ONLY valid JSON in this format (replace example values with actual analysis results):
+{
+  "score": number,
+  "matchPercentage": number,
+  "strengths": [
+    "example strength 1",
+    "example strength 2"
+  ],
+  "improvements": [
+    "example improvement 1",
+    "example improvement 2"
+  ],
+  "missingKeywords": [
+    "exampleKeyword1",
+    "exampleKeyword2"
+  ],
+  "suggestions": [
+    {
+      "category": "Skills",
+      "recommendation": "example recommendation",
+      "priority": "high"
+    },
+    {
+      "category": "Experience",
+      "recommendation": "example recommendation",
+      "priority": "medium"
+    }
+  ]
+}
+`;
+
+  const response = await ai.models.generateContent({
+    model: "gemini-2.5-pro",
+    contents: [
+      {
+        role: "user",
+        parts: [{ text: prompt }],
+      },
+    ],
+  });
+
+  let rawText = response?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+
+  if (!rawText) {
+    throw new Error("Gemini response did not contain text.");
+  }
+
+  // Strip markdown code fences if present
+  if (rawText.startsWith("```")) {
+    rawText = rawText.replace(/```(?:json)?\n?/, "").replace(/```$/, "").trim();
+  }
+
+  let parsed: ATSScoreResponse;
+  try {
+    parsed = JSON.parse(rawText);
+  } catch (err) {
+    console.error("Failed to parse JSON from AI response:", rawText);
+    throw new Error("Could not parse JSON from Gemini response.");
+  }
+
+  return parsed;
+}
+

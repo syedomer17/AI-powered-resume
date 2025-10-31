@@ -14,9 +14,9 @@ export default function Header() {
   const user = session?.user;
 
   return (
-    <header className="p-3 px-5 flex justify-between items-center shadow-md">
+    <header className="p-3 px-5 flex justify-between items-center bg-white shadow-lg border-b border-gray-100">
       <Link href="/">
-        <div className="relative w-[100px] h-[40px]">
+  <div className="relative w-[100px] h-10">
           <Image
             src="/logo.svg"
             alt="Logo"

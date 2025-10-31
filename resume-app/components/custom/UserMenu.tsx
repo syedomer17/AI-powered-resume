@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { User, Mail, Search, LogOut } from "lucide-react";
+import { User, Mail, Search, LogOut, BarChart2 } from "lucide-react";
 
 export default function UserMenu({
   user,
@@ -89,6 +89,14 @@ export default function UserMenu({
                 >
                   <Mail className="w-4 h-4" />
                   <span>HR Contacts</span>
+                </Link>
+                <Link
+                  href={`/dashboard/ats`}
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 transition-colors"
+                >
+                  <BarChart2 className="w-4 h-4" />
+                  <span>ATS Checker</span>
                 </Link>
                 
                 <Link

@@ -200,8 +200,8 @@ const ATSAnalysisSchema = new Schema<IATSAnalysis>({
 
 const ResumeSchema = new Schema<IResume>(
   {
-    id: { type: Number, required: true },
-    title: { type: String, required: true },
+    id: { type: Number, required: true, index: true },
+    title: { type: String, required: true, index: true },
     personalDetails: { type: [PersonalDetailsSchema], default: [] },
     experience: { type: [ExperienceSchema], default: [] },
     education: { type: [EducationSchema], default: [] },
@@ -214,10 +214,13 @@ const ResumeSchema = new Schema<IResume>(
   { timestamps: true }
 );
 
+// ✅ Index for sorting or filtering by creation time
+ResumeSchema.index({ createdAt: -1 });
+
 const UserSchema = new Schema<IUser>(
   {
-    userName: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
+    userName: { type: String, required: true, index: true },
+    email: { type: String, required: true, unique: true, index: true },
     password: String,
     emailVerified: { type: Boolean, default: false },
     otp: String,
@@ -233,5 +236,7 @@ const UserSchema = new Schema<IUser>(
   },
   { timestamps: true }
 );
+
+UserSchema.index({ email: 1, userName: 1 });
 
 export default mongoose.models.User || mongoose.model<IUser>("User", UserSchema);
