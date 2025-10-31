@@ -8,7 +8,7 @@ import { connectToDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Search, Mail } from "lucide-react";
+import { Search, Mail, BarChart2 } from "lucide-react";
 
 interface IUser {
   _id: string;
@@ -53,8 +53,14 @@ export default async function DashboardPage() {
                 Send to HR
               </Button>
             </Link>
+            <Link href={`/dashboard/ats`}>
+              <Button className="bg-purple-600 hover:bg-purple-700 flex items-center gap-2">
+                <BarChart2 className="w-4 h-4" />
+                ATS Checker
+              </Button>
+            </Link>
             <Link href={`/dashboard/jobs/${user._id.toString()}`}>
-              <Button className="bg-[#9f5bff] flex items-center gap-2">
+              <Button className="bg-purple-600 flex items-center gap-2">
                 <Search className="w-4 h-4" />
                 Find Jobs
               </Button>
