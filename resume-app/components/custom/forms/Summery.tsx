@@ -83,21 +83,26 @@ const Summery: React.FC<SummeryProps> = ({ enableNext, userId, resumeId }) => {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl shadow-lg mt-10"
+      className="p-6 md:p-8 bg-card border border-border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 mt-6"
     >
-      <h2 className="font-semibold text-xl mb-1">📝 Summary</h2>
-      <p className="text-sm text-zinc-500 mb-4">
-        Add a professional summary for your resume.
-      </p>
+      <div className="mb-6 pb-4 border-b border-border">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent flex items-center gap-2">
+          <span className="text-2xl">📝</span>
+          Professional Summary
+        </h2>
+        <p className="text-sm text-muted-foreground mt-2">
+          Add a professional summary for your resume
+        </p>
+      </div>
 
-      <form onSubmit={onSave} className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-          <label htmlFor="summary-textarea" className="font-medium">
+      <form onSubmit={onSave} className="space-y-5">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+          <label htmlFor="summary-textarea" className="text-sm font-medium text-foreground">
             Your Summary
           </label>
           <Button
             variant="outline"
-            className="border-fuchsia-500 text-fuchsia-500"
+            className="border-purple-500/50 text-purple-600 dark:text-purple-400 hover:bg-purple-500/10"
             size="sm"
             type="button"
             onClick={handleGenerate}
@@ -119,8 +124,9 @@ const Summery: React.FC<SummeryProps> = ({ enableNext, userId, resumeId }) => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-2"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 bg-purple-500/10 dark:bg-purple-500/20 border border-purple-500/20 rounded-lg"
           >
+            <p className="col-span-full text-sm font-medium text-foreground mb-2">Select a summary level:</p>
             {Object.entries(options).map(([level, text]) => (
               <Button
                 key={level}
@@ -131,37 +137,58 @@ const Summery: React.FC<SummeryProps> = ({ enableNext, userId, resumeId }) => {
                   setOptions(null);
                 }}
                 type="button"
-                className="justify-start whitespace-normal text-left"
+                className="justify-start whitespace-normal text-left h-auto py-3 hover:bg-purple-500/10 hover:border-purple-500/50"
               >
-                {level.charAt(0).toUpperCase() + level.slice(1)}
+                <span className="font-semibold">{level.charAt(0).toUpperCase() + level.slice(1)}</span>
               </Button>
             ))}
           </motion.div>
         )}
 
-        <Textarea
-          id="summary-textarea"
-          className="mt-2 min-h-[120px]"
-          value={summary}
-          required
-          placeholder="Write your summary here..."
-          onChange={(e) => {
-            setSummary(e.target.value);
-            enableNext(e.target.value.trim().length > 0);
-            setOptions(null);
-          }}
-        />
+        <div className="space-y-2">
+          <label htmlFor="summary-textarea" className="text-sm font-medium text-foreground">
+            Summary Text
+          </label>
+          <Textarea
+            id="summary-textarea"
+            className="min-h-[150px] transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+            value={summary}
+            required
+            placeholder="Write your professional summary here..."
+            onChange={(e) => {
+              setSummary(e.target.value);
+              enableNext(e.target.value.trim().length > 0);
+              setOptions(null);
+            }}
+          />
+        </div>
 
-        <div className="flex justify-end">
+        <motion.div
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.99 }}
+          className="flex justify-end"
+        >
           <Button
             type="submit"
-            className="bg-fuchsia-500 hover:bg-fuchsia-600 text-white flex items-center gap-2 transition"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 dark:from-blue-500 dark:to-purple-500 dark:hover:from-blue-600 dark:hover:to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 h-11 px-8"
             disabled={loading}
+            size="lg"
           >
-            {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-            Save
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                Save Changes
+              </>
+            )}
           </Button>
-        </div>
+        </motion.div>
       </form>
     </motion.div>
   );

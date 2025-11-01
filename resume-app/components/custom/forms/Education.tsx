@@ -190,12 +190,17 @@ const Education: React.FC<EducationProps> = ({
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl shadow-lg mt-10"
+      className="p-6 md:p-8 bg-card border border-border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 mt-6"
     >
-      <h2 className="font-semibold text-xl mb-1">🎓 Education</h2>
-      <p className="text-sm text-zinc-500 mb-4">
-        Add your education details below.
-      </p>
+      <div className="mb-6 pb-4 border-b border-border">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent flex items-center gap-2">
+          <span className="text-2xl">🎓</span>
+          Education
+        </h2>
+        <p className="text-sm text-muted-foreground mt-2">
+          Add your education details below
+        </p>
+      </div>
 
       <AnimatePresence>
         {educationalList.map((item, index) => (
@@ -205,11 +210,12 @@ const Education: React.FC<EducationProps> = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-4 border border-zinc-200 dark:border-zinc-700 p-4 mb-5 rounded-lg bg-zinc-50 dark:bg-zinc-800"
+            className="grid grid-cols-1 md:grid-cols-2 gap-4 border border-border p-5 mb-5 rounded-xl bg-muted/30"
           >
             <div>
-              <label className="text-xs font-medium">University Name</label>
+              <label className="text-sm font-medium text-foreground">University Name</label>
               <Input
+                className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={item.universityName}
                 onChange={(e) =>
                   handleChange(index, "universityName", e.target.value)
@@ -218,32 +224,36 @@ const Education: React.FC<EducationProps> = ({
               />
             </div>
             <div>
-              <label className="text-xs font-medium">Degree</label>
+              <label className="text-sm font-medium text-foreground">Degree</label>
               <Input
+                className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={item.degree}
                 onChange={(e) => handleChange(index, "degree", e.target.value)}
                 placeholder="e.g., B.Sc"
               />
             </div>
             <div className="md:col-span-2">
-              <label className="text-xs font-medium">Major</label>
+              <label className="text-sm font-medium text-foreground">Major</label>
               <Input
+                className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={item.major}
                 onChange={(e) => handleChange(index, "major", e.target.value)}
                 placeholder="e.g., Computer Science"
               />
             </div>
             <div>
-              <label className="text-xs font-medium">City</label>
+              <label className="text-sm font-medium text-foreground">City</label>
               <Input
+                className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={item.city}
                 onChange={(e) => handleChange(index, "city", e.target.value)}
                 placeholder="e.g., Hyderabad"
               />
             </div>
             <div>
-              <label className="text-xs font-medium">Country</label>
+              <label className="text-sm font-medium text-foreground">Country</label>
               <Input
+                className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={item.country}
                 onChange={(e) => handleChange(index, "country", e.target.value)}
                 placeholder="e.g., India"
@@ -251,9 +261,10 @@ const Education: React.FC<EducationProps> = ({
             </div>
             <div className="md:col-span-2 flex flex-col md:flex-row gap-4">
               <div className="flex-1">
-                <label className="text-xs font-medium">Start Date</label>
+                <label className="text-sm font-medium text-foreground">Start Date</label>
                 <Input
                   type="date"
+                  className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                   value={item.startDate}
                   onChange={(e) =>
                     handleChange(index, "startDate", e.target.value)
@@ -261,9 +272,10 @@ const Education: React.FC<EducationProps> = ({
                 />
               </div>
               <div className="flex-1">
-                <label className="text-xs font-medium">End Date</label>
+                <label className="text-sm font-medium text-foreground">End Date</label>
                 <Input
                   type="date"
+                  className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                   value={item.endDate}
                   onChange={(e) =>
                     handleChange(index, "endDate", e.target.value)
@@ -272,8 +284,9 @@ const Education: React.FC<EducationProps> = ({
               </div>
             </div>
             <div className="md:col-span-2">
-              <label className="text-xs font-medium">Description</label>
+              <label className="text-sm font-medium text-foreground">Description</label>
               <Textarea
+                className="mt-1 min-h-24 focus:ring-2 focus:ring-blue-500/20"
                 value={item.description}
                 onChange={(e) =>
                   handleChange(index, "description", e.target.value)
@@ -286,7 +299,7 @@ const Education: React.FC<EducationProps> = ({
                 variant="outline"
                 onClick={() => handleRemove(index)}
                 disabled={educationalList.length === 1}
-                className="flex items-center gap-1 hover:bg-red-50 dark:hover:bg-red-900"
+                className="flex items-center gap-1 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50"
               >
                 <Trash2 className="w-4 h-4" />
                 Remove
@@ -296,33 +309,24 @@ const Education: React.FC<EducationProps> = ({
         ))}
       </AnimatePresence>
 
-      <motion.div
-        whileHover={{ scale: 1.02 }}
-        className="flex justify-start mt-4"
-      >
+      <div className="flex justify-between mt-6 gap-2">
         <Button
           variant="outline"
           onClick={handleAdd}
-          className="flex items-center gap-1"
+          className="flex items-center gap-1 border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 "
         >
           <Plus className="w-4 h-4" />
           Add More
         </Button>
-      </motion.div>
-
-      <motion.div
-        whileHover={{ scale: 1.02 }}
-        className="flex justify-end mt-6"
-      >
         <Button
-          className="bg-fuchsia-500 hover:bg-fuchsia-600 text-white flex items-center gap-2 transition"
+          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
           onClick={handleSave}
           disabled={loading}
         >
-          {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+          {loading && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
           Save
         </Button>
-      </motion.div>
+      </div>
     </motion.div>
   );
 };

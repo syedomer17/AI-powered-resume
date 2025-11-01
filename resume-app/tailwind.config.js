@@ -10,6 +10,9 @@ export default {
       colors: {
         myColor: "#222222",
       },
+      screens: {
+        'xs': '475px',
+      },
     },
   },
   plugins: [],

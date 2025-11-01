@@ -22,8 +22,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={manrope.className}>
+    <html lang="en" suppressHydrationWarning >
+      <body className={`${manrope.className} min-h-screen bg-background text-foreground`}> 
         <Providers>
           <Toaster />
           {children}

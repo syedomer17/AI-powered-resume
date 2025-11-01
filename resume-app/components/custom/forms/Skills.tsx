@@ -161,12 +161,17 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl shadow-lg mt-10"
+      className="p-6 md:p-8 bg-card border border-border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 mt-6"
     >
-      <h2 className="font-semibold text-xl mb-1">🛠️ Skills</h2>
-      <p className="text-sm text-zinc-500 mb-4">
-        Select categories and specify your skills.
-      </p>
+      <div className="mb-6 pb-4 border-b border-border">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent flex items-center gap-2">
+          <span className="text-2xl">🛠️</span>
+          Skills
+        </h2>
+        <p className="text-sm text-muted-foreground mt-2">
+          Select categories and specify your skills
+        </p>
+      </div>
 
       <AnimatePresence>
         {skillsList.map((item, index) => (
@@ -176,14 +181,14 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="flex flex-col sm:flex-row sm:items-center justify-between border border-zinc-200 dark:border-zinc-700 rounded-lg bg-zinc-50 dark:bg-zinc-800 p-3 mb-3 gap-3"
+            className="flex flex-col sm:flex-row sm:items-center justify-between border border-border rounded-xl bg-muted/30 p-4 mb-4 gap-3"
           >
-            <div className="flex flex-col sm:flex-row gap-2 w-full flex-1">
+            <div className="flex flex-col sm:flex-row gap-3 w-full flex-1">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline"
-                    className="flex justify-between w-full sm:w-40"
+                    className="flex justify-between w-full sm:w-48 h-11 font-medium"
                   >
                     {item.category || "Select Category"}
                     <ChevronDown className="w-4 h-4" />
@@ -202,6 +207,7 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
               </DropdownMenu>
               <Input
                 placeholder="Skill name"
+                className="h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={item.name}
                 onChange={(e) => handleChange(index, "name", e.target.value)}
               />
@@ -211,7 +217,7 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
               size="sm"
               onClick={() => handleRemove(index)}
               disabled={skillsList.length === 1}
-              className="flex items-center gap-1 hover:bg-red-50 dark:hover:bg-red-900"
+              className="flex items-center gap-1 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 "
             >
               <Trash2 className="w-4 h-4" />
               Remove
@@ -220,16 +226,20 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
         ))}
       </AnimatePresence>
 
-      <div className="flex flex-wrap justify-between mt-4 gap-2">
-        <Button variant="outline" onClick={handleAdd}>
+      <div className="flex flex-wrap justify-between mt-6 gap-2">
+        <Button 
+          variant="outline" 
+          onClick={handleAdd}
+          className="border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 "
+        >
           + Add Skill
         </Button>
         <Button
-          className="bg-fuchsia-500 hover:bg-fuchsia-600 text-white flex items-center gap-2 transition"
+          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
           onClick={handleSave}
           disabled={loading}
         >
-          {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+          {loading && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
           Save
         </Button>
       </div>

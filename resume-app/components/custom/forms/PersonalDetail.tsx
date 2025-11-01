@@ -149,30 +149,39 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl shadow-lg mt-10"
+      className="p-6 md:p-8 bg-card border border-border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 mt-6"
     >
-      <h2 className="font-semibold text-xl mb-1">👤 Personal Details</h2>
-      <p className="text-sm text-zinc-500 mb-4">
-        Get started with your basic information.
-      </p>
+      <div className="mb-6 pb-4 border-b border-border">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent flex items-center gap-2">
+          <span className="text-2xl">👤</span>
+          Personal Details
+        </h2>
+        <p className="text-sm text-muted-foreground mt-2">
+          Get started with your basic information
+        </p>
+      </div>
 
       <form>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {/* Name */}
-          <div>
-            <label className="text-xs font-medium capitalize">First Name</label>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground flex items-center gap-1">
+              First Name <span className="text-destructive">*</span>
+            </label>
             <Input
-              className="capitalize"
+              className="capitalize h-11 transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
               name="firstName"
               value={personalDetails.firstName}
               onChange={handleChange}
               placeholder="e.g., John"
             />
           </div>
-          <div>
-            <label className="text-xs font-medium capitalize">Last Name</label>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground flex items-center gap-1">
+              Last Name <span className="text-destructive">*</span>
+            </label>
             <Input
-              className="capitalize"
+              className="capitalize h-11 transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
               name="lastName"
               value={personalDetails.lastName}
               onChange={handleChange}
@@ -181,10 +190,12 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
           </div>
 
           {/* Job Title */}
-          <div className="sm:col-span-2">
-            <label className="text-xs font-medium">Job Title</label>
+          <div className="sm:col-span-2 space-y-2">
+            <label className="text-sm font-medium text-foreground flex items-center gap-1">
+              Job Title <span className="text-destructive">*</span>
+            </label>
             <Input
-              className="capitalize"
+              className="capitalize h-11 transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
               name="jobTitle"
               value={personalDetails.jobTitle}
               onChange={handleChange}
@@ -193,22 +204,25 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
           </div>
 
           {/* Contact */}
-          <div>
-            <label className="text-xs font-medium">Phone</label>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">Phone</label>
             <PhoneInput
               country={"in"}
               value={personalDetails.phone.replace("+", "")}
               onChange={handlePhoneChange}
               enableSearch
-              inputClass="!w-full !h-10 !text-sm"
+              inputClass="!w-full !h-11 !text-sm dark:!bg-background dark:!border-border dark:!text-foreground"
               containerClass="!w-full"
+              dropdownClass="dark:!bg-background dark:!border-border dark:!text-foreground"
+              searchClass="dark:!bg-background dark:!border-border dark:!text-foreground"
             />
           </div>
-          <div>
-            <label className="text-xs font-medium">Email</label>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">Email</label>
             <Input
               type="email"
               name="email"
+              className="h-11 transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
               value={personalDetails.email}
               onChange={handleChange}
               placeholder="omerali.code@gmail.com"
@@ -216,12 +230,15 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
           </div>
 
           {/* Address Section */}
-          <div className="sm:col-span-2">
-            <h3 className="text-sm font-semibold mb-3">📍 Location</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="sm:col-span-2 mt-2">
+            <div className="flex items-center gap-2 mb-4 p-3 rounded-lg bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/20">
+              <span className="text-xl">📍</span>
+              <h3 className="text-sm font-semibold text-foreground">Location Information</h3>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               {/* Country */}
-              <div>
-                <label className="text-xs font-medium">Country</label>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">Country</label>
                 <Select
                   value={personalDetails.country}
                   onValueChange={(val) =>
@@ -233,7 +250,7 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
                     }))
                   }
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-11">
                     <SelectValue placeholder="Select Country" />
                   </SelectTrigger>
                   <SelectContent>
@@ -247,8 +264,8 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
               </div>
 
               {/* State */}
-              <div>
-                <label className="text-xs font-medium">State</label>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">State</label>
                 <Select
                   value={personalDetails.state}
                   onValueChange={(val) =>
@@ -260,7 +277,7 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
                   }
                   disabled={!personalDetails.country}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-11">
                     <SelectValue placeholder="Select State" />
                   </SelectTrigger>
                   <SelectContent>
@@ -274,8 +291,8 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
               </div>
 
               {/* City */}
-              <div>
-                <label className="text-xs font-medium">City</label>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">City</label>
                 <Select
                   value={personalDetails.city}
                   onValueChange={(val) =>
@@ -286,7 +303,7 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
                   }
                   disabled={!personalDetails.state}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-11">
                     <SelectValue placeholder="Select City" />
                   </SelectTrigger>
                   <SelectContent>
@@ -302,25 +319,32 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
           </div>
 
           {/* Social Media Section */}
-          <div className="sm:col-span-2">
-            <h3 className="text-sm font-semibold mb-2 mt-4 border-t pt-4">🔗 Social Media</h3>
-            <p className="text-xs text-zinc-500 mb-3">Add your social media profile links and display names</p>
+          <div className="sm:col-span-2 mt-4">
+            <div className="flex items-center gap-2 mb-4 p-3 rounded-lg bg-purple-500/10 dark:bg-purple-500/20 border border-purple-500/20">
+              <span className="text-xl">🔗</span>
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">Social Media</h3>
+                <p className="text-xs text-muted-foreground">Add your social media profiles (optional)</p>
+              </div>
+            </div>
           </div>
 
           {/* LinkedIn */}
-          <div>
-            <label className="text-xs font-medium">LinkedIn Username</label>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">LinkedIn Username</label>
             <Input
               name="linkedInUsername"
+              className="h-11 transition-all duration-200 focus:ring-2 focus:ring-purple-500/20"
               value={personalDetails.linkedInUsername}
               onChange={handleChange}
               placeholder="e.g., Syed Omer Ali"
             />
           </div>
-          <div>
-            <label className="text-xs font-medium">LinkedIn Profile URL</label>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">LinkedIn Profile URL</label>
             <Input
               name="linkedIn"
+              className="h-11 transition-all duration-200 focus:ring-2 focus:ring-purple-500/20"
               value={personalDetails.linkedIn}
               onChange={handleChange}
               placeholder="e.g., https://linkedin.com/in/syed-omer-ali"
@@ -328,19 +352,21 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
           </div>
 
           {/* GitHub */}
-          <div>
-            <label className="text-xs font-medium">GitHub Username</label>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">GitHub Username</label>
             <Input
               name="githubUsername"
+              className="h-11 transition-all duration-200 focus:ring-2 focus:ring-purple-500/20"
               value={personalDetails.githubUsername}
               onChange={handleChange}
               placeholder="e.g., Syed Omer Ali"
             />
           </div>
-          <div>
-            <label className="text-xs font-medium">GitHub Profile URL</label>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">GitHub Profile URL</label>
             <Input
               name="github"
+              className="h-11 transition-all duration-200 focus:ring-2 focus:ring-purple-500/20"
               value={personalDetails.github}
               onChange={handleChange}
               placeholder="e.g., https://github.com/syedomer17"
@@ -348,19 +374,21 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
           </div>
 
           {/* Twitter */}
-          <div>
-            <label className="text-xs font-medium">Twitter Username</label>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">Twitter Username</label>
             <Input
               name="twitterUsername"
+              className="h-11 transition-all duration-200 focus:ring-2 focus:ring-purple-500/20"
               value={personalDetails.twitterUsername}
               onChange={handleChange}
               placeholder="e.g., Syed Omer Ali"
             />
           </div>
-          <div>
-            <label className="text-xs font-medium">Twitter Profile URL</label>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">Twitter Profile URL</label>
             <Input
               name="twitter"
+              className="h-11 transition-all duration-200 focus:ring-2 focus:ring-purple-500/20"
               value={personalDetails.twitter}
               onChange={handleChange}
               placeholder="e.g., https://twitter.com/syedomerali"
@@ -368,19 +396,21 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
           </div>
 
           {/* Medium */}
-          <div>
-            <label className="text-xs font-medium">Medium Username</label>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">Medium Username</label>
             <Input
               name="mediumUsername"
+              className="h-11 transition-all duration-200 focus:ring-2 focus:ring-purple-500/20"
               value={personalDetails.mediumUsername}
               onChange={handleChange}
               placeholder="e.g., Syed Omer Ali"
             />
           </div>
-          <div>
-            <label className="text-xs font-medium">Medium Profile URL</label>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">Medium Profile URL</label>
             <Input
               name="medium"
+              className="h-11 transition-all duration-200 focus:ring-2 focus:ring-purple-500/20"
               value={personalDetails.medium}
               onChange={handleChange}
               placeholder="e.g., https://medium.com/@syedomerali"
@@ -389,17 +419,30 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
         </div>
 
         <motion.div
-          whileHover={{ scale: 1.02 }}
-          className="mt-4 flex justify-end"
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.99 }}
+          className="mt-8 flex justify-end"
         >
           <Button
             type="button"
-            className="bg-fuchsia-500 hover:bg-fuchsia-600 text-white flex items-center gap-2 transition"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 dark:from-blue-500 dark:to-purple-500 dark:hover:from-blue-600 dark:hover:to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 h-11 px-8"
             onClick={handleSave}
             disabled={loading}
+            size="lg"
           >
-            {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-            Save
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                Save Changes
+              </>
+            )}
           </Button>
         </motion.div>
       </form>

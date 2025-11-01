@@ -12,21 +12,21 @@ export default function Home() {
           {/* <img src={'/grid.svg'} className="absolute z-[-10] w-full" 
       width={1200} height={300} /> */}
           {/* <Header/> */}
-          <section className=" z-50">
-            <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
+          <section className="z-50 relative">
+            <div className="py-6 sm:py-8 md:py-12 lg:py-16 px-4 sm:px-6 md:px-8 mx-auto max-w-7xl text-center">
               <Link
                 href="#"
-                className="inline-flex justify-between items-center py-1 px-1 pr-4 mb-7 text-sm text-gray-700 bg-gray-100 rounded-full dark:bg-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
+                className="inline-flex justify-between items-center py-1 px-1 pr-3 sm:pr-4 mb-6 sm:mb-7 text-xs sm:text-sm text-foreground bg-muted dark:bg-muted/40 rounded-full hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/70 transition-all shadow-sm dark:shadow-md backdrop-blur-sm max-w-full"
                 role="alert"
               >
-                <span className="text-xs bg-[#9f5bff] rounded-full text-white px-4 py-1.5 mr-3">
+                <span className="text-xs bg-[#9f5bff] dark:bg-primary rounded-full text-white px-3 sm:px-4 py-1 sm:py-1.5 mr-2 sm:mr-3 shadow-sm whitespace-nowrap">
                   New
-                </span>{" "}
-                <span className="text-sm font-medium">
+                </span>
+                <span className="text-xs sm:text-sm font-medium truncate">
                   syedomerali2006@gmail.com
                 </span>
                 <svg
-                  className="ml-2 w-5 h-5"
+                  className="ml-1 sm:ml-2 w-4 h-4 sm:w-5 sm:h-5 shrink-0"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
@@ -34,20 +34,20 @@ export default function Home() {
                   <path
                     fillRule="evenodd"
                     d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   ></path>
                 </svg>
               </Link>
-              <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-                Build Your Resume <span className="text-primary">With AI</span>{" "}
+              <h1 className="mb-4 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-foreground px-2">
+                Build Your Resume <span className="text-primary dark:text-primary">With AI</span>
               </h1>
-              <p className="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
+              <p className="mb-6 sm:mb-8 text-base sm:text-lg font-normal text-muted-foreground dark:text-muted-foreground/90 lg:text-xl px-4 sm:px-16 xl:px-48">
                 Effortlessly Craft a Standout Resume with Our AI-Powered Builder
               </p>
-              <div className="flex flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
+              <div className="flex flex-col mb-8 lg:mb-16 space-y-3 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4 px-4">
                 <Link
                   href="/dashboard"
-                  className="bg-[#9f5bff] inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg hover:bg-[#9f5bff] focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
+                  className="bg-primary inline-flex justify-center items-center py-3 px-5 sm:py-3.5 sm:px-6 text-sm sm:text-base font-medium text-center text-primary-foreground rounded-lg hover:bg-primary/90 dark:hover:bg-primary/80 focus:ring-4 focus:ring-ring/30 shadow-md dark:shadow-primary/30 transition-all active:scale-[0.98] w-full sm:w-auto"
                 >
                   Get Started
                   <svg
@@ -59,7 +59,7 @@ export default function Home() {
                     <path
                       fillRule="evenodd"
                       d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     ></path>
                   </svg>
                 </Link>
@@ -78,14 +78,14 @@ export default function Home() {
                   Watch video
                 </Link> */}
               </div>
-              <div className="px-4 mx-auto text-center md:max-w-screen-md lg:max-w-screen-lg lg:px-36">
-                <span className="font-semibold text-gray-400 uppercase">
+              <div className="px-4 mx-auto text-center md:max-w-3xl lg:max-w-5xl lg:px-36">
+                <span className="font-semibold text-muted-foreground uppercase">
                   FEATURED IN
                 </span>
-                <div className="flex flex-wrap justify-center items-center mt-8 text-gray-500 sm:justify-between">
+                <div className="flex flex-wrap justify-center items-center mt-8 text-muted-foreground sm:justify-between">
                   <Link
                     href="#"
-                    className="mr-5 mb-5 lg:mb-0 hover:text-gray-800 dark:hover:text-gray-400"
+                    className="mr-5 mb-5 lg:mb-0 hover:text-foreground"
                   >
                     <svg
                       className="h-8"
@@ -133,7 +133,7 @@ export default function Home() {
                   </Link>
                   <Link
                     href="#"
-                    className="mr-5 mb-5 lg:mb-0 hover:text-gray-800 dark:hover:text-gray-400"
+                    className="mr-5 mb-5 lg:mb-0 hover:text-foreground"
                   >
                     <svg
                       className="h-11"
@@ -187,24 +187,24 @@ export default function Home() {
               </div>
             </div>
           </section>
-          <section className="py-8 bg-white z-50 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
-            <h2 className="font-bold text-3xl">How it Works?</h2>
-            <h2 className="text-md text-gray-500">
-              Give mock interview in just 3 simplar easy step
+          <section className="py-8 bg-background z-50 px-4 mx-auto max-w-7xl text-center lg:py-16 lg:px-12">
+            <h2 className="font-bold text-3xl text-foreground">How it Works?</h2>
+            <h2 className="text-md text-muted-foreground">
+              Give mock interview in just 3 simple steps
             </h2>
 
             <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
               <Link
-                className="block rounded-xl border bg-white border-gray-200 p-8 shadow-xl transition hover:border-pink-500/10 hover:shadow-pink-500/10"
+                className="block rounded-xl border bg-card text-card-foreground border-border p-8 shadow-sm transition hover:border-primary/40"
                 href="#"
               >
-                <AtomIcon className="h-8 w-8" />
+                <AtomIcon className="h-8 w-8 text-muted-foreground" />
 
-                <h2 className="mt-4 text-xl font-bold text-black">
+                <h2 className="mt-4 text-xl font-bold text-foreground">
                   Create Your Resume Prompt
                 </h2>
 
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="mt-1 text-sm text-muted-foreground">
                   Easily write a tailored prompt that guides our AI to generate
                   a personalized, professional resume based on your experience
                   and goals.
@@ -212,16 +212,16 @@ export default function Home() {
               </Link>
 
               <Link
-                className="block rounded-xl border bg-white border-gray-200 p-8 shadow-xl transition hover:border-pink-500/10 hover:shadow-pink-500/10"
+                className="block rounded-xl border bg-card text-card-foreground border-border p-8 shadow-sm transition hover:border-primary/40"
                 href="#"
               >
-                <Edit className="h-8 w-8" />
+                <Edit className="h-8 w-8 text-muted-foreground" />
 
-                <h2 className="mt-4 text-xl font-bold text-black">
+                <h2 className="mt-4 text-xl font-bold text-foreground">
                   Edit and Customize
                 </h2>
 
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="mt-1 text-sm text-muted-foreground">
                   Fine-tune every detail of your resume with intuitive editing
                   tools, ensuring your skills and achievements are highlighted
                   perfectly.
@@ -229,16 +229,16 @@ export default function Home() {
               </Link>
 
               <a
-                className="block rounded-xl border bg-white border-gray-200 p-8 shadow-xl transition hover:border-pink-500/10 hover:shadow-pink-500/10"
+                className="block rounded-xl border bg-card text-card-foreground border-border p-8 shadow-sm transition hover:border-primary/40"
                 href="#"
               >
-                <Share2 className="h-8 w-8" />
+                <Share2 className="h-8 w-8 text-muted-foreground" />
 
-                <h2 className="mt-4 text-xl font-bold text-black">
+                <h2 className="mt-4 text-xl font-bold text-foreground">
                   Share & Download
                 </h2>
 
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="mt-1 text-sm text-muted-foreground">
                   Export your resume in multiple formats or share it instantly
                   with recruiters to start receiving responses right away.
                 </p>
@@ -248,7 +248,7 @@ export default function Home() {
             <div className="mt-12 text-center">
               <Link
                 href="/login"
-                className="inline-block rounded bg-pink-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-pink-700 focus:outline-none focus:ring focus:ring-yellow-400"
+                className="inline-block rounded bg-primary px-12 py-3 text-sm font-medium text-primary-foreground transition hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring/40"
               >
                 Get Started Today
               </Link>

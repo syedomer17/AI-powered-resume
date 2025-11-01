@@ -58,19 +58,36 @@ export default function AvatarUploader({ value, onUploaded }: AvatarUploaderProp
   }
 
   return (
-    <div className="flex items-center gap-3">
-      <div className="h-14 w-14 rounded-full overflow-hidden bg-neutral-200 ring-1 ring-black/5">
-        {preview ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={preview} alt="avatar" className="h-full w-full object-cover" />
-        ) : null}
-      </div>
-      <div>
-        <Button type="button" onClick={openPicker} disabled={loading} className="bg-purple-600 hover:bg-purple-700">
-          {loading ? "Uploading..." : "Upload Avatar"}
-        </Button>
-        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleChange} />
-      </div>
+    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+      <Button 
+        type="button" 
+        onClick={openPicker} 
+        disabled={loading} 
+        variant="outline"
+        size="sm"
+        className="w-full sm:w-auto"
+      >
+        {loading ? (
+          <>
+            <svg className="animate-spin -ml-1 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Uploading...
+          </>
+        ) : (
+          <>
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            Change Avatar
+          </>
+        )}
+      </Button>
+      <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleChange} />
+      <p className="text-xs text-muted-foreground dark:text-muted-foreground/70">
+        PNG, JPG or WEBP (max. 3MB)
+      </p>
     </div>
   );
 }

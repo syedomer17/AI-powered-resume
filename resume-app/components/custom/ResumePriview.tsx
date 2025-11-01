@@ -16,7 +16,7 @@ export default function ResumePriview() {
   return (
     <motion.div
       id="resume-preview"
-      className="shadow-lg h-full bg-white border border-gray-300 mx-auto overflow-x-auto"
+      className="h-full bg-white dark:bg-white mx-auto overflow-x-auto rounded-lg"
       style={{ 
         fontFamily: 'Georgia, "Times New Roman", Times, serif',
         pageBreakInside: 'avoid',
@@ -37,6 +37,24 @@ export default function ResumePriview() {
             border-radius: 0 !important;
             margin: 0 !important;
           }
+        }
+        
+        /* Force white background for resume preview in dark mode */
+        #resume-preview {
+          background-color: #ffffff !important;
+          color: #000000 !important;
+        }
+        
+        #resume-preview * {
+          color: inherit !important;
+        }
+        
+        /* Allow links to have their own colors */
+        #resume-preview a,
+        #resume-preview a *,
+        #resume-preview .text-blue-600,
+        #resume-preview .text-blue-700 {
+          color: #1d4ed8 !important;
         }
       `}</style>
       <div className="space-y-3" style={{ pageBreakInside: 'avoid' }}>

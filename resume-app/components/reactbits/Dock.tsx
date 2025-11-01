@@ -78,7 +78,7 @@ function DockItem({
       onFocus={() => isHovered.set(1)}
       onBlur={() => isHovered.set(0)}
       onClick={onClick}
-      className={`relative inline-flex items-center justify-center rounded-full bg-[#060010] text-white border-neutral-700 border-2 shadow-lg ring-0 transition-shadow duration-200 ${className}`}
+      className={`relative inline-flex items-center justify-center rounded-full bg-neutral-800/80 dark:bg-neutral-900/80 text-white border border-neutral-700/50 dark:border-neutral-600/30 shadow-xl hover:shadow-2xl backdrop-blur-sm ring-0 transition-all duration-300 cursor-pointer hover:bg-neutral-700/80 dark:hover:bg-neutral-800/80 ${className}`}
       tabIndex={0}
       role="button"
       aria-haspopup="true"
@@ -87,7 +87,7 @@ function DockItem({
       <motion.div
         aria-hidden
         style={{ opacity: glow }}
-        className="pointer-events-none absolute -inset-3 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(167,139,250,0.45),rgba(167,139,250,0.15),transparent)] blur-xl"
+        className="pointer-events-none absolute -inset-2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.6),rgba(168,85,247,0.3),transparent)] blur-lg"
       />
       {Children.map(children, child =>
         React.isValidElement(child)
@@ -119,11 +119,11 @@ function DockLabel({ children, className = '', isHovered }: DockLabelProps) {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, y: 0 }}
-          animate={{ opacity: 1, y: -10 }}
-          exit={{ opacity: 0, y: 0 }}
-          transition={{ duration: 0.2 }}
-          className={`${className} absolute -top-6 left-1/2 w-fit whitespace-pre rounded-md border border-neutral-700 bg-[#060010] px-2 py-0.5 text-xs text-white`}
+          initial={{ opacity: 0, y: 0, scale: 0.9 }}
+          animate={{ opacity: 1, y: -10, scale: 1 }}
+          exit={{ opacity: 0, y: 0, scale: 0.9 }}
+          transition={{ duration: 0.2, ease: 'easeOut' }}
+          className={`${className} absolute -top-8 left-1/2 w-fit whitespace-pre rounded-lg border border-neutral-700/50 dark:border-neutral-600/30 bg-neutral-800/95 dark:bg-neutral-900/95 backdrop-blur-md px-3 py-1.5 text-xs font-medium text-white shadow-xl`}
           role="tooltip"
           style={{ x: '-50%' }}
         >
@@ -162,10 +162,10 @@ export default function Dock({
   const height = useSpring(heightRow, spring);
 
   return (
-    <motion.div style={{ height, scrollbarWidth: 'none' }} className="mx-2 flex max-w-full items-center">
+    <motion.div style={{ height, scrollbarWidth: 'none' }} className="mx-auto flex max-w-full items-center justify-center">
       {/* Gradient glow behind the panel */}
-      <div aria-hidden className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 w-[min(90vw,720px)] h-[72px]">
-        <div className="absolute inset-0 rounded-2xl bg-linear-to-r from-violet-500/20 via-fuchsia-500/20 to-cyan-500/20 blur-xl" />
+      <div aria-hidden className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 w-[min(85vw,560px)] h-[100px]">
+        <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-violet-600/30 via-purple-600/30 to-blue-600/30 blur-3xl" />
       </div>
       <motion.div
         onMouseMove={({ pageX }) => {
@@ -176,7 +176,7 @@ export default function Dock({
           isHovered.set(0);
           mouseX.set(Infinity);
         }}
-        className={`${className} absolute bottom-2 left-1/2 transform -translate-x-1/2 flex items-end w-fit gap-4 rounded-2xl border border-neutral-200/60 dark:border-neutral-700/60 bg-white/70 dark:bg-neutral-900/70 backdrop-blur-xl shadow-2xl ring-1 ring-black/5 pb-2 px-4`}
+        className={`${className} fixed bottom-6 left-1/2 transform -translate-x-1/2 flex items-center w-fit gap-2 sm:gap-3 rounded-[20px] border border-neutral-700/30 dark:border-neutral-600/20 bg-neutral-900/80 dark:bg-neutral-950/80 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] ring-1 ring-white/5 py-2 px-3 sm:py-2.5 sm:px-4`}
         style={{ height: panelHeight }}
         role="toolbar"
         aria-label="Application dock"
@@ -185,7 +185,7 @@ export default function Dock({
           <DockItem
             key={index}
             onClick={item.onClick}
-            className={`${item.active ? 'border-violet-400/60 ring-2 ring-violet-300/40' : ''} ${item.className ?? ''}`}
+            className={`${item.active ? 'border-violet-500/80 ring-2 ring-violet-400/40 bg-violet-900/40' : ''} ${item.className ?? ''}`}
             mouseX={mouseX}
             spring={spring}
             distance={distance}

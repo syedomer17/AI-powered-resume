@@ -12,7 +12,7 @@ export default function ResumePage() {
   const { data: session, status } = useSession();
 
   if (!resumeId || typeof resumeId !== "string") {
-    return <div className="text-red-500">Invalid resume ID.</div>;
+    return <div className="text-destructive">Invalid resume ID.</div>;
   }
 
   if (status === "loading") {
@@ -20,7 +20,7 @@ export default function ResumePage() {
   }
 
   if (!session?.user?.id) {
-    return <div className="text-red-600">You must be logged in to edit experience.</div>;
+    return <div className="text-destructive">You must be logged in to edit experience.</div>;
     // Or you could redirect to login using useRouter
   }
 
@@ -28,7 +28,7 @@ export default function ResumePage() {
 
   return (
     <main className="max-w-3xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Edit Experience</h1>
+      <h1 className="text-2xl font-bold mb-4 text-foreground">Edit Experience</h1>
       <Experience resumeId={resumeId} userId={userId} />
     </main>
   );

@@ -58,7 +58,15 @@ export default async function JobSearchPage({ params }: JobSearchPageParams) {
   return (
     <>
       <Header />
-      <div className="p-10">
+      <div className="min-h-screen p-4 sm:p-6 md:p-8 lg:p-10 max-w-7xl mx-auto">
+        <div className="mb-8 space-y-2">
+          <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
+            Job Search
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
+            Discover opportunities that match your skills and experience
+          </p>
+        </div>
         <JobSearch 
           userSkills={allSkills} 
           resumeId={firstResumeId}

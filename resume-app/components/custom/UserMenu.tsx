@@ -42,7 +42,7 @@ export default function UserMenu({
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setOpen((prev) => !prev)}
-        className="focus:outline-none"
+        className="focus:outline-none ring-2 ring-transparent hover:ring-primary/30 rounded-full transition-all"
       >
         <Image
           src={user.image || fallbackImage}
@@ -55,17 +55,17 @@ export default function UserMenu({
           }
           width={40}
           height={40}
-          className="rounded-full border"
+          className="rounded-full border border-border dark:border-border/60 w-8 h-8 sm:w-10 sm:h-10"
         />
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-md shadow-lg z-10">
-          <div className="p-4 border-b">
-            <p className="font-semibold">
+        <div className="absolute right-0 mt-2 w-56 sm:w-64 bg-card text-card-foreground border border-border rounded-md shadow-lg dark:shadow-xl z-60 backdrop-blur-sm">
+          <div className="p-3 sm:p-4 border-b border-border">
+            <p className="font-semibold text-sm sm:text-base truncate">
               {user.login ?? user.name ?? "Anonymous"}
             </p>
-            <p className="text-sm text-gray-500 truncate">
+            <p className="text-xs sm:text-sm text-muted-foreground truncate">
               {user.email ?? "No email"}
             </p>
           </div>
@@ -74,7 +74,7 @@ export default function UserMenu({
             <Link
               href="/dashboard"
               onClick={() => setOpen(false)}
-              className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 transition-colors"
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 hover:bg-accent hover:text-accent-foreground transition-colors text-sm"
             >
               <User className="w-4 h-4" />
               <span>Dashboard</span>
@@ -85,7 +85,7 @@ export default function UserMenu({
                 <Link
                   href={`/dashboard/hr-contacts/${userId}`}
                   onClick={() => setOpen(false)}
-                  className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 transition-colors"
+                  className="flex items-center gap-2 px-3 sm:px-4 py-2 hover:bg-accent hover:text-accent-foreground transition-colors text-sm"
                 >
                   <Mail className="w-4 h-4" />
                   <span>HR Contacts</span>
@@ -93,7 +93,7 @@ export default function UserMenu({
                 <Link
                   href={`/dashboard/ats`}
                   onClick={() => setOpen(false)}
-                  className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 transition-colors"
+                  className="flex items-center gap-2 px-3 sm:px-4 py-2 hover:bg-accent hover:text-accent-foreground transition-colors text-sm"
                 >
                   <BarChart2 className="w-4 h-4" />
                   <span>ATS Checker</span>
@@ -102,7 +102,7 @@ export default function UserMenu({
                 <Link
                   href={`/dashboard/jobs/${userId}`}
                   onClick={() => setOpen(false)}
-                  className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 transition-colors"
+                  className="flex items-center gap-2 px-3 sm:px-4 py-2 hover:bg-accent hover:text-accent-foreground transition-colors text-sm"
                 >
                   <Search className="w-4 h-4" />
                   <span>Find Jobs</span>
@@ -111,10 +111,10 @@ export default function UserMenu({
             )}
           </div>
           
-          <div className="border-t">
+          <div className="border-t border-border">
             <button
               onClick={() => signOut({ callbackUrl: "/login" })}
-              className="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors text-red-600"
+              className="flex items-center gap-2 w-full text-left px-3 sm:px-4 py-2 hover:bg-accent transition-colors text-red-600 dark:text-red-400 text-sm rounded-b-md"
             >
               <LogOut className="w-4 h-4" />
               <span>Sign Out</span>

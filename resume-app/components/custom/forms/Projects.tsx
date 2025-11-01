@@ -259,19 +259,24 @@ const Projects: React.FC<ProjectsProps> = ({
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl shadow-lg mt-10"
+      className="p-6 md:p-8 bg-card border border-border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 mt-6"
     >
-      <h2 className="font-semibold text-xl mb-1">💼 Projects</h2>
-      <p className="text-sm text-zinc-500 mb-4">
-        Add your personal or professional projects.
-      </p>
+      <div className="mb-6 pb-4 border-b border-border">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent flex items-center gap-2">
+          <span className="text-2xl">�</span>
+          Projects
+        </h2>
+        <p className="text-sm text-muted-foreground mt-2">
+          Add your personal or professional projects
+        </p>
+      </div>
 
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-end mb-6">
         <Button
           variant="outline"
           onClick={handleGenerate}
           disabled={generating}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 border-purple-200 dark:border-purple-800 text-purple-600 dark:text-purple-400 hover:bg-purple-50 "
         >
           {generating ? (
             <>
@@ -288,17 +293,17 @@ const Projects: React.FC<ProjectsProps> = ({
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="mt-2"
+          className="mt-4 mb-6"
         >
-          <h3 className="font-semibold mb-2">Generated Projects</h3>
-          <div className="space-y-2 max-h-60 overflow-auto border border-zinc-200 dark:border-zinc-700 rounded p-2 bg-zinc-50 dark:bg-zinc-800">
+          <h3 className="font-semibold mb-3 text-foreground">Generated Projects</h3>
+          <div className="space-y-2 max-h-60 overflow-auto border border-border rounded-lg p-3 bg-purple-50/50 dark:bg-purple-950/20">
             {options.map((proj, idx) => (
               <Button
                 key={idx}
                 variant="outline"
                 size="sm"
                 onClick={() => applyGeneratedProject(proj)}
-                className="justify-start whitespace-normal text-left w-full"
+                className="justify-start whitespace-normal text-left w-full hover:bg-purple-100 dark:hover:bg-purple-900/30"
               >
                 {proj.title}
               </Button>
@@ -315,20 +320,21 @@ const Projects: React.FC<ProjectsProps> = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-4 border border-zinc-200 dark:border-zinc-700 p-4 my-5 rounded-lg bg-zinc-50 dark:bg-zinc-800"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4 border border-border p-5 my-5 rounded-xl bg-muted/30"
           >
             <div>
-              <label className="text-xs font-medium">Project Title</label>
+              <label className="text-sm font-medium text-foreground">Project Title</label>
               <Input
-                className="capitalize"
+                className="capitalize mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={field.title}
                 onChange={(e) => handleChange(index, "title", e.target.value)}
                 placeholder="e.g., Portfolio Website"
               />
             </div>
             <div>
-              <label className="text-xs font-medium">Project Link</label>
+              <label className="text-sm font-medium text-foreground">Project Link</label>
               <Input
+                className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={field.link}
                 onChange={(e) => handleChange(index, "link", e.target.value)}
                 placeholder="https://..."
@@ -337,8 +343,9 @@ const Projects: React.FC<ProjectsProps> = ({
 
             {/* Tech Stack */}
             <div className="sm:col-span-2">
-              <label className="text-xs font-medium">Tech Stack</label>
+              <label className="text-sm font-medium text-foreground">Tech Stack</label>
               <Input
+                className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={field.techStack}
                 onChange={(e) => handleChange(index, "techStack", e.target.value)}
                 placeholder="e.g., Next.js, TailwindCSS, Auth.js, MongoDB, Shadcn, Gemini AI"
@@ -348,9 +355,10 @@ const Projects: React.FC<ProjectsProps> = ({
             {/* Start and End Dates */}
             <div className="flex flex-col sm:flex-row gap-4 sm:col-span-2">
               <div className="flex-1">
-                <label className="text-xs font-medium">Start Date</label>
+                <label className="text-sm font-medium text-foreground">Start Date</label>
                 <Input
                   type="date"
+                  className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                   value={field.startDate}
                   onChange={(e) =>
                     handleChange(index, "startDate", e.target.value)
@@ -358,9 +366,10 @@ const Projects: React.FC<ProjectsProps> = ({
                 />
               </div>
               <div className="flex-1">
-                <label className="text-xs font-medium">End Date</label>
+                <label className="text-sm font-medium text-foreground">End Date</label>
                 <Input
                   type="date"
+                  className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                   value={field.endDate}
                   onChange={(e) =>
                     handleChange(index, "endDate", e.target.value)
@@ -377,17 +386,20 @@ const Projects: React.FC<ProjectsProps> = ({
                 onChange={(e) =>
                   handleChange(index, "currentlyWorking", e.target.checked)
                 }
+                className="w-4 h-4 accent-purple-500"
               />
-              <label className="text-xs font-medium">Currently Working</label>
+              <label className="text-sm font-medium text-foreground">Currently Working</label>
             </div>
 
             {/* Description */}
             <div className="sm:col-span-2">
-              <label className="text-xs font-medium">Description</label>
-              <RichTextEditor
-                value={field.description}
-                onChange={(val) => handleChange(index, "description", val)}
-              />
+              <label className="text-sm font-medium text-foreground">Description</label>
+              <div className="mt-1">
+                <RichTextEditor
+                  value={field.description}
+                  onChange={(val) => handleChange(index, "description", val)}
+                />
+              </div>
             </div>
 
             {/* Remove button */}
@@ -397,7 +409,7 @@ const Projects: React.FC<ProjectsProps> = ({
                 size="sm"
                 onClick={() => handleRemove(index)}
                 disabled={projectList.length === 1}
-                className="flex items-center gap-1 hover:bg-red-50 dark:hover:bg-red-900"
+                className="flex items-center gap-1 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 "
               >
                 <Trash2 className="w-4 h-4" />
                 Remove
@@ -407,12 +419,16 @@ const Projects: React.FC<ProjectsProps> = ({
         ))}
       </AnimatePresence>
 
-      <div className="flex justify-between mt-4">
-        <Button variant="outline" onClick={handleAdd}>
+      <div className="flex justify-between mt-6">
+        <Button 
+          variant="outline" 
+          onClick={handleAdd}
+          className="border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 "
+        >
           + Add More
         </Button>
         <Button
-          className="bg-fuchsia-500 hover:bg-fuchsia-600 text-white flex items-center gap-2 transition"
+          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
           onClick={handleSave}
           disabled={loading}
         >

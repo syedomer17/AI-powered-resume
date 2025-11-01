@@ -74,25 +74,28 @@ const AddResume = ({ userId, userEmail }: AddResumeProps) => {
       {/* Add Resume Button */}
       <div
         onClick={() => setOpenDialog(true)}
-        className="p-14 py-24 border items-center flex justify-center bg-secondary rounded-lg h-[280px] hover:scale-105 transition-all hover:shadow-md cursor-pointer border-dotted"
+        className="p-8 sm:p-10 md:p-14 py-16 sm:py-20 md:py-24 items-center flex flex-col justify-center bg-secondary dark:bg-secondary/50 rounded-lg h-60 sm:h-[260px] md:h-[280px] hover:scale-105 transition-all hover:shadow-md dark:hover:shadow-xl cursor-pointer border-2 border-dotted dark:border-border/60 hover:border-primary dark:hover:border-primary group"
       >
-        <PlusSquare />
+        <PlusSquare className="w-10 h-10 sm:w-12 sm:h-12 text-muted-foreground group-hover:text-primary transition-colors" />
+        <span className="mt-3 text-sm sm:text-base font-medium text-muted-foreground group-hover:text-primary transition-colors">
+          Add New Resume
+        </span>
       </div>
 
       {/* Dialog */}
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-[95vw] sm:max-w-[90vw] md:max-w-2xl max-h-[90vh] overflow-y-auto p-4 sm:p-6">
           <DialogHeader>
-            <DialogTitle>Create New Resume</DialogTitle>
+            <DialogTitle className="text-lg sm:text-xl">Create New Resume</DialogTitle>
             <DialogDescription>
-              <p className="mb-2">Select a title for your new resume</p>
+              <p className="mb-3 text-sm sm:text-base">Select a title for your new resume</p>
 
               {/* Select Dropdown */}
               <Select
                 value={selectedTitle}
                 onValueChange={(value) => setSelectedTitle(value)}
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select a title" />
                 </SelectTrigger>
                 <SelectContent>
@@ -108,7 +111,7 @@ const AddResume = ({ userId, userEmail }: AddResumeProps) => {
               {/* Custom Title Input */}
               {selectedTitle === "Custom" && (
                 <Input
-                  className="mt-3"
+                  className="mt-3 w-full"
                   value={customTitle}
                   onChange={(e) => setCustomTitle(e.target.value)}
                   placeholder="Enter your custom title"
@@ -118,7 +121,7 @@ const AddResume = ({ userId, userEmail }: AddResumeProps) => {
 
               {/* Job Description Textarea */}
               <div className="mt-4">
-                <label htmlFor="jobDescription" className="text-sm font-medium text-foreground">
+                <label htmlFor="jobDescription" className="text-sm font-medium text-foreground block">
                   Job Description (Optional)
                 </label>
                 <p className="text-xs text-muted-foreground mb-2">
@@ -129,22 +132,23 @@ const AddResume = ({ userId, userEmail }: AddResumeProps) => {
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
                   placeholder="Paste the job description here..."
-                  className="min-h-[150px] mt-1"
+                  className="min-h-[120px] sm:min-h-[150px] mt-1 w-full"
                   disabled={loading}
                 />
               </div>
             </DialogDescription>
 
-            <div className="flex justify-end gap-5 mt-4">
+            <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-5 mt-4">
               <Button
                 onClick={() => setOpenDialog(false)}
                 variant="ghost"
                 disabled={loading}
+                className="w-full sm:w-auto"
               >
                 Cancel
               </Button>
               <Button
-                className="bg-[#9f5bff]"
+                className="bg-[#9f5bff] w-full sm:w-auto"
                 onClick={handleCreateResume}
                 disabled={
                   loading ||

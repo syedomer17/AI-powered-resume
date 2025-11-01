@@ -238,12 +238,17 @@ const Certifications: React.FC<CertificationsProps> = ({
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="p-5 shadow-lg rounded-lg border-t-4 border-zinc-800 dark:border-zinc-600 mt-10"
+      className="p-6 md:p-8 bg-card border border-border rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 mt-6"
     >
-      <h2 className="font-bold text-lg mb-2">Certifications</h2>
-      <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
-        Add your certifications with a link or upload an image
-      </p>
+      <div className="mb-6 pb-4 border-b border-border">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent flex items-center gap-2">
+          <span className="text-2xl">🏆</span>
+          Certifications
+        </h2>
+        <p className="text-sm text-muted-foreground mt-2">
+          Add your certifications with a link or upload an image
+        </p>
+      </div>
 
       <AnimatePresence>
         {certificationList.map((field, index) => (
@@ -253,11 +258,12 @@ const Certifications: React.FC<CertificationsProps> = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-4 border border-zinc-200 dark:border-zinc-700 p-4 my-5 rounded-lg bg-zinc-50 dark:bg-zinc-800"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4 border border-border p-5 my-5 rounded-xl bg-muted/30"
           >
             <div className="sm:col-span-2">
-              <label className="text-xs font-medium">Certification Name</label>
+              <label className="text-sm font-medium text-foreground">Certification Name</label>
               <Input
+                className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={field.name}
                 onChange={(e) => handleChange(index, "name", e.target.value)}
                 placeholder="e.g., AWS Certified Developer"
@@ -265,9 +271,10 @@ const Certifications: React.FC<CertificationsProps> = ({
             </div>
 
             <div>
-              <label className="text-xs font-medium">Certification Link (Optional)</label>
-              <div className="flex gap-2">
+              <label className="text-sm font-medium text-foreground">Certification Link (Optional)</label>
+              <div className="flex gap-2 mt-1">
                 <Input
+                  className="h-11 focus:ring-2 focus:ring-blue-500/20"
                   value={field.link}
                   onChange={(e) => handleChange(index, "link", e.target.value)}
                   placeholder="https://..."
@@ -276,51 +283,52 @@ const Certifications: React.FC<CertificationsProps> = ({
             </div>
 
             <div>
-              <label className="text-xs font-medium">Date</label>
+              <label className="text-sm font-medium text-foreground">Date</label>
               <Input
                 type="date"
+                className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={field.date}
                 onChange={(e) => handleChange(index, "date", e.target.value)}
               />
             </div>
 
             <div className="sm:col-span-2">
-              <label className="text-xs font-medium">Upload Image (Optional)</label>
-              <div className="flex items-center gap-2">
+              <label className="text-sm font-medium text-foreground">Upload Image (Optional)</label>
+              <div className="flex items-center gap-2 mt-1">
                 <Input
                   type="file"
                   accept="image/*"
+                  className="h-11"
                   onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (file) handleImageUpload(index, file);
                   }}
                   disabled={uploadingIndex === index}
-                  className="flex-1"
                 />
                 {uploadingIndex === index && (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader2 className="h-5 w-5 animate-spin text-purple-600" />
                 )}
               </div>
               {field.imageUrl && (
-                <div className="mt-2">
+                <div className="mt-3">
                   <img
                     src={field.imageUrl}
                     alt="Certification"
-                    className="h-20 object-contain border rounded"
+                    className="h-24 object-contain border border-border rounded-lg"
                   />
                 </div>
               )}
             </div>
 
-            <div className="sm:col-span-2 flex justify-end">
+            <div className="sm:col-span-2 flex justify-end mt-2">
               <Button
                 type="button"
                 onClick={() => handleRemove(index)}
                 size="sm"
-                variant="ghost"
-                className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950"
+                variant="outline"
+                className="flex items-center gap-1 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 "
               >
-                <Trash2 className="h-4 w-4 mr-1" />
+                <Trash2 className="h-4 w-4" />
                 Remove
               </Button>
             </div>
@@ -328,13 +336,12 @@ const Certifications: React.FC<CertificationsProps> = ({
         ))}
       </AnimatePresence>
 
-      <div className="flex gap-2 justify-between mt-4">
+            <div className="flex gap-2 justify-between mt-6">
         <Button
           type="button"
           onClick={handleAdd}
           variant="outline"
-          size="sm"
-          className="text-primary border-primary hover:bg-primary/10"
+          className="border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 "
         >
           + Add Certification
         </Button>
@@ -343,8 +350,7 @@ const Certifications: React.FC<CertificationsProps> = ({
           type="button"
           onClick={handleSave}
           disabled={loading}
-          size="sm"
-          className=" bg-[#9f5bff] text-white hover:bg-[#9f5bff]/90"
+          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
         >
           {loading ? (
             <>

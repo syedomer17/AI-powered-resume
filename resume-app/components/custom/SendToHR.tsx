@@ -108,35 +108,44 @@ const SendToHR = ({ resumeId, resumePdfUrl, onClose }: SendToHRProps) => {
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full border-l-4 border-l-emerald-500 dark:border-l-emerald-400 relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-500/10 to-transparent rounded-full blur-3xl" />
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Mail className="w-5 h-5" />
+        <CardTitle className="flex items-center gap-2 text-lg">
+          <div className="p-2 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20">
+            <Mail className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+          </div>
           Send Resume to HR
         </CardTitle>
-        <CardDescription>
+        <CardDescription className="text-xs">
           Automatically send your resume to {totalHRs} HR contacts
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Job Title Input */}
         <div className="space-y-2">
-          <label className="text-sm font-medium">Job Title</label>
+          <label className="text-sm font-medium flex items-center gap-2">
+            <span className="text-foreground">Job Title</span>
+            <span className="text-xs text-muted-foreground">(Required)</span>
+          </label>
           <Input
             value={jobTitle}
             onChange={(e) => setJobTitle(e.target.value)}
             placeholder="e.g., Software Developer, Product Manager"
             disabled={sending}
+            className="transition-all duration-200 focus:ring-2 focus:ring-emerald-500/20"
           />
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-muted-foreground flex items-center gap-1">
+            <Mail className="w-3 h-3" />
             This will be used in the email subject line
           </p>
         </div>
 
         {/* HR Count Slider */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium">
-            Number of HR Contacts: {hrCount}
+        <div className="space-y-3">
+          <label className="text-sm font-medium flex items-center justify-between">
+            <span className="text-foreground">Number of HR Contacts</span>
+            <span className="text-lg font-bold text-emerald-600 dark:text-emerald-400">{hrCount}</span>
           </label>
           <input
             type="range"
@@ -146,63 +155,78 @@ const SendToHR = ({ resumeId, resumePdfUrl, onClose }: SendToHRProps) => {
             value={hrCount}
             onChange={(e) => setHRCount(parseInt(e.target.value))}
             disabled={sending}
-            className="w-full"
+            className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-emerald-600 dark:accent-emerald-400"
           />
-          <p className="text-xs text-gray-500">
-            Send to {hrCount} out of {totalHRs} available HR contacts
-          </p>
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>10 contacts</span>
+            <span className="font-medium">{hrCount} / {totalHRs}</span>
+            <span>{totalHRs} contacts</span>
+          </div>
         </div>
 
         {/* Progress Bar */}
         {sending && (
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>Sending emails...</span>
-              <span>{progress}%</span>
+          <div className="space-y-3 p-4 rounded-lg bg-gradient-to-r from-emerald-500/10 to-blue-500/10 dark:from-emerald-500/20 dark:to-blue-500/20 border border-emerald-500/20">
+            <div className="flex justify-between text-sm items-center">
+              <span className="font-medium flex items-center gap-2">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Sending emails...
+              </span>
+              <span className="text-lg font-bold text-emerald-600 dark:text-emerald-400">{progress}%</span>
             </div>
-            <Progress value={progress} className="h-2" />
+            <Progress value={progress} className="h-3 bg-muted" />
+            <p className="text-xs text-muted-foreground">Please wait while we process your request</p>
           </div>
         )}
 
         {/* Results */}
         {result && (
-          <div className="space-y-2 p-4 bg-gray-50 rounded-lg">
-            <h4 className="font-semibold text-sm mb-2">Results:</h4>
-            <div className="grid grid-cols-3 gap-2">
-              <div className="flex flex-col items-center p-2 bg-white rounded border">
-                <CheckCircle2 className="w-5 h-5 text-green-500 mb-1" />
-                <span className="text-lg font-bold">{result.sent}</span>
-                <span className="text-xs text-gray-500">Sent</span>
+          <div className="space-y-3 p-4 rounded-lg bg-muted/50 dark:bg-muted/20 border border-border animate-fade-in">
+            <h4 className="font-semibold text-sm mb-3 flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              Delivery Results
+            </h4>
+            <div className="grid grid-cols-3 gap-3">
+              <div className="flex flex-col items-center p-4 bg-emerald-500/10 dark:bg-emerald-500/20 rounded-lg border border-emerald-500/20 hover:shadow-md transition-shadow">
+                <CheckCircle2 className="w-6 h-6 text-emerald-600 dark:text-emerald-400 mb-2" />
+                <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{result.sent}</span>
+                <span className="text-xs text-muted-foreground font-medium">Sent</span>
               </div>
-              <div className="flex flex-col items-center p-2 bg-white rounded border">
-                <XCircle className="w-5 h-5 text-red-500 mb-1" />
-                <span className="text-lg font-bold">{result.failed}</span>
-                <span className="text-xs text-gray-500">Failed</span>
+              <div className="flex flex-col items-center p-4 bg-red-500/10 dark:bg-red-500/20 rounded-lg border border-red-500/20 hover:shadow-md transition-shadow">
+                <XCircle className="w-6 h-6 text-red-600 dark:text-red-400 mb-2" />
+                <span className="text-2xl font-bold text-red-600 dark:text-red-400">{result.failed}</span>
+                <span className="text-xs text-muted-foreground font-medium">Failed</span>
               </div>
-              <div className="flex flex-col items-center p-2 bg-white rounded border">
-                <Mail className="w-5 h-5 text-blue-500 mb-1" />
-                <span className="text-lg font-bold">{result.total}</span>
-                <span className="text-xs text-gray-500">Total</span>
+              <div className="flex flex-col items-center p-4 bg-blue-500/10 dark:bg-blue-500/20 rounded-lg border border-blue-500/20 hover:shadow-md transition-shadow">
+                <Mail className="w-6 h-6 text-blue-600 dark:text-blue-400 mb-2" />
+                <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">{result.total}</span>
+                <span className="text-xs text-muted-foreground font-medium">Total</span>
               </div>
             </div>
+            {result.sent > 0 && (
+              <p className="text-xs text-center text-emerald-600 dark:text-emerald-400 mt-2">
+                🎉 Your resume has been successfully delivered!
+              </p>
+            )}
           </div>
         )}
 
         {/* Demo Mode Notice */}
-        <div className="flex items-start gap-2 p-3 bg-yellow-50 border border-yellow-200 rounded">
-          <AlertCircle className="w-4 h-4 text-yellow-600 mt-0.5 flex-shrink-0" />
-          <p className="text-xs text-yellow-800">
+        <div className="flex items-start gap-2 p-3 bg-yellow-500/10 dark:bg-yellow-500/20 border border-yellow-500/20 rounded-lg">
+          <AlertCircle className="w-4 h-4 text-yellow-600 dark:text-yellow-400 mt-0.5 shrink-0" />
+          <p className="text-xs text-yellow-800 dark:text-yellow-300">
             <strong>Demo Mode:</strong> Emails are simulated for demonstration. 
             Configure EMAIL_USER and EMAIL_PASSWORD in .env to send real emails.
           </p>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-2">
+        <div className="flex gap-2 pt-2">
           <Button
             onClick={handleSendToHR}
             disabled={sending || !jobTitle.trim()}
-            className="flex-1"
+            className="flex-1 bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 dark:from-emerald-500 dark:to-blue-500 dark:hover:from-emerald-600 dark:hover:to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
+            size="lg"
           >
             {sending ? (
               <>
@@ -217,7 +241,7 @@ const SendToHR = ({ resumeId, resumePdfUrl, onClose }: SendToHRProps) => {
             )}
           </Button>
           {onClose && (
-            <Button variant="outline" onClick={onClose} disabled={sending}>
+            <Button variant="outline" onClick={onClose} disabled={sending} size="lg">
               Close
             </Button>
           )}

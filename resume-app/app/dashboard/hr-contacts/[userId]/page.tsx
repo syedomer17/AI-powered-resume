@@ -7,7 +7,7 @@ import Header from "@/components/custom/Header";
 import HRSendPanel from "@/components/custom/HRSendPanel";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getCategorizedHREmails, getTotalHRCount } from "@/data/hrEmails";
-import { Mail, Building2, Users, Send } from "lucide-react";
+import { Mail, Building2, Users, Send, AlertCircle, FileText } from "lucide-react";
 import mongoose from "mongoose";
 
 interface HRPageParams {
@@ -52,73 +52,118 @@ export default async function HRContactsPage({ params }: HRPageParams) {
   return (
     <>
       <Header />
-      <div className="p-10 max-w-7xl mx-auto">
+      <div className="min-h-screen p-4 sm:p-6 md:p-8 lg:p-10 max-w-7xl mx-auto">
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">HR Contacts</h1>
-          <p className="text-gray-600">
+        <div className="mb-8 space-y-2">
+          <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 bg-clip-text text-transparent">
+            HR Contacts
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground flex items-center gap-2">
+            <Mail className="w-4 h-4" />
             Send your resume to {totalHRCount} HR contacts automatically
           </p>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <Card>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          <Card className="relative overflow-hidden group hover:shadow-lg transition-all duration-300">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
-                <Users className="w-4 h-4" />
+              <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                <div className="p-2 rounded-lg bg-purple-500/10 dark:bg-purple-500/20">
+                  <Users className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                </div>
                 Total HR Contacts
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">{totalHRCount}</div>
+              <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">{totalHRCount}</div>
+              <p className="text-xs text-muted-foreground mt-1">Available contacts</p>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="relative overflow-hidden group hover:shadow-lg transition-all duration-300">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
-                <Building2 className="w-4 h-4" />
+              <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                <div className="p-2 rounded-lg bg-blue-500/10 dark:bg-blue-500/20">
+                  <Building2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                </div>
                 Categories
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">{categoryCount}</div>
+              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">{categoryCount}</div>
+              <p className="text-xs text-muted-foreground mt-1">Industry segments</p>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="relative overflow-hidden group hover:shadow-lg transition-all duration-300 sm:col-span-2 lg:col-span-1">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
-                <Mail className="w-4 h-4" />
+              <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                <div className="p-2 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20">
+                  <Send className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                </div>
                 Ready to Send
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-green-600">
+              <div className={`text-3xl font-bold ${firstResumeId ? "text-emerald-600 dark:text-emerald-400" : "text-muted-foreground"}`}>
                 {firstResumeId ? "Yes" : "No"}
               </div>
-              {!firstResumeId && (
-                <p className="text-xs text-red-600 mt-1">Create a resume first</p>
+              {!firstResumeId ? (
+                <p className="text-xs text-destructive mt-1 flex items-center gap-1">
+                  <AlertCircle className="w-3 h-3" />
+                  Create a resume first
+                </p>
+              ) : (
+                <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-1">Resume ready to send</p>
               )}
             </CardContent>
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           {/* Overview only (no email list) */}
           <div className="lg:col-span-2 space-y-6">
-            <Card>
+            <Card className="relative overflow-hidden border-l-4 border-l-purple-500 dark:border-l-purple-400">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-500/10 to-transparent rounded-full blur-3xl" />
               <CardHeader>
-                <CardTitle>HR Outreach</CardTitle>
-                <CardDescription>
+                <CardTitle className="flex items-center gap-2">
+                  <div className="p-2 rounded-lg bg-purple-500/10 dark:bg-purple-500/20">
+                    <Mail className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                  </div>
+                  HR Outreach Program
+                </CardTitle>
+                <CardDescription className="text-sm">
                   Choose how many HR contacts to reach. Upload your resume first, then send.
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-600">
-                  For privacy and anti-spam reasons, we don’t display the emails. We maintain a vetted list of {totalHRCount} HR contacts across multiple industries. You can choose how many to reach and we’ll take care of the delivery.
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  For privacy and anti-spam reasons, we don't display the emails. We maintain a vetted list of <span className="font-semibold text-purple-600 dark:text-purple-400">{totalHRCount} HR contacts</span> across multiple industries. You can choose how many to reach and we'll take care of the delivery.
                 </p>
+                <div className="p-4 rounded-lg bg-muted/50 dark:bg-muted/20 border border-border">
+                  <h4 className="font-semibold text-sm mb-2 flex items-center gap-2">
+                    <Building2 className="w-4 h-4" />
+                    How It Works
+                  </h4>
+                  <ol className="space-y-2 text-sm text-muted-foreground">
+                    <li className="flex items-start gap-2">
+                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xs font-semibold">1</span>
+                      <span>Upload your PDF resume on the right panel</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xs font-semibold">2</span>
+                      <span>Specify your job title and desired number of HR contacts</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xs font-semibold">3</span>
+                      <span>Click send and we'll distribute your resume professionally</span>
+                    </li>
+                  </ol>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -126,27 +171,40 @@ export default async function HRContactsPage({ params }: HRPageParams) {
           {/* Upload + Send to HR Section */}
           <div className="lg:col-span-1">
             {firstResumeId ? (
-              <div className="sticky top-8">
+              <div className="sticky top-4 lg:top-8">
                 <HRSendPanel resumeId={firstResumeId} />
               </div>
             ) : (
-              <Card className="sticky top-8">
+              <Card className="sticky top-4 lg:top-8 border-2 border-dashed border-muted-foreground/20">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Send className="w-5 h-5" />
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <div className="p-2 rounded-lg bg-muted/50">
+                      <Send className="w-5 h-5" />
+                    </div>
                     Send Resume to HR
                   </CardTitle>
+                  <CardDescription>Upload required to proceed</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-center py-8">
-                    <Mail className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                    <p className="text-gray-600 mb-4">
-                      You need to create a resume and upload a PDF before sending to HR contacts.
-                    </p>
+                  <div className="text-center py-8 space-y-4">
+                    <div className="relative inline-block">
+                      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-full blur-xl" />
+                      <Mail className="relative w-16 h-16 text-muted-foreground/50 mx-auto" />
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        You need to create a resume and upload a PDF before sending to HR contacts.
+                      </p>
+                      <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
+                        <span className="w-2 h-2 rounded-full bg-destructive animate-pulse" />
+                        No resume available
+                      </div>
+                    </div>
                     <a
                       href={`/dashboard`}
-                      className="inline-block px-4 py-2 bg-primary text-white rounded hover:bg-primary/90 transition-colors"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                     >
+                      <FileText className="w-4 h-4" />
                       Create Resume
                     </a>
                   </div>

@@ -39,38 +39,55 @@ export default function HRSendPanel({ resumeId }: HRSendPanelProps) {
 
   return (
     <div className="space-y-4">
-      <Card>
+      <Card className="border-l-4 border-l-blue-500 dark:border-l-blue-400 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-500/10 to-transparent rounded-full blur-2xl" />
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Upload className="w-5 h-5" /> Upload Your Resume (PDF)
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <div className="p-2 rounded-lg bg-blue-500/10 dark:bg-blue-500/20">
+              <Upload className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            </div>
+            Upload Your Resume (PDF)
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-xs">
             Please upload a PDF version of your resume to proceed.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="flex items-center gap-2">
-            <Input type="file" accept="application/pdf" onChange={handleFileChange} disabled={uploading} />
-            <Button variant="outline" disabled>
-              {uploading ? "Uploading..." : "PDF only"}
-            </Button>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-muted-foreground">Select PDF File</label>
+            <Input 
+              type="file" 
+              accept="application/pdf" 
+              onChange={handleFileChange} 
+              disabled={uploading}
+              className="cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-500/10 file:text-blue-600 dark:file:text-blue-400 hover:file:bg-blue-500/20 transition-colors"
+            />
           </div>
+          {uploading && (
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/20">
+              <Upload className="w-4 h-4 text-blue-600 dark:text-blue-400 animate-pulse" />
+              <span className="text-sm text-blue-600 dark:text-blue-400 font-medium">Uploading...</span>
+            </div>
+          )}
           {uploadedUrl ? (
-            <div className="flex items-center gap-2 text-green-700 text-sm">
-              <CheckCircle2 className="w-4 h-4" />
-              <span>Uploaded: {fileName}</span>
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20 border border-emerald-500/20">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-emerald-600 dark:text-emerald-400">Upload successful!</p>
+                <p className="text-xs text-muted-foreground truncate">{fileName}</p>
+              </div>
             </div>
           ) : (
-            <div className="flex items-center gap-2 text-xs text-gray-500">
-              <FileText className="w-4 h-4" />
-              <span>Max size depends on Cloudinary plan. Ensure it is a PDF.</span>
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/50 dark:bg-muted/20 border border-border">
+              <FileText className="w-4 h-4 text-muted-foreground" />
+              <span className="text-xs text-muted-foreground">Max size depends on Cloudinary plan. PDF format only.</span>
             </div>
           )}
         </CardContent>
       </Card>
 
       {/* Once uploaded, enable sending */}
-      <div className={uploadedUrl ? "opacity-100" : "opacity-60 pointer-events-none"}>
+      <div className={`transition-all duration-300 ${uploadedUrl ? "opacity-100" : "opacity-50 pointer-events-none blur-sm"}`}>
         <SendToHR resumeId={resumeId} resumePdfUrl={uploadedUrl || undefined} />
       </div>
     </div>
