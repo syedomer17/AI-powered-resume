@@ -6,9 +6,7 @@ import AddResume from "@/components/custom/AddResume";
 import ResumeGrid from "@/components/custom/ResumeGrid";
 import { connectToDB } from "@/lib/mongodb";
 import User from "@/models/User";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Search, Mail, BarChart2 } from "lucide-react";
+import DashboardDock from "@/components/custom/DashboardDock";
 
 interface IUser {
   _id: string;
@@ -46,26 +44,7 @@ export default async function DashboardPage() {
               Start creating AI-powered resumes to land your next job.
             </p>
           </div>
-          <div className="flex gap-2">
-            <Link href={`/dashboard/hr-contacts/${user._id.toString()}`}>
-              <Button className="bg-purple-600 hover:bg-purple-700 flex items-center gap-2">
-                <Mail className="w-4 h-4" />
-                Send to HR
-              </Button>
-            </Link>
-            <Link href={`/dashboard/ats`}>
-              <Button className="bg-purple-600 hover:bg-purple-700 flex items-center gap-2">
-                <BarChart2 className="w-4 h-4" />
-                ATS Checker
-              </Button>
-            </Link>
-            <Link href={`/dashboard/jobs/${user._id.toString()}`}>
-              <Button className="bg-purple-600 flex items-center gap-2">
-                <Search className="w-4 h-4" />
-                Find Jobs
-              </Button>
-            </Link>
-          </div>
+          {/* Quick actions are now available in the bottom DashboardDock */}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
@@ -73,6 +52,7 @@ export default async function DashboardPage() {
           <ResumeGrid resumes={user.resumes} user={user} />
         </div>
       </section>
+      <DashboardDock userId={user._id.toString()} />
     </>
   );
 }
