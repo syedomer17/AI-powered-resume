@@ -33,11 +33,6 @@ interface EmailResponse {
 
 export const runtime = 'nodejs'; // important for Next.js App Router
 
-console.log("from",process.env.EMAIL_SENDER!);
-console.log("suhail",process.env.SUHAIL_API_KEY!);
-console.log("email",process.env.GMAIL_OWNER!);
-
-
 const sendEmail = async (apiKey: string, payload: EmailPayload): Promise<EmailResponse> => {
   const response = await fetch('https://email.suhail.app/api/send-email', {
     method: 'POST',

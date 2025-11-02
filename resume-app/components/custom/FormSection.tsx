@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import ThemeColor from "./ThemeColor";
 import Link from "next/link";
 import { useResumeInfo } from "@/context/ResumeInfoConext";
+import { triggerConfetti } from "@/components/firecrackers/ConfettiSideCannons";
 
 interface FormSectionProps {
   resumeId: string;
@@ -39,6 +40,8 @@ const FormSection: React.FC<FormSectionProps> = ({ resumeId, userId,resumeIndex 
         toast.error("User or resume ID missing");
         return;
       }
+      // Trigger confetti when user completes all resume sections
+      triggerConfetti();
       router.push(`/dashboard/resume/${userId}/${resumeId}/view`);
     } else {
       setActiveFormIndex(nextIndex);

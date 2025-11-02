@@ -22,6 +22,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
+import { triggerConfetti } from "@/components/firecrackers/ConfettiSideCannons";
 
 interface Resume {
   _id?: string;
@@ -88,6 +89,9 @@ export default function ResumeCardItem({ resume, index }: ResumeCardItemProps) {
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
+
+      // Trigger confetti celebration on successful download
+      triggerConfetti();
     } catch (e) {
       console.error("Failed to download PDF:", e);
     } finally {

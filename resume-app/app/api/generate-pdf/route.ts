@@ -23,24 +23,33 @@ export async function GET(req: NextRequest) {
   const resumeUrl = `${origin}/dashboard/resume/${userId}/${resumeId}/view`;
 
   try {
-    console.log(`Launching Puppeteer...`);
+    // console.log(`Launching Puppeteer...`);
     const browser = await puppeteer.launch({
       headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-accelerated-2d-canvas",
+        "--no-first-run",
+        "--no-zygote",
+        "--disable-gpu",
+      ],
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath(),
     });
 
     const page = await browser.newPage();
 
-    console.log(`Setting viewport...`);
+    // console.log(`Setting viewport...`);
     await page.setViewport({ width: 1200, height: 800 });
 
-  console.log(`Navigating to: ${resumeUrl}`);
+  // console.log(`Navigating to: ${resumeUrl}`);
   await page.goto(resumeUrl, { waitUntil: "networkidle0" });
 
   // Use screen media for colors; we'll isolate the resume node manually
   await page.emulateMediaType("screen");
 
-    console.log(`Waiting for #print-area...`);
+    // console.log(`Waiting for #print-area...`);
     await page.waitForSelector("#print-area", { timeout: 15000 });
 
     // Isolate only the printable node to avoid nav/headers or extra whitespace
