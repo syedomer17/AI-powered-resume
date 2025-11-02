@@ -3,6 +3,23 @@
 
 /* Tailwind v4 custom-variant is used by the compiler, but VS Code may not recognize it. Safe to omit here. */
 
+/* Gradient Animation */
+@keyframes gradient {
+  0%, 100% {
+    background-size: 200% 200%;
+    background-position: left center;
+  }
+  50% {
+    background-size: 200% 200%;
+    background-position: right center;
+  }
+}
+
+.animate-gradient {
+  animation: gradient 8s ease infinite;
+  background-size: 200% 200%;
+}
+
 /* Set Manrope as default font */
 body {
   font-family: var(--font-manrope), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
