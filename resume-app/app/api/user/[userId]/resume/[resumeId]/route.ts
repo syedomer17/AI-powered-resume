@@ -11,7 +11,7 @@ export async function DELETE(
     await connectToDB();
 
     const { userId, resumeId } = await params;
-    console.log(resumeId,userId);
+    // console.log(resumeId,userId);
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return NextResponse.json(
@@ -97,8 +97,23 @@ export async function GET(
       );
     }
 
+    // Convert MongoDB ObjectIds to strings to avoid serialization issues
+    const sanitizeObject = (obj: any): any => {
+      if (obj === null || obj === undefined) return obj;
+      if (Array.isArray(obj)) return obj.map(sanitizeObject);
+      if (typeof obj === 'object') {
+        if (obj._id) obj._id = obj._id.toString();
+        Object.keys(obj).forEach(key => {
+          obj[key] = sanitizeObject(obj[key]);
+        });
+      }
+      return obj;
+    };
+
+    const sanitizedResume = sanitizeObject(JSON.parse(JSON.stringify(resume)));
+
     return NextResponse.json(
-      { success: true, resume },
+      { success: true, resume: sanitizedResume },
       { status: 200 }
     );
   } catch (error) {

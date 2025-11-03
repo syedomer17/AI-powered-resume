@@ -18,9 +18,9 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  // Build absolute URL based on the incoming request's origin
+  // Build absolute URL to the public print route (no auth required)
   const origin = req.nextUrl.origin;
-  const resumeUrl = `${origin}/dashboard/resume/${userId}/${resumeId}/view`;
+  const resumeUrl = `${origin}/print/${userId}/${resumeId}`;
 
   try {
     // console.log(`Launching Puppeteer...`);
@@ -40,17 +40,70 @@ export async function GET(req: NextRequest) {
 
     const page = await browser.newPage();
 
+    // Capture console logs from the page
+    // page.on('console', msg => {
+    //   console.log('PAGE LOG:', msg.type(), msg.text());
+    // });
+
+    // Capture page errors
+    // page.on('pageerror', (error: any) => {
+    //   console.error('PAGE ERROR:', error?.message || error);
+    // });
+
     // console.log(`Setting viewport...`);
     await page.setViewport({ width: 1200, height: 800 });
 
   // console.log(`Navigating to: ${resumeUrl}`);
-  await page.goto(resumeUrl, { waitUntil: "networkidle0" });
+  await page.goto(resumeUrl, { waitUntil: "networkidle2", timeout: 30000 });
 
   // Use screen media for colors; we'll isolate the resume node manually
   await page.emulateMediaType("screen");
 
+    // Debug: Check what's on the page
+    // const bodyContent = await page.evaluate(() => document.body.innerHTML);
+    // console.log('Page loaded. Body preview:', bodyContent.substring(0, 500));
+    
+    // Check if print-area exists
+    // const hasPrintArea = await page.evaluate(() => !!document.querySelector('#print-area'));
+    // console.log('Has #print-area:', hasPrintArea);
+    
+    // if (!hasPrintArea) {
+    //   // Take a screenshot for debugging
+    //   await page.screenshot({ path: '/tmp/puppeteer-debug.png', fullPage: true });
+    //   console.log('Screenshot saved to /tmp/puppeteer-debug.png');
+    // }
+
     // console.log(`Waiting for #print-area...`);
-    await page.waitForSelector("#print-area", { timeout: 15000 });
+    // Wait for both the print-area and the content to be fully loaded
+    await page.waitForSelector("#print-area", { timeout: 30000 });
+    
+    // Debug: Check the content inside print-area
+    // const printAreaContent = await page.evaluate(() => {
+    //   const printArea = document.querySelector('#print-area');
+    //   return {
+    //     innerHTML: printArea?.innerHTML.substring(0, 500),
+    //     textContent: printArea?.textContent?.substring(0, 200),
+    //     hasLoader: !!printArea?.querySelector('.animate-spin'),
+    //     childrenCount: printArea?.children.length
+    //   };
+    // });
+    // console.log('Print area content:', printAreaContent);
+    
+    // Wait a bit for data to load
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    
+    // Check again after waiting
+    // const printAreaAfter = await page.evaluate(() => {
+    //   const printArea = document.querySelector('#print-area');
+    //   return {
+    //     textContent: printArea?.textContent?.substring(0, 200),
+    //     hasLoader: !!printArea?.querySelector('.animate-spin'),
+    //     childrenCount: printArea?.children.length
+    //   };
+    // });
+    // console.log('Print area after 3s:', printAreaAfter);
+    
+    // console.log('Generating PDF...');
 
     // Isolate only the printable node to avoid nav/headers or extra whitespace
     await page.evaluate(() => {
@@ -86,7 +139,7 @@ export async function GET(req: NextRequest) {
   // Optional debug screenshot (commented out in production)
   // await page.screenshot({ path: "/tmp/puppeteer-screenshot.png", fullPage: true });
 
-    console.log(`Generating PDF...`);
+    // console.log(`Generating PDF...`);
     const pdfBuffer = await page.pdf({
       format: "A4",
       printBackground: true,
