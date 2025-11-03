@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Home } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import ThemeColor from "./ThemeColor";
 import Link from "next/link";
 import { useResumeInfo } from "@/context/ResumeInfoConext";
 import { triggerConfetti } from "@/components/firecrackers/ConfettiSideCannons";
@@ -62,7 +61,6 @@ const FormSection: React.FC<FormSectionProps> = ({ resumeId, userId,resumeIndex 
               <Home className="w-4 h-4" />
             </Button>
           </Link>
-          <ThemeColor userId={userId} resumeId={resumeId} />
           <div className="hidden sm:block h-6 w-px bg-border" />
           <div className="text-sm text-muted-foreground">
             Step <span className="font-bold text-foreground">{activeFormIndex}</span> of <span className="font-bold text-foreground">8</span>

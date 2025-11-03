@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, TrendingUp, AlertCircle, CheckCircle2, XCircle } from "lucide-react";
-import axios from "axios";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 
 interface ATSScoreDisplayProps {
   resumeData: {
@@ -35,6 +35,7 @@ interface ATSAnalysis {
 }
 
 const ATSScoreDisplay = ({ resumeData, userId, resumeId }: ATSScoreDisplayProps) => {
+  const { callApi } = useApiWithRateLimit();
   const [jobDescription, setJobDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const [analysis, setAnalysis] = useState<ATSAnalysis | null>(null);
@@ -45,26 +46,39 @@ const ATSScoreDisplay = ({ resumeData, userId, resumeId }: ATSScoreDisplayProps)
 
     try {
       setLoading(true);
-      const response = await axios.post("/api/analyze-ats", {
-        resumeData,
-        jobDescription: jobDescription.trim(),
+      const response = await callApi("/api/analyze-ats", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          resumeData,
+          jobDescription: jobDescription.trim(),
+        }),
       });
 
-      const analysisData = response.data.data;
+      if (!response) {
+        setLoading(false);
+        return;
+      }
+
+      const analysisData = response.data;
       setAnalysis(analysisData);
       setShowInput(false);
 
       // Save the ATS score if userId and resumeId are provided
       if (userId && resumeId) {
         try {
-          await axios.post("/api/ats-score", {
-            userId,
-            resumeId,
-            atsData: {
-              score: analysisData.score,
-              matchPercentage: analysisData.matchPercentage,
-              jobDescription: jobDescription.trim(),
-            },
+          await callApi("/api/ats-score", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId,
+              resumeId,
+              atsData: {
+                score: analysisData.score,
+                matchPercentage: analysisData.matchPercentage,
+                jobDescription: jobDescription.trim(),
+              },
+            }),
           });
         } catch (saveErr) {
           console.error("Failed to save ATS score:", saveErr);

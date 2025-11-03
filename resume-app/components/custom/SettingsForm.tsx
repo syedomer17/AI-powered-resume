@@ -6,6 +6,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import AvatarUploader from "./AvatarUploader";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import { useSession } from "next-auth/react";
 
 type SettingsFormProps = {
   initialUser: {
@@ -17,6 +19,8 @@ type SettingsFormProps = {
 };
 
 export default function SettingsForm({ initialUser }: SettingsFormProps) {
+  const { callApi } = useApiWithRateLimit();
+  const { data: session, update } = useSession();
   const [userName, setUserName] = useState(initialUser.userName || "");
   const [avatar, setAvatar] = useState(initialUser.avatar || "");
   const [bio, setBio] = useState(initialUser.bio || "");
@@ -31,13 +35,22 @@ export default function SettingsForm({ initialUser }: SettingsFormProps) {
     setLoading(true);
     setNotification(null);
     try {
-      const res = await fetch("/api/profile", {
+      const data = await callApi("/api/profile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userName, avatar, bio }),
       });
-      const data = await res.json();
-      if (!res.ok || !data.success) throw new Error(data.message || "Failed to update profile");
+
+      if (!data) {
+        setLoading(false);
+        return;
+      }
+
+      if (!data.success) throw new Error(data.message || "Failed to update profile");
+      
+      // Update the session - this will trigger a fresh fetch from database
+      await update();
+      
       setNotification({ type: "success", message: "Profile updated successfully!" });
       setTimeout(() => setNotification(null), 5000);
     } catch (err: any) {

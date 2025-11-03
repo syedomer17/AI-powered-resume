@@ -21,7 +21,9 @@ export default function UserMenu({
   const menuRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession();
   
-  const userId = user.id || session?.user?.id;
+  // Use session data directly for real-time updates
+  const currentUser = session?.user || user;
+  const userId = currentUser.id;
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -45,12 +47,12 @@ export default function UserMenu({
         className="focus:outline-none ring-2 ring-transparent hover:ring-primary/30 rounded-full transition-all"
       >
         <Image
-          src={user.image || fallbackImage}
+          src={currentUser.image || fallbackImage}
           alt={
-            user.login
-              ? `${user.login}'s avatar`
-              : user.name
-              ? `${user.name}'s avatar`
+            currentUser.login
+              ? `${currentUser.login}'s avatar`
+              : currentUser.name
+              ? `${currentUser.name}'s avatar`
               : "User avatar"
           }
           width={40}
@@ -63,10 +65,10 @@ export default function UserMenu({
         <div className="absolute right-0 mt-2 w-56 sm:w-64 bg-card text-card-foreground border border-border rounded-md shadow-lg dark:shadow-xl z-60 backdrop-blur-sm">
           <div className="p-3 sm:p-4 border-b border-border">
             <p className="font-semibold text-sm sm:text-base truncate">
-              {user.login ?? user.name ?? "Anonymous"}
+              {currentUser.login ?? currentUser.name ?? "Anonymous"}
             </p>
             <p className="text-xs sm:text-sm text-muted-foreground truncate">
-              {user.email ?? "No email"}
+              {currentUser.email ?? "No email"}
             </p>
           </div>
           

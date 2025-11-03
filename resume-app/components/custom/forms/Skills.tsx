@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { useResumeInfo } from "@/context/ResumeInfoConext";
-import axios from "axios";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import React, { useEffect, useState } from "react";
@@ -35,12 +35,14 @@ const SKILL_CATEGORIES = [
   "Mobile",
   "Data Science",
   "AI/ML",
-  "Other",
+  "Custom",
 ];
 
 const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
   const { resumeInfo, setResumeInfo } = useResumeInfo();
+  const { callApi } = useApiWithRateLimit();
   const [loading, setLoading] = useState(false);
+  const [customCategoryInputs, setCustomCategoryInputs] = useState<{ [key: number]: boolean }>({});
 
   const [skillsList, setSkillsList] = useState<SkillType[]>([
     { id: undefined, category: "", name: "" },
@@ -97,19 +99,23 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
     }
 
     try {
-      const res = await axios.delete("/api/user/skills", {
-        data: {
+      const res = await callApi("/api/user/skills", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           userId,
           resumeId,
           skillId: skillToRemove.id,
-        },
+        }),
       });
 
-      if (res.data?.success) {
+      if (!res) return;
+
+      if (res.success) {
         toast.success("Skill removed.");
         setSkillsList((prev) => prev.filter((_, i) => i !== index));
       } else {
-        toast.error(res.data?.message || "Failed to remove skill.");
+        toast.error(res.message || "Failed to remove skill.");
       }
     } catch (err) {
       console.error(err);
@@ -136,17 +142,26 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
     }
     setLoading(true);
     try {
-      const response = await axios.patch("/api/user/skills", {
-        userId,
-        resumeId,
-        skills: skillsList,
+      const response = await callApi("/api/user/skills", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          resumeId,
+          skills: skillsList,
+        }),
       });
 
-      if (response.data?.success) {
+      if (!response) {
+        setLoading(false);
+        return;
+      }
+
+      if (response.success) {
         toast.success("Skills Saved!");
         enableNext(true);
       } else {
-        toast.error(response.data?.message || "Failed to update skills.");
+        toast.error(response.message || "Failed to update skills.");
       }
     } catch (err) {
       console.error(err);
@@ -184,27 +199,49 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
             className="flex flex-col sm:flex-row sm:items-center justify-between border border-border rounded-xl bg-muted/30 p-4 mb-4 gap-3"
           >
             <div className="flex flex-col sm:flex-row gap-3 w-full flex-1">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="flex justify-between w-full sm:w-48 h-11 font-medium"
-                  >
-                    {item.category || "Select Category"}
-                    <ChevronDown className="w-4 h-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  {SKILL_CATEGORIES.map((category) => (
-                    <DropdownMenuItem
-                      key={category}
-                      onSelect={() => handleChange(index, "category", category)}
+              {customCategoryInputs[index] ? (
+                <Input
+                  placeholder="Enter custom category"
+                  className="h-11 focus:ring-2 focus:ring-purple-500/20 w-full sm:w-48"
+                  value={item.category}
+                  onChange={(e) => handleChange(index, "category", e.target.value)}
+                  onBlur={() => {
+                    if (!item.category) {
+                      setCustomCategoryInputs((prev) => ({ ...prev, [index]: false }));
+                    }
+                  }}
+                  autoFocus
+                />
+              ) : (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="flex justify-between w-full sm:w-48 h-11 font-medium"
                     >
-                      {category}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+                      {item.category || "Select Category"}
+                      <ChevronDown className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    {SKILL_CATEGORIES.map((category) => (
+                      <DropdownMenuItem
+                        key={category}
+                        onSelect={() => {
+                          if (category === "Custom") {
+                            setCustomCategoryInputs((prev) => ({ ...prev, [index]: true }));
+                            handleChange(index, "category", "");
+                          } else {
+                            handleChange(index, "category", category);
+                          }
+                        }}
+                      >
+                        {category}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
               <Input
                 placeholder="Skill name"
                 className="h-11 focus:ring-2 focus:ring-blue-500/20"

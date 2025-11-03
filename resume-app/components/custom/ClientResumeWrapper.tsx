@@ -2,7 +2,7 @@
 
 import { ResumeInfoProvider, ResumeInfoType } from "@/context/ResumeInfoConext";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 import FormSection from "./FormSection";
 import ResumePriview from "./ResumePriview";
 import { Loader2 } from "lucide-react";
@@ -18,14 +18,21 @@ export default function ClientResumeWrapper({
   resumeId,
   resumeIndex, // ✅ include this
 }: ClientResumeWrapperProps) {
+  const { callApi } = useApiWithRateLimit();
   const [resumeData, setResumeData] = useState<ResumeInfoType | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchResume = async () => {
       try {
-        const response = await axios.get(`/api/resumes/${resumeId}`);
-        const resume = response.data.resume;
+        const response = await callApi(`/api/resumes/${resumeId}`);
+
+        if (!response) {
+          setLoading(false);
+          return;
+        }
+
+        const resume = response.resume;
 
         const personal = resume.personalDetails?.[0] ?? {};
 

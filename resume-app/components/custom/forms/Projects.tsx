@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import RichTextEditor from "@/components/RichTextEditor";
 import { Loader2, Trash2 } from "lucide-react";
-import axios from "axios";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 import { toast } from "sonner";
 import { useResumeInfo } from "@/context/ResumeInfoConext";
 import { generateProjects } from "@/service/AIModel";
@@ -34,6 +34,7 @@ const Projects: React.FC<ProjectsProps> = ({
   resumeId,
 }) => {
   const { resumeInfo, setResumeInfo } = useResumeInfo();
+  const { callApi } = useApiWithRateLimit();
 
   const [projectList, setProjectList] = useState<ProjectType[]>([
     {
@@ -141,20 +142,24 @@ const Projects: React.FC<ProjectsProps> = ({
     }
 
     try {
-      const res = await axios.delete("/api/user/projects", {
-        data: {
+      const res = await callApi("/api/user/projects", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           userId,
           resumeId,
           projectId: projectToRemove.id,
-        },
+        }),
       });
 
-      if (res.data?.success) {
+      if (!res) return;
+
+      if (res.success) {
         toast.success("Project removed.");
 
         // Update local state with the returned updated list from backend
         setProjectList(
-          res.data.projects.map((proj: any) => ({
+          res.projects.map((proj: any) => ({
             id: proj.id,
             title: proj.title,
             techStack: proj.techStack,
@@ -166,7 +171,7 @@ const Projects: React.FC<ProjectsProps> = ({
           }))
         );
       } else {
-        toast.error(res.data?.message || "Failed to remove project.");
+        toast.error(res.message || "Failed to remove project.");
       }
     } catch (err) {
       console.error(err);
@@ -180,17 +185,26 @@ const Projects: React.FC<ProjectsProps> = ({
 
     setLoading(true);
     try {
-      const response = await axios.patch("/api/user/projects", {
-        userId,
-        resumeId,
-        projects: projectList,
+      const response = await callApi("/api/user/projects", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          resumeId,
+          projects: projectList,
+        }),
       });
 
-      if (response.data?.success) {
+      if (!response) {
+        setLoading(false);
+        return;
+      }
+
+      if (response.success) {
         toast.success("Projects saved!");
         // Update local state with normalized IDs returned from backend
         setProjectList(
-          response.data.projects.map((proj: any) => ({
+          response.projects.map((proj: any) => ({
             id: proj.id,
             title: proj.title,
             techStack: proj.techStack,
@@ -271,23 +285,7 @@ const Projects: React.FC<ProjectsProps> = ({
         </p>
       </div>
 
-      <div className="flex justify-end mb-6">
-        <Button
-          variant="outline"
-          onClick={handleGenerate}
-          disabled={generating}
-          className="flex items-center gap-2 border-purple-200 dark:border-purple-800 text-purple-600 dark:text-purple-400 hover:bg-purple-50 "
-        >
-          {generating ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Generating...
-            </>
-          ) : (
-            "Generate from AI"
-          )}
-        </Button>
-      </div>
+      
 
       {options && options.length > 0 && (
         <motion.div

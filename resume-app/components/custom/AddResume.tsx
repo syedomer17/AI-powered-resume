@@ -15,7 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 
 interface AddResumeProps {
   userId: string;
@@ -31,6 +31,7 @@ const AddResume = ({ userId, userEmail }: AddResumeProps) => {
 
   const { data: session } = useSession();
   const router = useRouter();
+  const { callApi, isCoolingDown } = useApiWithRateLimit();
 
   const handleCreateResume = async () => {
     const finalTitle =
@@ -49,9 +50,18 @@ const AddResume = ({ userId, userEmail }: AddResumeProps) => {
         jobDescription: jobDescription.trim() || undefined, // Include job description if provided
       };
 
-      const res = await axios.post("/api/resume", payload);
+      const res = await callApi("/api/resume", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-      const createdResume = res?.data?.data?.resume;
+      if (!res) {
+        setLoading(false);
+        return;
+      }
+
+      const createdResume = res?.data?.resume;
       if (!createdResume) throw new Error("Resume creation failed.");
 
       const resumeIndex = createdResume.id;

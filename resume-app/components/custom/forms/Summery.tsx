@@ -7,7 +7,7 @@ import { useResumeInfo } from "@/context/ResumeInfoConext";
 import { generateSummary, SummaryResponse } from "@/service/AIModel";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import axios from "axios";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface SummeryProps {
@@ -18,6 +18,7 @@ interface SummeryProps {
 
 const Summery: React.FC<SummeryProps> = ({ enableNext, userId, resumeId }) => {
   const { resumeInfo, setResumeInfo } = useResumeInfo();
+  const { callApi } = useApiWithRateLimit();
   const [summary, setSummary] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [options, setOptions] = useState<SummaryResponse | null>(null);
@@ -65,11 +66,21 @@ const Summery: React.FC<SummeryProps> = ({ enableNext, userId, resumeId }) => {
 
     setLoading(true);
     try {
-      await axios.patch("/api/user/summery", {
-        userId,
-        resumeId,
-        text: summary,
+      const response = await callApi("/api/user/summery", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          resumeId,
+          text: summary,
+        }),
       });
+
+      if (!response) {
+        setLoading(false);
+        return;
+      }
+
       toast.success("Summary saved!");
     } catch (error) {
       toast.error("Failed to save summary");

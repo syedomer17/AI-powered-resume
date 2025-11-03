@@ -127,7 +127,8 @@ Generate 3–4 number points summarizing this experience in professional resume 
 </ol>
       `.trim();
 
-      const ai = new (await import("@google/genai")).GoogleGenAI({
+      const { GoogleGenAI } = await import("@google/genai");
+      const ai = new GoogleGenAI({
         apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY!,
       });
 
@@ -166,8 +167,7 @@ Generate 3–4 number points summarizing this experience in professional resume 
 
   return (
     <div className="space-y-2">
-      <div className="flex justify-between items-center">
-        <label className="text-sm font-medium">Work Summary</label>
+      <div className="flex justify-end items-center">
         <Button
           variant="outline"
           size="sm"
@@ -182,7 +182,7 @@ Generate 3–4 number points summarizing this experience in professional resume 
             <Brain className="h-4 w-4" />
           )}
           <span className="hidden sm:inline">
-            {loading ? "Generating..." : "Generate from Summary"}
+            {loading ? "Generating..." : "Generate from AI"}
           </span>
           <span className="sm:hidden">Generate</span>
         </Button>

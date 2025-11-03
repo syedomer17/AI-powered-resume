@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 
 type AvatarUploaderProps = {
   value?: string;
@@ -10,6 +11,7 @@ type AvatarUploaderProps = {
 
 export default function AvatarUploader({ value, onUploaded }: AvatarUploaderProps) {
   const fileRef = useRef<HTMLInputElement | null>(null);
+  const { callApi } = useApiWithRateLimit();
   const [preview, setPreview] = useState<string | undefined>(value);
   const [loading, setLoading] = useState(false);
 
@@ -40,16 +42,18 @@ export default function AvatarUploader({ value, onUploaded }: AvatarUploaderProp
         reader.readAsDataURL(file);
       });
 
-      const res = await fetch("/api/user/avatar", {
+      const data = await callApi("/api/user/avatar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ avatar: base64 }),
       });
-      const data = await res.json();
-  if (!res.ok || !data.imageUrl) throw new Error(data.message || "Upload failed");
 
-  setPreview(data.imageUrl);
-  onUploaded?.(data.imageUrl);
+      if (!data) return;
+
+      if (!data.imageUrl) throw new Error(data.message || "Upload failed");
+
+      setPreview(data.imageUrl);
+      onUploaded?.(data.imageUrl);
     } catch (err: any) {
       alert(err.message || "Failed to upload avatar");
     } finally {

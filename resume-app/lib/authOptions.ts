@@ -52,7 +52,23 @@ export const authOptions: AuthOptions = {
   session: { strategy: "jwt" },
 
   callbacks: {
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger, session }) {
+      // Handle session update - refresh user data from database
+      if (trigger === "update" && token.user?.email) {
+        await connectToDB();
+        const updatedUser = await User.findOne({ email: token.user.email }).select("-password -otp");
+        
+        if (updatedUser) {
+          token.user = {
+            id: updatedUser._id.toString(),
+            name: updatedUser.userName,
+            email: updatedUser.email,
+            image: updatedUser.avatar || DEFAULT_AVATAR,
+          };
+        }
+        return token;
+      }
+
       if (user) {
         if (account?.provider === "google" || account?.provider === "github") {
           await connectToDB();

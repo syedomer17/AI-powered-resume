@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Loader2, Mail, Send, CheckCircle2, XCircle, AlertCircle } from "lucide-react";
-import axios from "axios";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 import { toast } from "sonner";
 
 interface SendToHRProps {
@@ -17,6 +17,7 @@ interface SendToHRProps {
 }
 
 const SendToHR = ({ resumeId, resumePdfUrl, onClose }: SendToHRProps) => {
+  const { callApi } = useApiWithRateLimit();
   const [jobTitle, setJobTitle] = useState("Software Developer");
   const [hrCount, setHRCount] = useState(50);
   const [totalHRs, setTotalHRs] = useState(100);
@@ -35,9 +36,11 @@ const SendToHR = ({ resumeId, resumePdfUrl, onClose }: SendToHRProps) => {
 
   const fetchHRStatus = async () => {
     try {
-      const response = await axios.get("/api/jobs/send-to-hr");
-      if (response.data.success) {
-        setTotalHRs(response.data.data.totalHRContacts);
+      const response = await callApi("/api/jobs/send-to-hr");
+      if (!response) return;
+
+      if (response.success) {
+        setTotalHRs(response.data.totalHRContacts);
       }
     } catch (error) {
       console.error("Failed to fetch HR status:", error);
@@ -71,12 +74,22 @@ const SendToHR = ({ resumeId, resumePdfUrl, onClose }: SendToHRProps) => {
     }, 200);
 
     try {
-      const response = await axios.post("/api/jobs/send-to-hr", {
-        resumeId,
-        jobTitle,
-        hrCount,
-        resumePdfUrl,
+      const response = await callApi("/api/jobs/send-to-hr", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          resumeId,
+          jobTitle,
+          hrCount,
+          resumePdfUrl,
+        }),
       });
+
+      if (!response) {
+        clearInterval(progressInterval);
+        setSending(false);
+        return;
+      }
 
       clearInterval(progressInterval);
       setProgress(100);

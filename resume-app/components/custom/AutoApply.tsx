@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Loader2, Zap, CheckCircle2, XCircle, AlertCircle, ExternalLink } from "lucide-react";
-import axios from "axios";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 import { toast } from "sonner";
 
 interface Job {
@@ -30,6 +30,7 @@ interface ApplicationResult {
 }
 
 const AutoApply = ({ jobs, resumeId, onClose }: AutoApplyProps) => {
+  const { callApi } = useApiWithRateLimit();
   const [applying, setApplying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [results, setResults] = useState<ApplicationResult[]>([]);
@@ -58,26 +59,31 @@ const AutoApply = ({ jobs, resumeId, onClose }: AutoApplyProps) => {
     try {
       const jobIds = jobs.map(job => job.job_id);
       
-      // Simulate progressive updates
-      const totalJobs = jobIds.length;
-      let completed = 0;
-
-      const response = await axios.post("/api/jobs/auto-apply", {
-        jobIds,
-        resumeId,
+      const response = await callApi("/api/jobs/auto-apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          jobIds,
+          resumeId,
+        }),
       });
 
-      if (response.data.success) {
-        setResults(response.data.data.results);
+      if (!response) {
+        setApplying(false);
+        return;
+      }
+
+      if (response.success) {
+        setResults(response.data.results);
         setSummary({
-          total: response.data.data.total,
-          successful: response.data.data.successful,
-          failed: response.data.data.failed,
+          total: response.data.total,
+          successful: response.data.successful,
+          failed: response.data.failed,
         });
         setProgress(100);
 
         toast.success(
-          `Auto-applied to ${response.data.data.successful} out of ${response.data.data.total} jobs! 🚀`
+          `Auto-applied to ${response.data.successful} out of ${response.data.total} jobs! 🚀`
         );
       }
     } catch (error: any) {

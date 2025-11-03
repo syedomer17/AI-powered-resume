@@ -6,12 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Upload, CheckCircle2, FileText } from "lucide-react";
 import SendToHR from "@/components/custom/SendToHR";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 
 interface HRSendPanelProps {
   resumeId: string;
 }
 
 export default function HRSendPanel({ resumeId }: HRSendPanelProps) {
+  const { callApi } = useApiWithRateLimit();
   const [uploading, setUploading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -25,9 +27,17 @@ export default function HRSendPanel({ resumeId }: HRSendPanelProps) {
     try {
       const form = new FormData();
       form.append("file", file);
-      const res = await fetch("/api/upload-resume", { method: "POST", body: form });
-      const data = await res.json();
-      if (!res.ok || !data.success) throw new Error(data.message || "Upload failed");
+      const data = await callApi("/api/upload-resume", {
+        method: "POST",
+        body: form,
+      });
+
+      if (!data) {
+        setUploading(false);
+        return;
+      }
+
+      if (!data.success) throw new Error(data.message || "Upload failed");
       setUploadedUrl(data.url);
     } catch (err) {
       console.error("Resume upload failed:", err);

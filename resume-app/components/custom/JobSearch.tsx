@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Loader2, Search, MapPin, Building2, ExternalLink, Calendar, DollarSign, Briefcase, Mail, Zap, CheckSquare } from "lucide-react";
-import axios from "axios";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 import JobStats from "./JobStats";
 import SendToHR from "./SendToHR";
 import AutoApply from "./AutoApply";
@@ -39,6 +39,7 @@ interface JobSearchProps {
 }
 
 const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchProps) => {
+  const { callApi } = useApiWithRateLimit();
   const [query, setQuery] = useState(defaultQuery);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(false);
@@ -84,11 +85,20 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
 
       console.log("Searching with params:", params);
 
-      const response = await axios.post("/api/jobs/search", params);
+      const response = await callApi("/api/jobs/search", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(params),
+      });
       
-      console.log("Search response:", response.data);
+      if (!response) {
+        setLoading(false);
+        return;
+      }
+
+      console.log("Search response:", response);
       
-      setJobs(response.data.data);
+      setJobs(response.data);
       setHasSearched(true);
     } catch (err: any) {
       console.error("Failed to search jobs:", err);

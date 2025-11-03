@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
 import { triggerConfetti } from "@/components/firecrackers/ConfettiSideCannons";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 
 interface Resume {
   _id?: string;
@@ -39,6 +40,7 @@ export default function ResumeCardItem({ resume, index }: ResumeCardItemProps) {
   const { data: session } = useSession();
   const userId = session?.user?.id;
   const router = useRouter();
+  const { callApi } = useApiWithRateLimit();
   const [openAlert, setOpenAlert] = useState(false);
   const [downloading, setDownloading] = useState(false);
 
@@ -51,16 +53,15 @@ export default function ResumeCardItem({ resume, index }: ResumeCardItemProps) {
     }
 
     try {
-      const res = await fetch(`/api/user/${userId}/resume/${resume._id}`, {
+      const data = await callApi(`/api/user/${userId}/resume/${resume._id}`, {
         method: "DELETE",
       });
 
-      if (res.ok) {
+      if (data) {
         setOpenAlert(false);
         router.refresh();
       } else {
-        const data = await res.json();
-        console.error("Failed to delete resume:", data?.message);
+        console.error("Failed to delete resume");
       }
     } catch (err) {
       console.error("Error deleting resume:", err);
@@ -76,6 +77,7 @@ export default function ResumeCardItem({ resume, index }: ResumeCardItemProps) {
 
     try {
       setDownloading(true);
+      // Use regular fetch for blob downloads (not wrapped in callApi)
       const res = await fetch(`/api/generate-pdf?userId=${userId}&resumeId=${resume._id}`);
       if (!res.ok) throw new Error(`PDF API failed: ${res.status}`);
       const blob = await res.blob();

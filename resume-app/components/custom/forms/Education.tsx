@@ -6,7 +6,7 @@ import { Loader2, Plus, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useResumeInfo } from "@/context/ResumeInfoConext";
-import axios from "axios";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -34,6 +34,7 @@ const Education: React.FC<EducationProps> = ({
   resumeId,
 }) => {
   const { resumeInfo, setResumeInfo } = useResumeInfo();
+  const { callApi } = useApiWithRateLimit();
 
   const [educationalList, setEducationalList] = useState<EducationType[]>([
     {
@@ -129,19 +130,23 @@ const Education: React.FC<EducationProps> = ({
     }
 
     try {
-      const res = await axios.delete("/api/user/education", {
-        data: {
+      const res = await callApi("/api/user/education", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           userId,
           resumeId,
           educationId: educationToRemove.id,
-        },
+        }),
       });
 
-      if (res.data?.success) {
+      if (!res) return;
+
+      if (res.success) {
         toast.success("Education removed.");
         setEducationalList((prev) => prev.filter((_, i) => i !== index));
       } else {
-        toast.error(res.data?.message || "Failed to remove education.");
+        toast.error(res.message || "Failed to remove education.");
       }
     } catch (err) {
       console.error(err);
@@ -161,13 +166,22 @@ const Education: React.FC<EducationProps> = ({
 
     setLoading(true);
     try {
-      const response = await axios.patch("/api/user/education", {
-        userId,
-        resumeId,
-        education: educationalList,
+      const response = await callApi("/api/user/education", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          resumeId,
+          education: educationalList,
+        }),
       });
 
-      if (response.data?.success) {
+      if (!response) {
+        setLoading(false);
+        return;
+      }
+
+      if (response.success) {
         toast.success("Education Saved!");
         enableNext(true);
       } else {

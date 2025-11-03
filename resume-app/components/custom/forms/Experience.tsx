@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import RichTextEditor from "@/components/RichTextEditor";
 import { Loader2, Trash2 } from "lucide-react";
-import axios from "axios";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 import { toast } from "sonner";
 import { useResumeInfo } from "@/context/ResumeInfoConext";
 import { generateExperience, AIExperience } from "@/service/AIModel";
@@ -41,6 +41,7 @@ const Experience: React.FC<ExperienceProps> = ({
   resumeId,
 }) => {
   const { resumeInfo, setResumeInfo } = useResumeInfo();
+  const { callApi } = useApiWithRateLimit();
 
   const [experienceList, setExperienceList] = useState<ExperienceType[]>([
     {
@@ -141,19 +142,23 @@ const Experience: React.FC<ExperienceProps> = ({
 
     // If it has an id—delete from DB
     try {
-      const res = await axios.delete("/api/user/experience", {
-        data: {
+      const res = await callApi("/api/user/experience", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           userId,
           resumeId,
           experienceId: experienceToRemove.id,
-        },
+        }),
       });
 
-      if (res.data?.success) {
+      if (!res) return;
+
+      if (res.success) {
         toast.success("Experience removed.");
         setExperienceList((prev) => prev.filter((_, i) => i !== index));
       } else {
-        toast.error(res.data?.message || "Failed to remove experience.");
+        toast.error(res.message || "Failed to remove experience.");
       }
     } catch (err) {
       console.error(err);
@@ -168,16 +173,26 @@ const Experience: React.FC<ExperienceProps> = ({
     }
     setLoading(true);
     try {
-      const response = await axios.patch("/api/user/experience", {
-        userId,
-        resumeId,
-        experience: experienceList,
+      const response = await callApi("/api/user/experience", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          resumeId,
+          experience: experienceList,
+        }),
       });
-      if (response.data?.success) {
+
+      if (!response) {
+        setLoading(false);
+        return;
+      }
+
+      if (response.success) {
         toast.success("Experience saved!");
         enableNext?.(true);
       } else {
-        toast.error(response.data?.message || "Failed to save.");
+        toast.error(response.message || "Failed to save.");
       }
     } catch (err) {
       console.error(err);
@@ -234,23 +249,6 @@ const Experience: React.FC<ExperienceProps> = ({
         <p className="text-sm text-muted-foreground mt-2">
           Add your previous job experience below
         </p>
-      </div>
-
-      <div className="flex justify-end mb-6">
-        <Button
-          variant="outline"
-          onClick={handleGenerate}
-          disabled={generating}
-          className="flex items-center gap-2 border-purple-200 dark:border-purple-800 text-purple-600 dark:text-purple-400 hover:bg-purple-50 "
-        >
-          {generating ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" /> Generating...
-            </>
-          ) : (
-            "Generate from AI"
-          )}
-        </Button>
       </div>
 
       <AnimatePresence>

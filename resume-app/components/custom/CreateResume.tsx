@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "react-hot-toast";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 
 export default function CreateResume({ userId, userEmail }: { userId?: string; userEmail?: string }) {
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
+  const { callApi } = useApiWithRateLimit();
   const router = useRouter();
 
   const handleCreateResume = async () => {
@@ -16,7 +18,7 @@ export default function CreateResume({ userId, userEmail }: { userId?: string; u
     setLoading(true);
 
     try {
-      const res = await fetch("/api/resume", {
+      const data = await callApi("/api/resume", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -26,10 +28,14 @@ export default function CreateResume({ userId, userEmail }: { userId?: string; u
         }),
       });
 
-      const data = await res.json();
+      if (!data) {
+        setLoading(false);
+        return;
+      }
 
-      if (!res.ok) {
+      if (!data.data) {
         toast.error(data.message || "Something went wrong");
+        setLoading(false);
         return;
       }
 

@@ -43,6 +43,8 @@
     "@tiptap/react": "^3.9.0",
     "@tiptap/starter-kit": "^3.9.0",
     "@types/canvas-confetti": "^1.9.0",
+    "@upstash/ratelimit": "^2.0.6",
+    "@upstash/redis": "^1.35.6",
     "axios": "^1.10.0",
     "bcryptjs": "^3.0.2",
     "canvas-confetti": "^1.9.4",

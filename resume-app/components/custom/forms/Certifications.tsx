@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2, Trash2, Upload, Link as LinkIcon } from "lucide-react";
-import axios from "axios";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 import { toast } from "sonner";
 import { useResumeInfo } from "@/context/ResumeInfoConext";
 import { motion, AnimatePresence } from "framer-motion";
@@ -29,6 +29,7 @@ const Certifications: React.FC<CertificationsProps> = ({
   resumeId,
 }) => {
   const { resumeInfo, setResumeInfo } = useResumeInfo();
+  const { callApi } = useApiWithRateLimit();
   const initialLoadRef = useRef(true);
 
   const [certificationList, setCertificationList] = useState<CertificationType[]>([
@@ -130,18 +131,22 @@ const Certifications: React.FC<CertificationsProps> = ({
     }
 
     try {
-      const res = await axios.delete("/api/user/certifications", {
-        data: {
+      const res = await callApi("/api/user/certifications", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           userId,
           resumeId,
           certificationId: certToRemove.id,
-        },
+        }),
       });
 
-      if (res.data?.success) {
+      if (!res) return;
+
+      if (res.success) {
         toast.success("Certification removed.");
         setCertificationList(
-          res.data.certifications.map((cert: any) => ({
+          res.certifications.map((cert: any) => ({
             id: cert.id,
             name: cert.name,
             link: cert.link,
@@ -150,7 +155,7 @@ const Certifications: React.FC<CertificationsProps> = ({
           }))
         );
       } else {
-        toast.error(res.data?.message || "Failed to remove certification.");
+        toast.error(res.message || "Failed to remove certification.");
       }
     } catch (err) {
       console.error(err);
@@ -164,16 +169,25 @@ const Certifications: React.FC<CertificationsProps> = ({
 
     setLoading(true);
     try {
-      const response = await axios.patch("/api/user/certifications", {
-        userId,
-        resumeId,
-        certifications: certificationList,
+      const response = await callApi("/api/user/certifications", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          resumeId,
+          certifications: certificationList,
+        }),
       });
 
-      if (response.data?.success) {
+      if (!response) {
+        setLoading(false);
+        return;
+      }
+
+      if (response.success) {
         toast.success("Certifications saved!");
         setCertificationList(
-          response.data.certifications.map((cert: any) => ({
+          response.certifications.map((cert: any) => ({
             id: cert.id,
             name: cert.name,
             link: cert.link,
@@ -182,7 +196,7 @@ const Certifications: React.FC<CertificationsProps> = ({
           }))
         );
       } else {
-        toast.error(response.data?.message || "Failed to save certifications.");
+        toast.error(response.message || "Failed to save certifications.");
       }
     } catch (err) {
       console.error(err);
@@ -213,17 +227,21 @@ const Certifications: React.FC<CertificationsProps> = ({
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await axios.post("/api/upload-image", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      const response = await callApi("/api/upload-image", {
+        method: "POST",
+        body: formData,
       });
 
-      if (response.data?.success) {
-        handleChange(index, "imageUrl", response.data.imageUrl);
+      if (!response) {
+        setUploadingIndex(null);
+        return;
+      }
+
+      if (response.success) {
+        handleChange(index, "imageUrl", response.imageUrl);
         toast.success("Image uploaded successfully!");
       } else {
-        toast.error(response.data?.message || "Failed to upload image");
+        toast.error(response.message || "Failed to upload image");
       }
     } catch (err) {
       console.error(err);
