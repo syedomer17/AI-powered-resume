@@ -4,10 +4,12 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import gsap from "gsap";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 
 export default function RequestOtpPage() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const { callApi } = useApiWithRateLimit();
   const router = useRouter();
 
   useEffect(() => {
@@ -25,15 +27,18 @@ export default function RequestOtpPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/forgot-password/request-otp", {
+      const data = await callApi("/api/forgot-password/request-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
 
-      const data = await res.json();
+      if (!data) {
+        setLoading(false);
+        return;
+      }
 
-      if (res.ok) {
+      if (!data.error) {
         toast.success("OTP sent to your email.");
         router.push(`/forgot-password/verify?email=${encodeURIComponent(email)}`);
       } else {

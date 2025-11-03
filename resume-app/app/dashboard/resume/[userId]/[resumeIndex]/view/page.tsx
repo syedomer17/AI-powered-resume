@@ -6,7 +6,7 @@ import ResumePriview from "@/components/custom/ResumePriview";
 import { Button } from "@/components/ui/button";
 import { RWebShare } from "react-web-share";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 // Client-side PDF generation libs were causing visual mismatches.
 // We'll prefer the server-rendered PDF via headless Chromium instead.
 import { motion, AnimatePresence } from "framer-motion";
@@ -18,6 +18,7 @@ export default function ViewPage() {
   const params = useParams();
   const userId = params.userId;
   const resumeId = params.resumeIndex; // <- This is your _id
+  const { callApi } = useApiWithRateLimit();
 
   const [resumeInfo, setResumeInfo] = useState<ResumeInfoType | null>(null);
   const [loading, setLoading] = useState(true);
@@ -26,8 +27,14 @@ export default function ViewPage() {
   useEffect(() => {
     const fetchResume = async () => {
       try {
-        const res = await axios.get(`/api/user/${userId}/resume/${resumeId}`);
-        const resume = res.data.resume;
+        const res = await callApi(`/api/user/${userId}/resume/${resumeId}`);
+
+        if (!res) {
+          setLoading(false);
+          return;
+        }
+
+        const resume = res.resume;
 
         if (!resume) {
           console.warn("Resume not found");

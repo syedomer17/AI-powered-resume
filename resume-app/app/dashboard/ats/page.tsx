@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import Header from "@/components/custom/Header";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 
 type ATSScoreResponse = {
   score: number;
@@ -23,6 +24,7 @@ export default function ATSCheckerPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<ATSScoreResponse | null>(null);
+  const { callApi } = useApiWithRateLimit();
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0] || null;
@@ -48,14 +50,18 @@ export default function ATSCheckerPage() {
       form.append("file", file);
       form.append("jobDescription", jobDescription);
 
-      const res = await fetch("/api/ats/analyze-pdf", {
+      const data = await callApi("/api/ats/analyze-pdf", {
         method: "POST",
         body: form,
       });
 
-      const data = await res.json();
-      if (!res.ok || !data?.success) {
-        throw new Error(data?.error || "Failed to analyze resume");
+      if (!data) {
+        setLoading(false);
+        return;
+      }
+
+      if (!data.success) {
+        throw new Error(data.error || "Failed to analyze resume");
       }
 
       setResult(data.data as ATSScoreResponse);

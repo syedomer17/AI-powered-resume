@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import gsap from "gsap";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 
 function VerifyOtpForm() {
   const [otp, setOtp] = useState(Array(6).fill(""));
@@ -11,6 +12,7 @@ function VerifyOtpForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const email = searchParams.get("email");
+  const { callApi } = useApiWithRateLimit();
 
   const [loading, setLoading] = useState(false);
   const [countdown, setCountdown] = useState(60);
@@ -58,15 +60,18 @@ function VerifyOtpForm() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/forgot-password/verify-otp", {
+      const data = await callApi("/api/forgot-password/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp: enteredOtp }),
       });
 
-      const data = await res.json();
+      if (!data) {
+        setLoading(false);
+        return;
+      }
 
-      if (res.ok) {
+      if (!data.error) {
         toast.success("OTP verified. You can now reset your password.");
         router.push(`/forgot-password/reset?email=${encodeURIComponent(email!)}`);
       } else {
@@ -83,14 +88,15 @@ function VerifyOtpForm() {
     if (countdown > 0) return;
 
     try {
-      const res = await fetch("/api/forgot-password/request-otp", {
+      const data = await callApi("/api/forgot-password/request-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-      const data = await res.json();
 
-      if (res.ok) {
+      if (!data) return;
+
+      if (!data.error) {
         toast.success("OTP resent successfully.");
         setOtp(Array(6).fill(""));
         setCountdown(60);

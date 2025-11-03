@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import gsap from "gsap";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 
 function ResetPasswordForm() {
   const searchParams = useSearchParams();
@@ -14,6 +15,7 @@ function ResetPasswordForm() {
   const [loading, setLoading] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const { callApi } = useApiWithRateLimit();
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -45,15 +47,18 @@ function ResetPasswordForm() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/forgot-password/reset", {
+      const data = await callApi("/api/forgot-password/reset", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, ...form }),
       });
 
-      const data = await res.json();
+      if (!data) {
+        setLoading(false);
+        return;
+      }
 
-      if (res.ok) {
+      if (!data.error) {
         toast.success("Password reset successfully.");
         router.push("/login");
       } else {

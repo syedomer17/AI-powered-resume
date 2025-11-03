@@ -8,11 +8,13 @@ import gsap from "gsap";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 
 const SignUp = () => {
   const [form, setForm] = useState({ userName: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const { callApi } = useApiWithRateLimit();
   const router = useRouter();
 
   useEffect(() => {
@@ -32,7 +34,7 @@ const SignUp = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch("/api/register", {
+      const data = await callApi("/api/register", {
         method: "POST",
         body: JSON.stringify({
           userName: form.userName, // 👈 map name to userName here
@@ -41,8 +43,13 @@ const SignUp = () => {
         }),
         headers: { "Content-Type": "application/json" },
       });
-      const data = await res.json();
-      if (res.ok) {
+
+      if (!data) {
+        setLoading(false);
+        return;
+      }
+
+      if (!data.error) {
         toast.success("Signup successful! Check your email for OTP.");
         router.push("/verify-email?email=" + form.email);
       } else {
