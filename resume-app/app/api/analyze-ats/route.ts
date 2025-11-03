@@ -27,10 +27,19 @@ export async function POST(req: NextRequest) {
       success: true,
       data: atsAnalysis,
     });
-  } catch (err) {
+  } catch (err: any) {
     console.error("ATS analysis error:", err);
+    
+    // Check if it's a 503 overload error
+    if (err?.status === 503 || err?.message?.includes("overloaded")) {
+      return NextResponse.json(
+        { error: "AI service is currently busy. Please try again in a few moments." },
+        { status: 503 }
+      );
+    }
+    
     return NextResponse.json(
-      { error: "Failed to analyze resume." },
+      { error: "Failed to analyze resume. Please try again." },
       { status: 500 }
     );
   }

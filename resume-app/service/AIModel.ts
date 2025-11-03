@@ -308,15 +308,45 @@ Return ONLY valid JSON in this exact format:
   ]
 }`;
 
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-pro",
-    contents: [
-      {
-        role: "user",
-        parts: [{ text: prompt }],
-      },
-    ],
-  });
+  // Retry logic with exponential backoff for 503 errors
+  let response;
+  let lastError;
+  const maxRetries = 3;
+  
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      response = await ai.models.generateContent({
+        model: "gemini-2.5-pro",
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: prompt }],
+          },
+        ],
+      });
+      break; // Success, exit retry loop
+    } catch (error: any) {
+      lastError = error;
+      
+      // Check if it's a 503 or overload error
+      if (error?.status === 503 || error?.message?.includes("overloaded")) {
+        if (attempt < maxRetries) {
+          // Wait with exponential backoff: 2s, 4s, 8s
+          const waitTime = Math.pow(2, attempt) * 1000;
+          // console.log(`Model overloaded, retrying in ${waitTime/1000}s... (attempt ${attempt}/${maxRetries})`);
+          await new Promise(resolve => setTimeout(resolve, waitTime));
+          continue;
+        }
+      }
+      
+      // If not 503 or max retries reached, throw error
+      throw error;
+    }
+  }
+
+  if (!response) {
+    throw lastError || new Error("Failed to get response from Gemini after retries");
+  }
 
   let rawText = response?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
 
