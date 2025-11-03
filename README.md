@@ -327,10 +327,10 @@ AI-powered-resume/
 🔓 = Public route (no authentication required)
 🔒 = Protected route (authentication required)
 
+``````
 
+### 🔒env 
 ```env│
-
-# Database├── LICENSE/                       # MIT License
 
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/dbname└── README.md                      # This file
 
@@ -396,7 +396,7 @@ PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stableCreate a `.env` file in t
 
 ```
 
-```ini
+```init
 
 4. **Run the development server**MONGODB_URI=
 
