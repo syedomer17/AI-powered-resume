@@ -10,93 +10,96 @@ const redis = new Redis({
   token: process.env.UPSTASH_REDIS_REST_TOKEN!,
 });
 
-// ✅ Create a rate limiter
-// 100 requests per 15 minutes per IP
-const ratelimit = new Ratelimit({
+// ✅ Global limit (general API traffic)
+const globalLimiter = new Ratelimit({
   redis,
-  limiter: Ratelimit.slidingWindow(40, "10 m"),
-  analytics: true,
-  prefix: "@upstash/ratelimit",
+  limiter: Ratelimit.slidingWindow(300, "1 m"), // 300 req/min
+  prefix: "global-limit",
 });
 
-// ✅ Public API routes that don't require authentication
-const PUBLIC_API_ROUTES = [
-  "/api/auth",           // NextAuth routes
-  "/api/register",       // User registration
-  "/api/verify-otp",     // Email verification
-  "/api/resend-otp",     // Resend OTP
-  "/api/forgot-password", // Password reset routes
-  "/api/user/",          // User resume data (for PDF generation)
+// ✅ Strict limit for AI heavy paths
+const aiLimiter = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(7, "1 m"), // 7 AI calls/min
+  prefix: "ai-limit",
+});
+
+// ✅ Routes that trigger AI usage
+const AI_HEAVY_ROUTES = [
+  "/api/generate-resume",
+  "/api/analyze-ats",
+  "/api/ats-score",
+  "/api/ats/analyze-pdf",
+  "/api/jobs/auto-apply",
+  "/api/summaries",
+  "/api/resume",
 ];
 
-// ✅ Helper to check if route is public
-function isPublicRoute(pathname: string): boolean {
-  return PUBLIC_API_ROUTES.some((route) => pathname.startsWith(route));
+// ✅ Public routes (no auth needed)
+const PUBLIC_API_ROUTES = [
+  "/api/auth",
+  "/api/register",
+  "/api/verify-otp",
+  "/api/resend-otp",
+  "/api/forgot-password",
+  "/api/request-reset",
+];
+
+function isPublic(path: string) {
+  return PUBLIC_API_ROUTES.some((r) => path.startsWith(r));
 }
 
 export async function middleware(req: NextRequest) {
-  // Apply only to API routes
-  if (!req.nextUrl.pathname.startsWith("/api")) {
-    return NextResponse.next();
-  }
+  const path = req.nextUrl.pathname;
 
-  const pathname = req.nextUrl.pathname;
+  // ✅ Only protect API routes
+  if (!path.startsWith("/api")) return NextResponse.next();
 
-  // ✅ Check authentication for protected routes
-  if (!isPublicRoute(pathname)) {
-    const token = await getToken({
-      req,
-      secret: process.env.NEXTAUTH_SECRET,
-    });
-
+  // ✅ Auth check for protected routes
+  if (!isPublic(path)) {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
     if (!token) {
-      return new NextResponse(
-        JSON.stringify({
-          error: "Authentication required",
-          message: "You must be logged in to access this resource",
-        }),
-        {
-          status: 401,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+      return NextResponse.json(
+        { error: "Login required" },
+        { status: 401 }
       );
     }
   }
 
-  // ✅ Safe IP extraction (TypeScript compatible)
   const ip =
     req.headers.get("x-real-ip") ||
     req.headers.get("x-forwarded-for")?.split(",")[0] ||
     "127.0.0.1";
 
-  // ✅ Apply rate limiting
-  const { success, limit, remaining, reset } = await ratelimit.limit(ip);
-
-  if (!success) {
-    return new NextResponse(
-      JSON.stringify({
-        error: "Too many requests. Please try again later.",
-        limit,
-        remaining,
-        reset,
-      }),
-      {
-        status: 429,
-        headers: {
-          "Content-Type": "application/json",
-          "Retry-After": Math.ceil((reset - Date.now()) / 1000).toString(),
-        },
+  // ✅ Limit AI routes separately
+  if (AI_HEAVY_ROUTES.some((r) => path.startsWith(r))) {
+    try {
+      const { success } = await aiLimiter.limit(ip);
+      if (!success) {
+        return NextResponse.json(
+          { error: "AI rate limit reached, please wait 👇", retryIn: "1 minute" },
+          { status: 429 }
+        );
       }
-    );
+    } catch {
+      console.warn("⚠️ Upstash AI limit skipped (server busy)");
+    }
   }
 
-  // ✅ Continue if within limit
+  // ✅ Global limit
+  try {
+    const { success } = await globalLimiter.limit(ip);
+    if (!success) {
+      return NextResponse.json(
+        { error: "Too many requests. Please slow down." },
+        { status: 429 }
+      );
+    }
+  } catch {
+    console.warn("⚠️ Upstash global limit skipped");
+  }
+
   return NextResponse.next();
 }
 
-// ✅ Apply to API routes only
-export const config = {
-  matcher: ["/api/:path*"],
-};
+export const config = { matcher: ["/api/:path*"] };

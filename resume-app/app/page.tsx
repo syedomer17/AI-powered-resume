@@ -11,15 +11,15 @@ export default function Home() {
         
         {/* Hero Section */}
         <section className="relative overflow-hidden">
-          {/* Gradient Orbs */}
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-3xl"></div>
-          <div className="absolute top-20 right-1/4 w-96 h-96 bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-3xl"></div>
+          {/* Gradient Orbs - Subtle and Professional */}
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-slate-500/5 dark:bg-slate-500/10 rounded-full blur-3xl"></div>
+          <div className="absolute top-20 right-1/4 w-96 h-96 bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-3xl"></div>
           
           <div className="relative z-10 py-12 sm:py-16 md:py-24 lg:py-32 px-4 sm:px-6 md:px-8 mx-auto max-w-7xl text-center">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 mb-8 bg-gradient-to-r from-blue-500/10 to-purple-500/10 dark:from-blue-500/20 dark:to-purple-500/20 border border-blue-200/50 dark:border-blue-800/50 rounded-full backdrop-blur-sm">
-              <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-              <span className="text-sm font-medium bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
+            <div className="inline-flex items-center gap-2 px-4 py-2 mb-8 bg-slate-800/90 dark:bg-slate-800/80 border border-slate-700 dark:border-slate-700 rounded-full backdrop-blur-sm shadow-lg">
+              <Sparkles className="w-4 h-4 text-slate-200 dark:text-slate-300" />
+              <span className="text-sm font-medium text-slate-200 dark:text-slate-300">
                 AI-Powered Resume Builder
               </span>
             </div>
@@ -28,7 +28,7 @@ export default function Home() {
             <h1 className="mb-6 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight">
               <span className="text-foreground">Build Your Perfect</span>
               <br />
-              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 dark:from-blue-400 dark:via-purple-400 dark:to-blue-400 bg-clip-text text-transparent animate-gradient">
+              <span className="text-slate-900 dark:text-slate-100">
                 Resume With AI
               </span>
             </h1>
@@ -40,7 +40,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
               <Link
                 href="/dashboard"
-                className="group relative inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300 active:scale-[0.98] w-full sm:w-auto"
+                className="group relative inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white bg-slate-900 dark:bg-slate-100 dark:text-slate-900 rounded-xl hover:bg-slate-800 dark:hover:bg-slate-200 shadow-lg hover:shadow-xl transition-all duration-300 active:scale-[0.98] w-full sm:w-auto"
               >
                 <Sparkles className="w-5 h-5 mr-2" />
                 Get Started Free
@@ -50,7 +50,7 @@ export default function Home() {
               </Link>
               <Link
                 href="/dashboard/ats"
-                className="inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-foreground bg-background border-2 border-border hover:border-primary/50 rounded-xl hover:bg-muted/50 transition-all duration-300 active:scale-[0.98] w-full sm:w-auto"
+                className="inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-slate-900 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700/50 shadow-md transition-all duration-300 active:scale-[0.98] w-full sm:w-auto"
               >
                 <FileText className="w-5 h-5 mr-2" />
                 Try ATS Checker
@@ -89,10 +89,10 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Feature 1 */}
             <div className="group relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
-              <div className="relative bg-card border border-border rounded-2xl p-8 hover:border-primary/50 transition-all duration-300 h-full">
-                <div className="w-14 h-14 bg-gradient-to-r from-blue-500/10 to-purple-500/10 dark:from-blue-500/20 dark:to-purple-500/20 rounded-xl flex items-center justify-center mb-6">
-                  <AtomIcon className="w-7 h-7 text-blue-600 dark:text-blue-400" />
+              <div className="absolute inset-0 bg-emerald-100/40 dark:bg-slate-800/50 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+              <div className="relative bg-white dark:bg-card border border-slate-200 dark:border-border rounded-2xl p-8 hover:border-emerald-300 dark:hover:border-slate-700 transition-all duration-300 h-full shadow-sm hover:shadow-md">
+                <div className="w-14 h-14 bg-gradient-to-br from-emerald-400 to-teal-500 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-emerald-200 dark:shadow-none">
+                  <AtomIcon className="w-7 h-7 text-white dark:text-emerald-400" />
                 </div>
                 <h3 className="text-xl font-bold text-foreground mb-3">
                   AI-Powered Generation
@@ -105,10 +105,10 @@ export default function Home() {
 
             {/* Feature 2 */}
             <div className="group relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
-              <div className="relative bg-card border border-border rounded-2xl p-8 hover:border-primary/50 transition-all duration-300 h-full">
-                <div className="w-14 h-14 bg-gradient-to-r from-purple-500/10 to-blue-500/10 dark:from-purple-500/20 dark:to-blue-500/20 rounded-xl flex items-center justify-center mb-6">
-                  <Edit className="w-7 h-7 text-purple-600 dark:text-purple-400" />
+              <div className="absolute inset-0 bg-amber-100/40 dark:bg-slate-800/50 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+              <div className="relative bg-white dark:bg-card border border-slate-200 dark:border-border rounded-2xl p-8 hover:border-amber-300 dark:hover:border-slate-700 transition-all duration-300 h-full shadow-sm hover:shadow-md">
+                <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-orange-500 dark:bg-amber-900/30 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-amber-200 dark:shadow-none">
+                  <Edit className="w-7 h-7 text-white dark:text-amber-400" />
                 </div>
                 <h3 className="text-xl font-bold text-foreground mb-3">
                   Easy Customization
@@ -121,10 +121,10 @@ export default function Home() {
 
             {/* Feature 3 */}
             <div className="group relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
-              <div className="relative bg-card border border-border rounded-2xl p-8 hover:border-primary/50 transition-all duration-300 h-full">
-                <div className="w-14 h-14 bg-gradient-to-r from-blue-500/10 to-purple-500/10 dark:from-blue-500/20 dark:to-purple-500/20 rounded-xl flex items-center justify-center mb-6">
-                  <Share2 className="w-7 h-7 text-blue-600 dark:text-blue-400" />
+              <div className="absolute inset-0 bg-sky-100/40 dark:bg-slate-800/50 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+              <div className="relative bg-white dark:bg-card border border-slate-200 dark:border-border rounded-2xl p-8 hover:border-sky-300 dark:hover:border-slate-700 transition-all duration-300 h-full shadow-sm hover:shadow-md">
+                <div className="w-14 h-14 bg-gradient-to-br from-sky-400 to-blue-500 dark:bg-sky-900/30 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-sky-200 dark:shadow-none">
+                  <Share2 className="w-7 h-7 text-white dark:text-sky-400" />
                 </div>
                 <h3 className="text-xl font-bold text-foreground mb-3">
                   Export & Share
@@ -142,7 +142,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-6">
-                Why Choose <span className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">HireAI</span>
+                Why Choose <span className="text-slate-900 dark:text-slate-100 font-extrabold">HireAI</span>
               </h2>
               <p className="text-lg text-muted-foreground mb-8">
                 Our AI-powered platform helps you create professional resumes that get noticed by recruiters and pass ATS systems.
@@ -150,8 +150,8 @@ export default function Home() {
               
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-green-500/10 dark:bg-green-500/20 rounded-lg flex items-center justify-center shrink-0">
-                    <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
+                  <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-teal-500 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center shrink-0 shadow-md shadow-emerald-200 dark:shadow-none">
+                    <CheckCircle className="w-5 h-5 text-white dark:text-emerald-400" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground mb-1">ATS-Optimized</h4>
@@ -160,8 +160,8 @@ export default function Home() {
                 </div>
                 
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-blue-500/10 dark:bg-blue-500/20 rounded-lg flex items-center justify-center shrink-0">
-                    <Zap className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  <div className="w-10 h-10 bg-gradient-to-br from-sky-400 to-blue-500 dark:bg-sky-900/30 rounded-xl flex items-center justify-center shrink-0 shadow-md shadow-sky-200 dark:shadow-none">
+                    <Zap className="w-5 h-5 text-white dark:text-sky-400" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground mb-1">Lightning Fast</h4>
@@ -170,8 +170,8 @@ export default function Home() {
                 </div>
                 
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-purple-500/10 dark:bg-purple-500/20 rounded-lg flex items-center justify-center shrink-0">
-                    <TrendingUp className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                  <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-500 dark:bg-amber-900/30 rounded-xl flex items-center justify-center shrink-0 shadow-md shadow-amber-200 dark:shadow-none">
+                    <TrendingUp className="w-5 h-5 text-white dark:text-amber-400" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground mb-1">Career Growth</h4>
@@ -182,16 +182,16 @@ export default function Home() {
             </div>
             
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur-3xl"></div>
-              <div className="relative bg-card border border-border rounded-3xl p-8 shadow-2xl">
+              <div className="absolute inset-0 bg-slate-200/50 dark:bg-slate-800/50 rounded-3xl blur-3xl"></div>
+              <div className="relative bg-white dark:bg-card border border-slate-200 dark:border-border rounded-3xl p-8 shadow-xl">
                 <div className="space-y-4">
-                  <div className="h-4 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded w-3/4"></div>
-                  <div className="h-4 bg-muted/50 rounded w-full"></div>
-                  <div className="h-4 bg-muted/50 rounded w-5/6"></div>
-                  <div className="h-20 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl mt-6"></div>
+                  <div className="h-4 bg-slate-700 dark:bg-slate-700 rounded w-3/4"></div>
+                  <div className="h-4 bg-slate-200 dark:bg-muted/50 rounded w-full"></div>
+                  <div className="h-4 bg-slate-200 dark:bg-muted/50 rounded w-5/6"></div>
+                  <div className="h-20 bg-slate-800 dark:bg-slate-800 rounded-xl mt-6"></div>
                   <div className="grid grid-cols-2 gap-4 mt-6">
-                    <div className="h-16 bg-muted/50 rounded-lg"></div>
-                    <div className="h-16 bg-muted/50 rounded-lg"></div>
+                    <div className="h-16 bg-slate-100 dark:bg-muted/50 rounded-lg"></div>
+                    <div className="h-16 bg-slate-100 dark:bg-muted/50 rounded-lg"></div>
                   </div>
                 </div>
               </div>
@@ -210,7 +210,7 @@ export default function Home() {
             </p>
             <Link
               href="/dashboard"
-              className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
+              className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-slate-900 dark:bg-slate-100 dark:text-slate-900 rounded-xl hover:bg-slate-800 dark:hover:bg-slate-200 shadow-lg hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
             >
               <Sparkles className="w-5 h-5 mr-2" />
               Get Started for Free

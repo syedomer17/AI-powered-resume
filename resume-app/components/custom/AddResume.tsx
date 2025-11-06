@@ -84,10 +84,12 @@ const AddResume = ({ userId, userEmail }: AddResumeProps) => {
       {/* Add Resume Button */}
       <div
         onClick={() => setOpenDialog(true)}
-        className="p-8 sm:p-10 md:p-14 py-16 sm:py-20 md:py-24 items-center flex flex-col justify-center bg-secondary dark:bg-secondary/50 rounded-lg h-60 sm:h-[260px] md:h-[280px] hover:scale-105 transition-all hover:shadow-md dark:hover:shadow-xl cursor-pointer border-2 border-dotted dark:border-border/60 hover:border-primary dark:hover:border-primary group"
+        className="items-center flex flex-col justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-900/50 rounded-xl shadow-md hover:shadow-xl cursor-pointer border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 group transition-all duration-300 p-6 h-[240px]"
       >
-        <PlusSquare className="w-10 h-10 sm:w-12 sm:h-12 text-muted-foreground group-hover:text-primary transition-colors" />
-        <span className="mt-3 text-sm sm:text-base font-medium text-muted-foreground group-hover:text-primary transition-colors">
+        <div className="w-16 h-16 mb-3 bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 rounded-2xl shadow-lg flex items-center justify-center group-hover:scale-110 transition-all duration-300">
+          <PlusSquare className="w-8 h-8 text-white" />
+        </div>
+        <span className="text-base font-bold text-black dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
           Add New Resume
         </span>
       </div>
@@ -158,7 +160,7 @@ const AddResume = ({ userId, userEmail }: AddResumeProps) => {
                 Cancel
               </Button>
               <Button
-                className="bg-[#9f5bff] w-full sm:w-auto"
+                className="bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-slate-200 dark:text-slate-900 w-full sm:w-auto"
                 onClick={handleCreateResume}
                 disabled={
                   loading ||

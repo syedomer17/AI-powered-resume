@@ -102,16 +102,13 @@ export default function ResumeCardItem({ resume, index }: ResumeCardItemProps) {
   };
   return (
     <>
-      <div className="relative group w-full bg-white dark:bg-card rounded-2xl shadow-lg dark:shadow-xl overflow-hidden transition-all transform hover:scale-105 hover:shadow-2xl dark:hover:shadow-2xl border border-gray-200 dark:border-border/60 hover:border-[#9f5bff] dark:hover:border-primary">
-        {/* Gradient Top Banner */}
-        <div className="bg-gradient-to-r from-fuchsia-400 via-purple-400 to-blue-400 dark:from-primary/80 dark:via-purple-500 dark:to-blue-500 h-20 sm:h-24 w-full"></div>
-
+      <div className="relative group w-full bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-800 rounded-xl shadow-md hover:shadow-xl overflow-hidden transition-all duration-300 border border-slate-200/50 dark:border-slate-700/50 hover:border-blue-400/50 dark:hover:border-blue-500/50">
         {/* Dropdown Trigger (Top-right) */}
-        <div className="absolute top-2 sm:top-3 right-2 sm:right-3 z-10">
+        <div className="absolute top-3 right-3 z-10">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="p-1.5 sm:p-2 rounded-full hover:bg-gray-100 dark:hover:bg-accent transition backdrop-blur-sm bg-white/80 dark:bg-card/80">
-                <MoreVertical className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 dark:text-foreground hover:text-[#9f5bff] dark:hover:text-primary" />
+              <button className="p-2 rounded-lg hover:bg-white/80 dark:hover:bg-slate-700/80 transition backdrop-blur-sm bg-white/60 dark:bg-slate-800/60 shadow-sm">
+                <MoreVertical className="h-4 w-4 text-slate-700 dark:text-slate-300" />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-40">
@@ -144,16 +141,20 @@ export default function ResumeCardItem({ resume, index }: ResumeCardItemProps) {
 
         <Link
           href={`/dashboard/resume/${userId}/${resume.id}/edit`}
-          className="block pt-12 sm:pt-16 pb-5 sm:pb-6 px-3 sm:px-4 text-center"
+          className="block h-full flex flex-col items-center justify-center p-6 text-center"
         >
-          <div className="absolute top-10 sm:top-12 left-1/2 transform -translate-x-1/2 w-20 h-20 sm:w-24 sm:h-24 bg-white dark:bg-card rounded-full shadow-md dark:shadow-lg flex items-center justify-center group-hover:scale-105 transition border-2 border-white dark:border-border/40">
-            <Image src="/cv.png" width={50} height={50} alt="Resume Icon" className="w-10 h-10 sm:w-12 sm:h-12" />
+          {/* Resume Icon */}
+          <div className="w-20 h-20 mb-4 bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 rounded-2xl shadow-lg flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+            <Image src="/cv.png" width={48} height={48} alt="Resume Icon" className="w-12 h-12 drop-shadow-lg" />
           </div>
 
-          <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-foreground group-hover:text-[#9f5bff] dark:group-hover:text-primary transition mt-4 sm:mt-6 line-clamp-2">
+          {/* Title */}
+          <h3 className="text-lg font-bold text-black dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition line-clamp-2 mb-2">
             {resume.title || "Untitled Resume"}
           </h3>
-          <p className="text-xs text-gray-500 dark:text-muted-foreground mt-1">Click to edit</p>
+          
+          {/* Subtitle */}
+          <p className="text-xs text-black dark:text-white opacity-60 dark:opacity-50">Click to edit</p>
         </Link>
       </div>
 

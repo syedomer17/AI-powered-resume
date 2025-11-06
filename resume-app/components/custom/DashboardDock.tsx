@@ -16,31 +16,31 @@ export default function DashboardDock({ userId }: DashboardDockProps) {
     {
       icon: <Home size={18} className="sm:w-5 sm:h-5" />,
       label: 'Home',
-      className: pathname === '/dashboard' ? '!border-violet-500/80 !ring-2 !ring-violet-400/50 !bg-violet-900/50' : '',
+      className: pathname === '/dashboard' ? '!border-slate-400 dark:!border-slate-600 !ring-2 !ring-slate-300/50 dark:!ring-slate-500/50 !bg-slate-100 dark:!bg-slate-800' : '',
       onClick: () => router.push('/dashboard'),
     },
     {
       icon: <BarChart2 size={18} className="sm:w-5 sm:h-5" />,
       label: 'ATS',
-      className: pathname?.startsWith('/dashboard/ats') ? '!border-violet-500/80 !ring-2 !ring-violet-400/50 !bg-violet-900/50' : '',
+      className: pathname?.startsWith('/dashboard/ats') ? '!border-slate-400 dark:!border-slate-600 !ring-2 !ring-slate-300/50 dark:!ring-slate-500/50 !bg-slate-100 dark:!bg-slate-800' : '',
       onClick: () => router.push('/dashboard/ats'),
     },
     {
       icon: <Search size={18} className="sm:w-5 sm:h-5" />,
       label: 'Jobs',
-      className: pathname?.startsWith('/dashboard/jobs') ? '!border-violet-500/80 !ring-2 !ring-violet-400/50 !bg-violet-900/50' : '',
+      className: pathname?.startsWith('/dashboard/jobs') ? '!border-slate-400 dark:!border-slate-600 !ring-2 !ring-slate-300/50 dark:!ring-slate-500/50 !bg-slate-100 dark:!bg-slate-800' : '',
       onClick: () => router.push(userId ? `/dashboard/jobs/${userId}` : '/dashboard/jobs'),
     },
     {
       icon: <Mail size={18} className="sm:w-5 sm:h-5" />,
       label: 'HR',
-      className: pathname?.startsWith('/dashboard/hr-contacts') ? '!border-violet-500/80 !ring-2 !ring-violet-400/50 !bg-violet-900/50' : '',
+      className: pathname?.startsWith('/dashboard/hr-contacts') ? '!border-slate-400 dark:!border-slate-600 !ring-2 !ring-slate-300/50 dark:!ring-slate-500/50 !bg-slate-100 dark:!bg-slate-800' : '',
       onClick: () => router.push(userId ? `/dashboard/hr-contacts/${userId}` : '/dashboard/hr-contacts'),
     },
     {
       icon: <Settings size={18} className="sm:w-5 sm:h-5" />,
       label: 'Settings',
-      className: pathname?.startsWith('/dashboard/settings') ? '!border-violet-500/80 !ring-2 !ring-violet-400/50 !bg-violet-900/50' : '',
+      className: pathname?.startsWith('/dashboard/settings') ? '!border-slate-400 dark:!border-slate-600 !ring-2 !ring-slate-300/50 dark:!ring-slate-500/50 !bg-slate-100 dark:!bg-slate-800' : '',
       onClick: () => router.push('/dashboard/settings'),
     },
   ];

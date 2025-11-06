@@ -408,6 +408,12 @@ body {
   height: 10px;
 }
 
+/* Dashboard heading visibility fixes (light vs dark) */
+html:not(.dark) .dashboard-title { color: #000 !important; }
+html:not(.dark) .dashboard-subtitle { color: #374151 !important; }
+html.dark .dashboard-title { color: #ffffff !important; }
+html.dark .dashboard-subtitle { color: #d1d5db !important; }
+
 ::-webkit-scrollbar-track {
   background: hsl(var(--muted) / 0.3);
   border-radius: 5px;

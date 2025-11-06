@@ -34,13 +34,13 @@ export default async function DashboardPage() {
   return (
     <>
       <Header />
-  <section className="px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-32 py-6 sm:py-8 md:py-10 bg-background min-h-screen relative pb-24 md:pb-28">
+  <section className="px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-32 py-6 sm:py-8 md:py-10 bg-white dark:bg-background min-h-screen relative pb-24 md:pb-28">
         <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="w-full sm:w-auto">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground dark:bg-gradient-to-r dark:from-primary dark:to-primary/70 dark:bg-clip-text dark:text-transparent leading-tight">
+            <h1 className="dashboard-title text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
               Welcome Back!
             </h1>
-            <p className="text-sm sm:text-base text-muted-foreground dark:text-muted-foreground/90 mt-1.5 sm:mt-2">
+            <p className="dashboard-subtitle text-sm sm:text-base mt-1.5 sm:mt-2">
               Start creating AI-powered resumes to land your next job.
             </p>
           </div>
