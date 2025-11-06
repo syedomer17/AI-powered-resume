@@ -19,7 +19,7 @@ export default function Home() {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 mb-8 bg-slate-800/90 dark:bg-slate-800/80 border border-slate-700 dark:border-slate-700 rounded-full backdrop-blur-sm shadow-lg">
               <Sparkles className="w-4 h-4 text-slate-200 dark:text-slate-300" />
-              <span className="text-sm font-medium text-slate-200 dark:text-slate-300">
+              <span className="text-sm font-medium text-slate-200 dark:text-slate-300 text-white">
                 AI-Powered Resume Builder
               </span>
             </div>
@@ -40,7 +40,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
               <Link
                 href="/dashboard"
-                className="group relative inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white bg-slate-900 dark:bg-slate-100 dark:text-slate-900 rounded-xl hover:bg-slate-800 dark:hover:bg-slate-200 shadow-lg hover:shadow-xl transition-all duration-300 active:scale-[0.98] w-full sm:w-auto"
+                className="btn-primary-dark-sm"
               >
                 <Sparkles className="w-5 h-5 mr-2" />
                 Get Started Free
@@ -210,7 +210,7 @@ export default function Home() {
             </p>
             <Link
               href="/dashboard"
-              className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-slate-900 dark:bg-slate-100 dark:text-slate-900 rounded-xl hover:bg-slate-800 dark:hover:bg-slate-200 shadow-lg hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
+              className="btn-primary-dark-sm"
             >
               <Sparkles className="w-5 h-5 mr-2" />
               Get Started for Free

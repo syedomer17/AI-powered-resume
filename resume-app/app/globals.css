@@ -440,6 +440,51 @@ html:not(.dark) span.text-white {
   color: #ffffff !important;
 }
 
+/* Homepage button fixes for Get Started buttons */
+/* html:not(.dark) a[href="/dashboard"] {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+html.dark a[href="/dashboard"] {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+html:not(.dark) a[href="/dashboard"] * {
+  color: #ffffff !important;
+}
+html.dark a[href="/dashboard"] * {
+  color: #000000 !important;
+} */
+
+@layer utilities {
+  .btn-primary-dark {
+    @apply inline-flex items-center justify-center
+           font-semibold rounded-xl
+           px-8 py-4
+           bg-black text-white
+           dark:bg-white dark:text-black
+           hover:bg-gray-800 dark:hover:bg-gray-100
+           shadow-lg hover:shadow-xl
+           transition-all duration-300 active:scale-[0.98];
+  }
+}
+
+@layer utilities {
+  .btn-primary-dark-sm {
+    @apply inline-flex items-center justify-center
+           font-semibold rounded-xl
+           px-6 py-3 text-base
+           bg-black text-white
+           dark:bg-white dark:text-black
+           hover:bg-gray-800 dark:hover:bg-gray-200
+           shadow-md hover:shadow-lg
+           transition-all duration-300 active:scale-[0.98];
+  }
+}
+
+
+
+
 /* Header title text fixes - ensure visibility */
 html:not(.dark) header .text-black { color: #000000 !important; }
 html.dark header .dark\\:text-white { color: #ffffff !important; }
