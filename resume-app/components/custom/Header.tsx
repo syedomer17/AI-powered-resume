@@ -24,10 +24,10 @@ export default function Header() {
           <div className="relative">
             <div className="absolute inset-0 bg-slate-200 dark:bg-slate-700 rounded-lg blur-md opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
             <div className="relative px-3 py-1.5 bg-slate-800 dark:bg-slate-800 rounded-lg border border-slate-700 dark:border-slate-700">
-              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white dark:text-slate-300" />
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </div>
           </div>
-          <div className="text-lg sm:text-xl font-extrabold text-[#0f172a] dark:text-[#f1f5f9]" style={{ color: 'inherit' }}>
+          <div className="text-lg sm:text-xl font-extrabold text-black dark:text-white">
             <TextType
               text={["AI Resume", "CV Maker", "HireAI"]}
               typingSpeed={45}
@@ -53,7 +53,7 @@ export default function Header() {
               <Button
                 variant="outline"
                 size="sm"
-                className="text-xs sm:text-sm px-3 sm:px-5 h-9 sm:h-10 border-slate-200 dark:border-slate-700 hover:bg-slate-50  hover:border-slate-300  transition-all duration-300 font-semibold"
+                className="text-xs sm:text-sm px-3 sm:px-5 h-9 sm:h-10 border-slate-200 dark:border-slate-700 hover:bg-slate-50  hover:border-slate-300  transition-all duration-300 font-semibold text-black dark:text-white"
               >
                 <span className="hidden xs:inline">Home</span>
                 <span className="xs:hidden">Home</span>
@@ -64,7 +64,7 @@ export default function Header() {
               <Button
                 variant="outline"
                 size="sm"
-                className="text-xs sm:text-sm px-3 sm:px-5 h-9 sm:h-10 border-slate-200 dark:border-slate-700 hover:bg-slate-50  hover:border-slate-300  transition-all duration-300 font-semibold"
+                className="text-xs sm:text-sm px-3 sm:px-5 h-9 sm:h-10 border-slate-200 dark:border-slate-700 hover:bg-slate-50  hover:border-slate-300  transition-all duration-300 font-semibold text-black dark:text-white"
               >
                 <span className="hidden xs:inline">Dashboard</span>
                 <span className="xs:hidden">Dashboard</span>

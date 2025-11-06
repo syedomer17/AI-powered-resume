@@ -79,13 +79,13 @@ export default function ATSCheckerPage() {
         <div className="mx-auto max-w-6xl">
           {/* Header Section */}
           <div className="mb-6 sm:mb-8">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground dark:bg-gradient-to-r dark:from-primary dark:to-primary/70 dark:bg-clip-text dark:text-transparent flex items-center gap-3">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black dark:text-white flex items-center gap-3">
               <svg className="w-8 h-8 sm:w-10 sm:h-10 text-primary dark:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
               ATS Resume Checker
             </h1>
-            <p className="text-sm sm:text-base text-muted-foreground dark:text-muted-foreground/90 mt-1.5 sm:mt-2">
+            <p className="text-sm sm:text-base text-slate-700 dark:text-slate-300 mt-1.5 sm:mt-2">
               Analyze your resume against job descriptions to optimize for Applicant Tracking Systems
             </p>
           </div>
@@ -99,8 +99,8 @@ export default function ATSCheckerPage() {
                 </svg>
               </div>
               <div>
-                <h2 className="text-lg sm:text-xl font-semibold text-foreground mb-1">Upload & Analyze</h2>
-                <p className="text-sm text-muted-foreground dark:text-muted-foreground/80">
+                <h2 className="text-lg sm:text-xl font-semibold text-black dark:text-white mb-1">Upload & Analyze</h2>
+                <p className="text-sm text-slate-700 dark:text-slate-300">
                   Upload your resume and provide the job description to get detailed insights
                 </p>
               </div>
@@ -109,27 +109,42 @@ export default function ATSCheckerPage() {
             <div className="grid gap-6">
               {/* File Upload */}
               <div className="grid gap-3">
-                <label className="text-sm font-semibold text-foreground dark:text-foreground/90 flex items-center gap-2">
+                <label className="text-sm font-semibold text-black dark:text-white flex items-center gap-2">
                   <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                   </svg>
                   Upload Resume (PDF)
                 </label>
                 <div className="relative">
-                  <Input 
-                    type="file" 
-                    accept="application/pdf" 
+                  <input
+                    type="file"
+                    accept="application/pdf"
                     onChange={onFileChange}
-                    className="cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 file:cursor-pointer"
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                    id="resume-upload"
                   />
+                  <label
+                    htmlFor="resume-upload"
+                    className="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-md cursor-pointer"
+                    style={{ 
+                      backgroundColor: '#000000', 
+                      color: '#ffffff',
+                      border: 'none'
+                    }}
+                  >
+                    Choose File
+                  </label>
+                  <span className="ml-3 text-sm text-slate-700 dark:text-slate-300">
+                    {file ? file.name : "No file chosen"}
+                  </span>
                 </div>
                 {file && (
                   <div className="flex items-center gap-2 p-3 bg-muted/50 dark:bg-muted/30 rounded-lg border border-border/50">
                     <svg className="w-5 h-5 text-green-600 dark:text-green-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <p className="text-sm font-medium text-foreground truncate">{file.name}</p>
-                    <span className="text-xs text-muted-foreground ml-auto shrink-0">
+                    <p className="text-sm font-medium text-black dark:text-white truncate">{file.name}</p>
+                    <span className="text-xs text-slate-600 dark:text-slate-400 ml-auto shrink-0">
                       {(file.size / 1024).toFixed(1)} KB
                     </span>
                   </div>
@@ -138,7 +153,7 @@ export default function ATSCheckerPage() {
 
               {/* Job Description */}
               <div className="grid gap-3">
-                <label className="text-sm font-semibold text-foreground dark:text-foreground/90 flex items-center gap-2">
+                <label className="text-sm font-semibold text-black dark:text-white flex items-center gap-2">
                   <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
@@ -151,7 +166,7 @@ export default function ATSCheckerPage() {
                   onChange={(e) => setJobDescription(e.target.value)}
                   className="resize-none font-mono text-sm"
                 />
-                <p className="text-xs text-muted-foreground dark:text-muted-foreground/70">
+                <p className="text-sm text-slate-700 dark:text-slate-300">
                   Provide a detailed job description for accurate ATS analysis
                 </p>
               </div>
@@ -162,7 +177,12 @@ export default function ATSCheckerPage() {
                   disabled={loading} 
                   onClick={handleAnalyze}
                   size="lg"
-                  className="bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/80 shadow-md dark:shadow-primary/30 w-full sm:w-auto min-w-[180px]"
+                  className="shadow-md w-full sm:w-auto min-w-[180px]"
+                  style={{ 
+                    backgroundColor: '#000000', 
+                    color: '#ffffff',
+                    border: 'none'
+                  }}
                 >
                   {loading ? (
                     <>
@@ -186,7 +206,7 @@ export default function ATSCheckerPage() {
                     <svg className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span className="text-sm font-medium text-red-800 dark:text-red-200">{error}</span>
+                    <span className="text-sm font-medium text-red-800 dark:text-red-300">{error}</span>
                   </div>
                 )}
               </div>

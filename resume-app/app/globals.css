@@ -414,6 +414,202 @@ html:not(.dark) .dashboard-subtitle { color: #374151 !important; }
 html.dark .dashboard-title { color: #ffffff !important; }
 html.dark .dashboard-subtitle { color: #d1d5db !important; }
 
+/* General text color fixes for consistent visibility */
+html:not(.dark) h1, html:not(.dark) h2, html:not(.dark) h3 { color: #000; }
+html:not(.dark) p, html:not(.dark) span, html:not(.dark) label { color: #374151; }
+html.dark h1, html.dark h2, html.dark h3 { color: #ffffff; }
+html.dark p, html.dark span, html.dark label { color: #d1d5db; }
+
+/* Force white text for resume cards and add resume button in both modes */
+.text-white,
+html:not(.dark) .text-white,
+html.dark .text-white {
+  color: #ffffff !important;
+}
+
+/* Resume card specific text overrides */
+html:not(.dark) [class*="ResumeCardItem"] h3,
+html:not(.dark) [class*="ResumeCardItem"] p,
+html:not(.dark) [class*="resume-card"] h3,
+html:not(.dark) [class*="resume-card"] p {
+  color: #ffffff !important;
+}
+
+/* AddResume component text override */
+html:not(.dark) span.text-white {
+  color: #ffffff !important;
+}
+
+/* Header title text fixes - ensure visibility */
+html:not(.dark) header .text-black { color: #000000 !important; }
+html.dark header .dark\\:text-white { color: #ffffff !important; }
+html:not(.dark) header div[class*="text-black"] { color: #000000 !important; }
+html.dark header div[class*="dark:text-white"] { color: #ffffff !important; }
+
+/* Fix for header brand text specifically */
+html:not(.dark) header .font-extrabold { color: #000000 !important; }
+html.dark header .font-extrabold { color: #ffffff !important; }
+
+/* Button text color fixes */
+html:not(.dark) button { color: #ffffff; }
+html.dark button { color: #000000; }
+html:not(.dark) .btn { color: #ffffff; }
+html.dark .btn { color: #000000; }
+
+/* Button background fixes - inverse color scheme */
+html:not(.dark) button[class*="bg-primary"], 
+html:not(.dark) .btn[class*="bg-primary"] { 
+  background-color: #000000 !important; 
+  color: #ffffff !important; 
+}
+html:not(.dark) button[class*="bg-primary"]:hover, 
+html:not(.dark) .btn[class*="bg-primary"]:hover { 
+  background-color: #374151 !important; 
+}
+html.dark button[class*="bg-primary"], 
+html.dark .btn[class*="bg-primary"] { 
+  background-color: #ffffff !important; 
+  color: #000000 !important; 
+}
+html.dark button[class*="bg-primary"]:hover, 
+html.dark .btn[class*="bg-primary"]:hover { 
+  background-color: #f3f4f6 !important; 
+}
+
+/* Theme toggle icon fixes */
+html:not(.dark) [data-lucide="sun"] { color: #000000 !important; }
+html:not(.dark) [data-lucide="moon"] { color: #000000 !important; }
+html.dark [data-lucide="sun"] { color: #ffffff !important; }
+html.dark [data-lucide="moon"] { color: #ffffff !important; }
+
+/* Theme toggle button background fixes */
+html:not(.dark) button[aria-label="Toggle theme"] { 
+  background-color: #ffffff !important; 
+  border-color: #e2e8f0 !important;
+}
+html.dark button[aria-label="Toggle theme"] { 
+  background-color: #000000 !important; 
+  border-color: #000000 !important;
+}
+
+/* Additional theme toggle specificity */
+.dark button[aria-label="Toggle theme"] { 
+  background-color: #000000 !important; 
+  border: 1px solid #000000 !important;
+}
+.dark button[aria-label="Toggle theme"] svg { 
+  color: #ffffff !important; 
+}
+
+/* Even more specific theme toggle overrides */
+html.dark header button[aria-label="Toggle theme"],
+html.dark nav button[aria-label="Toggle theme"],
+html.dark div button[aria-label="Toggle theme"] { 
+  background-color: #000000 !important; 
+  border-color: #000000 !important;
+  background: #000000 !important;
+}
+
+html.dark button[aria-label="Toggle theme"] * {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Disable all hover effects on theme toggle */
+button[aria-label="Toggle theme"],
+button[aria-label="Toggle theme"]:hover,
+button[aria-label="Toggle theme"]:focus,
+button[aria-label="Toggle theme"]:active,
+.no-hover,
+.no-hover:hover,
+.no-hover:focus,
+.no-hover:active {
+  background-color: inherit !important;
+  background: inherit !important;
+  border-color: inherit !important;
+  transform: none !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+  transition: none !important;
+}
+
+/* ULTIMATE theme toggle override - NO HOVER EFFECTS EVER */
+button[aria-label="Toggle theme"] {
+  background-color: white !important;
+  border-color: #e2e8f0 !important;
+}
+.dark button[aria-label="Toggle theme"] {
+  background-color: black !important;
+  border-color: #374151 !important;
+}
+button[aria-label="Toggle theme"]:hover,
+button[aria-label="Toggle theme"]:focus,
+button[aria-label="Toggle theme"]:active,
+button[aria-label="Toggle theme"]:visited {
+  background-color: white !important;
+  border-color: #e2e8f0 !important;
+}
+.dark button[aria-label="Toggle theme"]:hover,
+.dark button[aria-label="Toggle theme"]:focus,
+.dark button[aria-label="Toggle theme"]:active,
+.dark button[aria-label="Toggle theme"]:visited {
+  background-color: black !important;
+  border-color: #374151 !important;
+}
+
+/* Completely disable any hover state changes for theme toggle */
+html:not(.dark) button[aria-label="Toggle theme"],
+html:not(.dark) button[aria-label="Toggle theme"]:hover,
+html:not(.dark) button[aria-label="Toggle theme"]:focus,
+html:not(.dark) button[aria-label="Toggle theme"]:active {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  background: #ffffff !important;
+}
+
+html.dark button[aria-label="Toggle theme"],
+html.dark button[aria-label="Toggle theme"]:hover,
+html.dark button[aria-label="Toggle theme"]:focus,
+html.dark button[aria-label="Toggle theme"]:active {
+  background-color: #000000 !important;
+  border-color: #000000 !important;
+  background: #000000 !important;
+}
+
+/* ATS page button fixes - ensure correct colors */
+html:not(.dark) .bg-black { background-color: #000000 !important; color: #ffffff !important; }
+html:not(.dark) .hover\\:bg-gray-800:hover { background-color: #374151 !important; }
+html.dark .dark\\:bg-white { background-color: #ffffff !important; color: #000000 !important; }
+html.dark .dark\\:hover\\:bg-gray-100:hover { background-color: #f3f4f6 !important; }
+
+/* Custom file upload button dark mode styles */
+html.dark label[for="resume-upload"] { 
+  background-color: #ffffff !important; 
+  color: #000000 !important; 
+}
+html.dark label[for="resume-upload"]:hover { 
+  background-color: #f3f4f6 !important; 
+}
+
+/* Settings page button dark mode styles */
+html.dark form button[type="submit"] { 
+  background-color: #ffffff !important; 
+  color: #000000 !important; 
+}
+html.dark form button[type="submit"]:hover { 
+  background-color: #f3f4f6 !important; 
+}
+
+/* Avatar uploader button dark mode styles */
+html.dark button[type="button"]:not([aria-label="Toggle theme"]) { 
+  background-color: #ffffff !important; 
+  color: #000000 !important; 
+  border-color: #ffffff !important;
+}
+html.dark button[type="button"]:not([aria-label="Toggle theme"]):hover { 
+  background-color: #f3f4f6 !important; 
+}
+
 ::-webkit-scrollbar-track {
   background: hsl(var(--muted) / 0.3);
   border-radius: 5px;

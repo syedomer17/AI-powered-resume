@@ -205,14 +205,19 @@ export default function SettingsForm({ initialUser }: SettingsFormProps) {
 
           {/* Action Buttons */}
           <div className="flex flex-col-reverse sm:flex-row justify-between items-center gap-3 pt-4 border-t border-border dark:border-border/60">
-            <p className="text-xs text-muted-foreground dark:text-muted-foreground/70">
+            <p className="text-xs text-slate-700 dark:text-slate-300">
               Last updated: {new Date().toLocaleDateString()}
             </p>
             <Button 
               type="submit" 
               disabled={loading} 
-              className="bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/80 shadow-md dark:shadow-primary/30 w-full sm:w-auto min-w-[140px]"
+              className="shadow-md w-full sm:w-auto min-w-[140px]"
               size="lg"
+              style={{ 
+                backgroundColor: '#000000', 
+                color: '#ffffff',
+                border: 'none'
+              }}
             >
               {loading ? (
                 <>

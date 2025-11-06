@@ -23,10 +23,10 @@ export default async function SettingsPage() {
         <div className="max-w-4xl mx-auto">
           {/* Header Section */}
           <div className="mb-6 sm:mb-8">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground dark:bg-gradient-to-r dark:from-primary dark:to-primary/70 dark:bg-clip-text dark:text-transparent">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black dark:text-white">
               Account Settings
             </h1>
-            <p className="text-sm sm:text-base text-muted-foreground dark:text-muted-foreground/90 mt-1.5 sm:mt-2">
+            <p className="text-sm sm:text-base text-slate-700 dark:text-slate-300 mt-1.5 sm:mt-2">
               Manage your account settings and preferences
             </p>
           </div>

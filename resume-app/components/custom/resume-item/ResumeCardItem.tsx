@@ -149,12 +149,12 @@ export default function ResumeCardItem({ resume, index }: ResumeCardItemProps) {
           </div>
 
           {/* Title */}
-          <h3 className="text-lg font-bold text-black dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition line-clamp-2 mb-2">
+          <h3 className="text-lg font-bold text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition line-clamp-2 mb-2">
             {resume.title || "Untitled Resume"}
           </h3>
           
           {/* Subtitle */}
-          <p className="text-xs text-black dark:text-white opacity-60 dark:opacity-50">Click to edit</p>
+          <p className="text-xs text-white opacity-60">Click to edit</p>
         </Link>
       </div>
 

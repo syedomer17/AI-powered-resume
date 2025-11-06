@@ -89,7 +89,7 @@ const AddResume = ({ userId, userEmail }: AddResumeProps) => {
         <div className="w-16 h-16 mb-3 bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 rounded-2xl shadow-lg flex items-center justify-center group-hover:scale-110 transition-all duration-300">
           <PlusSquare className="w-8 h-8 text-white" />
         </div>
-        <span className="text-base font-bold text-black dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+        <span className="text-base font-bold text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
           Add New Resume
         </span>
       </div>

@@ -69,7 +69,12 @@ export default function AvatarUploader({ value, onUploaded }: AvatarUploaderProp
         disabled={loading} 
         variant="outline"
         size="sm"
-        className="w-full sm:w-auto"
+        className="w-full sm:w-auto border-slate-200 dark:border-slate-700"
+        style={{ 
+          backgroundColor: '#000000', 
+          color: '#ffffff',
+          border: '1px solid #000000'
+        }}
       >
         {loading ? (
           <>
@@ -89,7 +94,7 @@ export default function AvatarUploader({ value, onUploaded }: AvatarUploaderProp
         )}
       </Button>
       <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleChange} />
-      <p className="text-xs text-muted-foreground dark:text-muted-foreground/70">
+      <p className="text-xs text-slate-700 dark:text-slate-300">
         PNG, JPG or WEBP (max. 3MB)
       </p>
     </div>
