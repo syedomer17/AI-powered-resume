@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import { useApi } from "@/hooks/useApi";
 
 type AvatarUploaderProps = {
   value?: string;
@@ -11,7 +11,7 @@ type AvatarUploaderProps = {
 
 export default function AvatarUploader({ value, onUploaded }: AvatarUploaderProps) {
   const fileRef = useRef<HTMLInputElement | null>(null);
-  const { callApi } = useApiWithRateLimit();
+  const { callApi, loading: apiLoading } = useApi();
   const [preview, setPreview] = useState<string | undefined>(value);
   const [loading, setLoading] = useState(false);
 

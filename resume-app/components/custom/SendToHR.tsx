@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Loader2, Mail, Send, CheckCircle2, XCircle, AlertCircle } from "lucide-react";
-import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import { useApi } from "@/hooks/useApi";
 import { toast } from "sonner";
 
 interface SendToHRProps {
@@ -17,7 +17,7 @@ interface SendToHRProps {
 }
 
 const SendToHR = ({ resumeId, resumePdfUrl, onClose }: SendToHRProps) => {
-  const { callApi } = useApiWithRateLimit();
+  const { callApi, loading: apiLoading } = useApi();
   const [jobTitle, setJobTitle] = useState("Software Developer");
   const [hrCount, setHRCount] = useState(50);
   const [totalHRs, setTotalHRs] = useState(100);

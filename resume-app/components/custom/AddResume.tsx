@@ -15,7 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import { useApi } from "@/hooks/useApi";
 
 interface AddResumeProps {
   userId: string;
@@ -31,7 +31,7 @@ const AddResume = ({ userId, userEmail }: AddResumeProps) => {
 
   const { data: session } = useSession();
   const router = useRouter();
-  const { callApi, isCoolingDown } = useApiWithRateLimit();
+  const { callApi, loading: apiLoading } = useApi();
 
   const handleCreateResume = async () => {
     const finalTitle =

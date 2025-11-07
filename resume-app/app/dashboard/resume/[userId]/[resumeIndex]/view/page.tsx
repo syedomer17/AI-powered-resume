@@ -6,7 +6,7 @@ import ResumePriview from "@/components/custom/ResumePriview";
 import { Button } from "@/components/ui/button";
 import { RWebShare } from "react-web-share";
 import { useEffect, useState } from "react";
-import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import { useApi } from "@/hooks/useApi";
 // Client-side PDF generation libs were causing visual mismatches.
 // We'll prefer the server-rendered PDF via headless Chromium instead.
 import { motion, AnimatePresence } from "framer-motion";
@@ -18,7 +18,7 @@ export default function ViewPage() {
   const params = useParams();
   const userId = params.userId;
   const resumeId = params.resumeIndex; // <- This is your _id
-  const { callApi } = useApiWithRateLimit();
+  const { callApi, loading: apiLoading } = useApi();
 
   const [resumeInfo, setResumeInfo] = useState<ResumeInfoType | null>(null);
   const [loading, setLoading] = useState(true);

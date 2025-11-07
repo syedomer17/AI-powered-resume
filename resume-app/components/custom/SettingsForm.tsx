@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import AvatarUploader from "./AvatarUploader";
-import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import { useApi } from "@/hooks/useApi";
 import { useSession } from "next-auth/react";
 
 type SettingsFormProps = {
@@ -19,7 +19,7 @@ type SettingsFormProps = {
 };
 
 export default function SettingsForm({ initialUser }: SettingsFormProps) {
-  const { callApi } = useApiWithRateLimit();
+  const { callApi, loading: apiLoading } = useApi();
   const { data: session, update } = useSession();
   const [userName, setUserName] = useState(initialUser.userName || "");
   const [avatar, setAvatar] = useState(initialUser.avatar || "");

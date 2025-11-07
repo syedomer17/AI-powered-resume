@@ -6,7 +6,7 @@ import { Loader2, Plus, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useResumeInfo } from "@/context/ResumeInfoConext";
-import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import { useApi } from "@/hooks/useApi";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -34,7 +34,7 @@ const Education: React.FC<EducationProps> = ({
   resumeId,
 }) => {
   const { resumeInfo, setResumeInfo } = useResumeInfo();
-  const { callApi } = useApiWithRateLimit();
+  const { callApi, loading: apiLoading } = useApi();
 
   const [educationalList, setEducationalList] = useState<EducationType[]>([
     {

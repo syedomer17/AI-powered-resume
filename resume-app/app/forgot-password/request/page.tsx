@@ -4,12 +4,12 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import gsap from "gsap";
-import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import { useApi } from "@/hooks/useApi";
 
 export default function RequestOtpPage() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const { callApi } = useApiWithRateLimit();
+  const { callApi, loading: apiLoading } = useApi();
   const router = useRouter();
 
   useEffect(() => {

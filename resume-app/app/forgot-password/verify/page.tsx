@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import gsap from "gsap";
-import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import { useApi } from "@/hooks/useApi";
 
 function VerifyOtpForm() {
   const [otp, setOtp] = useState(Array(6).fill(""));
@@ -12,7 +12,7 @@ function VerifyOtpForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const email = searchParams.get("email");
-  const { callApi } = useApiWithRateLimit();
+  const { callApi, loading: apiLoading } = useApi();
 
   const [loading, setLoading] = useState(false);
   const [countdown, setCountdown] = useState(60);

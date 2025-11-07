@@ -2,7 +2,7 @@
 
 import { ResumeInfoProvider, ResumeInfoType } from "@/context/ResumeInfoConext";
 import { useEffect, useState } from "react";
-import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import { useApi } from "@/hooks/useApi";
 import FormSection from "./FormSection";
 import ResumePriview from "./ResumePriview";
 import { Loader2 } from "lucide-react";
@@ -18,7 +18,7 @@ export default function ClientResumeWrapper({
   resumeId,
   resumeIndex, // ✅ include this
 }: ClientResumeWrapperProps) {
-  const { callApi } = useApiWithRateLimit();
+  const { callApi, loading: apiLoading } = useApi();
   const [resumeData, setResumeData] = useState<ResumeInfoType | null>(null);
   const [loading, setLoading] = useState(true);
 

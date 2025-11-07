@@ -18,7 +18,7 @@ export default function Header() {
     <header className="relative p-3 sm:p-4 px-4 sm:px-8 flex justify-between items-center bg-background/95 backdrop-blur-xl supports-backdrop-filter:bg-background/90 border-b border-border sticky top-0 z-50 shadow-sm">
       {/* Subtle accent line */}
       <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-slate-300 dark:via-slate-700 to-transparent"></div>
-      
+
       <Link href="/">
         <div className="group flex items-center gap-2 transition-all duration-300 hover:scale-105">
           <div className="relative">
@@ -42,7 +42,11 @@ export default function Header() {
 
       {status === "loading" ? (
         <div className="animate-pulse">
-          <Button disabled size="sm" className="sm:h-10 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-purple-300/30">
+          <Button
+            disabled
+            size="sm"
+            className="sm:h-10 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-purple-300/30"
+          >
             <Loader2 className="animate-spin h-4 w-4" />
           </Button>
         </div>
@@ -78,10 +82,10 @@ export default function Header() {
         <div className="flex items-center gap-2 sm:gap-3">
           <ThemeToggle />
           <Button
-            className="relative overflow-hidden bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-slate-200 text-white dark:text-slate-900 shadow-lg text-xs sm:text-sm px-4 sm:px-6 h-9 sm:h-10 font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105"
             onClick={() => signIn()}
+            className="btn-start-invert shadow-lg text-xs sm:text-sm px-4 sm:px-6 h-9 sm:h-10 font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 flex items-center gap-1"
           >
-            <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
+            <Sparkles className="w-4 h-4" />
             <span className="hidden xs:inline">Get Started</span>
             <span className="xs:hidden">Start</span>
           </Button>

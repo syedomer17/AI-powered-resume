@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import Header from "@/components/custom/Header";
-import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import { useApi } from "@/hooks/useApi";
 
 type ATSScoreResponse = {
   score: number;
@@ -24,7 +24,7 @@ export default function ATSCheckerPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<ATSScoreResponse | null>(null);
-  const { callApi } = useApiWithRateLimit();
+  const { callApi, loading: apiLoading } = useApi();
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0] || null;
@@ -375,8 +375,13 @@ export default function ATSCheckerPage() {
                         {s.category}
                       </span>
                       <Badge
-                        variant={s.priority === "high" ? "destructive" : s.priority === "medium" ? "secondary" : "default"}
-                        className="shrink-0"
+                        className={`shrink-0 ${
+                          s.priority === "high" 
+                            ? "bg-red-500 text-white hover:bg-red-600 dark:bg-red-500 dark:text-white dark:hover:bg-red-600" 
+                            : s.priority === "medium" 
+                            ? "bg-orange-500 text-white hover:bg-orange-600 dark:bg-orange-500 dark:text-white dark:hover:bg-orange-600" 
+                            : "bg-green-500 text-white hover:bg-green-600 dark:bg-green-500 dark:text-white dark:hover:bg-green-600"
+                        }`}
                       >
                         {s.priority}
                       </Badge>

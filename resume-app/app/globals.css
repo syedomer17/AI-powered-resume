@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 @import "tw-animate-css";
 
 /* Tailwind v4 custom-variant is used by the compiler, but VS Code may not recognize it. Safe to omit here. */
@@ -1711,4 +1712,135 @@ div[class*="dock-item-icon"] .lucide,
   stroke: #fff !important;
 }
 
+/* ATS Priority Badge Styling - Force colors for all modes */
+/* High Priority - Red background with white text */
+.bg-red-500 {
+  background-color: #ef4444 !important;
+  color: #ffffff !important;
 }
+
+html.dark .bg-red-500,
+html:not(.dark) .bg-red-500 {
+  background-color: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+.bg-red-500:hover {
+  background-color: #dc2626 !important;
+}
+
+/* Medium Priority - Orange background with white text */
+.bg-orange-500 {
+  background-color: #f97316 !important;
+  color: #ffffff !important;
+}
+
+html.dark .bg-orange-500,
+html:not(.dark) .bg-orange-500 {
+  background-color: #f97316 !important;
+  color: #ffffff !important;
+}
+
+.bg-orange-500:hover {
+  background-color: #ea580c !important;
+}
+
+/* Low Priority - Green background with white text */
+.bg-green-500 {
+  background-color: #22c55e !important;
+  color: #ffffff !important;
+}
+
+html.dark .bg-green-500,
+html:not(.dark) .bg-green-500 {
+  background-color: #22c55e !important;
+  color: #ffffff !important;
+}
+
+.bg-green-500:hover {
+  background-color: #16a34a !important;
+}
+
+}
+
+@layer utilities {
+  .btn-reanalyze {
+    @apply !bg-white !text-black !border border-gray-400 rounded-xl;
+  }
+  .btn-reanalyze:hover {
+    @apply !bg-gray-100;
+  }
+
+  .dark .btn-reanalyze {
+    @apply !bg-black !text-white !border-gray-600;
+  }
+  .dark .btn-reanalyze:hover {
+    @apply !bg-gray-900;
+  }
+
+  .btn-reanalyze svg,
+  .btn-reanalyze [data-lucide] {
+    color: inherit !important;
+    stroke: inherit !important;
+  }
+}
+
+@layer utilities {
+  .ats-label {
+    @apply !text-black;
+  }
+  .dark .ats-label {
+    @apply !text-black;
+  }
+}
+
+@layer utilities {
+  .btn-start-invert {
+    /* Light mode */
+    @apply !bg-white !text-black !border !border-gray-300 rounded-lg;
+  }
+  .btn-start-invert:hover {
+    @apply !bg-gray-100;
+  }
+
+  /* Dark mode */
+  .dark .btn-start-invert {
+    @apply !bg-black !text-white !border-gray-700;
+  }
+  .dark .btn-start-invert:hover {
+    @apply !bg-gray-900;
+  }
+
+  /* ✅ Force icon color inside button (highest priority) */
+  .btn-start-invert svg,
+  .btn-start-invert [data-lucide] {
+    color: inherit !important;
+    stroke: inherit !important;
+  }
+
+  /* ✅ Force icon stroke explicitly since your theme overrides it */
+  .btn-start-invert svg {
+    stroke-width: 2 !important;
+  }
+}
+
+@layer utilities {
+  .text-always-black {
+    color: #000 !important;
+  }
+
+  .icon-always-black svg,
+  .icon-always-black {
+    color: #000 !important;
+    stroke: #000 !important;
+    fill: #000 !important;
+  }
+
+  .btn-social {
+    @apply flex items-center justify-center w-full bg-white border border-gray-300 
+    rounded-lg shadow px-6 py-2 text-sm hover:bg-gray-100 transition text-black;
+  }
+}
+
+
+

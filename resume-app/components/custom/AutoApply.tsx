@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Loader2, Zap, CheckCircle2, XCircle, AlertCircle, ExternalLink } from "lucide-react";
-import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import { useApi } from "@/hooks/useApi";
 import { toast } from "sonner";
 
 interface Job {
@@ -30,7 +30,7 @@ interface ApplicationResult {
 }
 
 const AutoApply = ({ jobs, resumeId, onClose }: AutoApplyProps) => {
-  const { callApi } = useApiWithRateLimit();
+  const { callApi, loading: apiLoading } = useApi();
   const [applying, setApplying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [results, setResults] = useState<ApplicationResult[]>([]);

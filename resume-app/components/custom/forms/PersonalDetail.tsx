@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import React, { useEffect, useState, useRef } from "react";
 import { Loader2 } from "lucide-react";
 import { useResumeInfo } from "@/context/ResumeInfoConext";
-import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import { useApi } from "@/hooks/useApi";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import PhoneInput from "react-phone-input-2";
@@ -31,7 +31,7 @@ const PersonalDetail: React.FC<PersonalDetailProps> = ({
   resumeId,
 }) => {
   const { resumeInfo, setResumeInfo } = useResumeInfo();
-  const { callApi } = useApiWithRateLimit();
+  const { callApi, loading: apiLoading } = useApi();
   const [loading, setLoading] = useState(false);
   const initialLoadRef = useRef(true);
 

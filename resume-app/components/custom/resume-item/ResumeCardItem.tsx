@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
 import { triggerConfetti } from "@/components/firecrackers/ConfettiSideCannons";
-import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import { useApi } from "@/hooks/useApi";
 
 interface Resume {
   _id?: string;
@@ -40,7 +40,7 @@ export default function ResumeCardItem({ resume, index }: ResumeCardItemProps) {
   const { data: session } = useSession();
   const userId = session?.user?.id;
   const router = useRouter();
-  const { callApi } = useApiWithRateLimit();
+  const { callApi, loading: apiLoading } = useApi();
   const [openAlert, setOpenAlert] = useState(false);
   const [downloading, setDownloading] = useState(false);
 

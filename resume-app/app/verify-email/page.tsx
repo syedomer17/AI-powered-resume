@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import gsap from "gsap";
-import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import { useApi } from "@/hooks/useApi";
 
 function VerifyEmailForm() {
   const [otp, setOtp] = useState(Array(6).fill(""));
@@ -12,7 +12,7 @@ function VerifyEmailForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
-  const { callApi } = useApiWithRateLimit();
+  const { callApi, loading: apiLoading } = useApi();
 
   const [countdown, setCountdown] = useState(60);
   const [resending, setResending] = useState(false);
@@ -116,7 +116,7 @@ function VerifyEmailForm() {
         {/* Card */}
         <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
           <div className="max-w-md mx-auto">
-            <h1 className="text-2xl font-semibold mb-2 text-center">
+            <h1 className="text-2xl font-semibold mb-2 text-center text-always-black">
               Verify Your Email
             </h1>
             <p className="text-center text-gray-600 mb-6">

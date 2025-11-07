@@ -7,7 +7,7 @@ import { useResumeInfo } from "@/context/ResumeInfoConext";
 import { generateSummary, SummaryResponse } from "@/service/AIModel";
 import { toast } from "sonner";
 import { Loader2, Sparkles } from "lucide-react";
-import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import { useApi } from "@/hooks/useApi";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface SummeryProps {
@@ -18,7 +18,7 @@ interface SummeryProps {
 
 const Summery: React.FC<SummeryProps> = ({ enableNext, userId, resumeId }) => {
   const { resumeInfo, setResumeInfo } = useResumeInfo();
-  const { callApi } = useApiWithRateLimit();
+  const { callApi, loading: apiLoading } = useApi();
   const [summary, setSummary] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [options, setOptions] = useState<SummaryResponse | null>(null);

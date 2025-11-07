@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import RichTextEditor from "@/components/RichTextEditor";
 import { Loader2, Trash2 } from "lucide-react";
-import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import { useApi } from "@/hooks/useApi";
 import { toast } from "sonner";
 import { useResumeInfo } from "@/context/ResumeInfoConext";
 import { generateProjects } from "@/service/AIModel";
@@ -34,7 +34,7 @@ const Projects: React.FC<ProjectsProps> = ({
   resumeId,
 }) => {
   const { resumeInfo, setResumeInfo } = useResumeInfo();
-  const { callApi } = useApiWithRateLimit();
+  const { callApi, loading: apiLoading } = useApi();
 
   const [projectList, setProjectList] = useState<ProjectType[]>([
     {

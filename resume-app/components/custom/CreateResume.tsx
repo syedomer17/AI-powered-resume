@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "react-hot-toast";
-import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import { useApi } from "@/hooks/useApi";
 
 export default function CreateResume({ userId, userEmail }: { userId?: string; userEmail?: string }) {
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
-  const { callApi } = useApiWithRateLimit();
+  const { callApi, loading: apiLoading } = useApi();
   const router = useRouter();
 
   const handleCreateResume = async () => {

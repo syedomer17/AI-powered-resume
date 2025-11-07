@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { useResumeInfo } from "@/context/ResumeInfoConext";
-import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import { useApi } from "@/hooks/useApi";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import React, { useEffect, useState } from "react";
@@ -40,7 +40,7 @@ const SKILL_CATEGORIES = [
 
 const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
   const { resumeInfo, setResumeInfo } = useResumeInfo();
-  const { callApi } = useApiWithRateLimit();
+  const { callApi, loading: apiLoading } = useApi();
   const [loading, setLoading] = useState(false);
   const [customCategoryInputs, setCustomCategoryInputs] = useState<{
     [key: number]: boolean;

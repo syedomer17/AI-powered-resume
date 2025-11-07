@@ -37,7 +37,7 @@ import {
   Zap,
   CheckSquare,
 } from "lucide-react";
-import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import { useApi } from "@/hooks/useApi";
 import JobStats from "./JobStats";
 import SendToHR from "./SendToHR";
 import AutoApply from "./AutoApply";
@@ -72,7 +72,7 @@ const JobSearch = ({
   defaultQuery = "",
   resumeId,
 }: JobSearchProps) => {
-  const { callApi } = useApiWithRateLimit();
+  const { callApi, loading: apiLoading } = useApi();
   const [query, setQuery] = useState(defaultQuery);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(false);

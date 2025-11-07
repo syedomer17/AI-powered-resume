@@ -2,11 +2,23 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, TrendingUp, AlertCircle, CheckCircle2, XCircle } from "lucide-react";
-import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
+import {
+  Loader2,
+  TrendingUp,
+  AlertCircle,
+  CheckCircle2,
+  XCircle,
+} from "lucide-react";
+import { useApi } from "@/hooks/useApi";
 
 interface ATSScoreDisplayProps {
   resumeData: {
@@ -34,8 +46,12 @@ interface ATSAnalysis {
   }[];
 }
 
-const ATSScoreDisplay = ({ resumeData, userId, resumeId }: ATSScoreDisplayProps) => {
-  const { callApi } = useApiWithRateLimit();
+const ATSScoreDisplay = ({
+  resumeData,
+  userId,
+  resumeId,
+}: ATSScoreDisplayProps) => {
+  const { callApi, loading: apiLoading } = useApi();
   const [jobDescription, setJobDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const [analysis, setAnalysis] = useState<ATSAnalysis | null>(null);
@@ -107,9 +123,10 @@ const ATSScoreDisplay = ({ resumeData, userId, resumeId }: ATSScoreDisplayProps)
 
   const getPriorityBadge = (priority: "high" | "medium" | "low") => {
     const colors = {
-      high: "bg-red-100 text-red-800",
-      medium: "bg-yellow-100 text-yellow-800",
-      low: "bg-blue-100 text-blue-800",
+      high: "bg-red-500 text-white hover:bg-red-600 dark:bg-red-500 dark:text-white dark:hover:bg-red-600",
+      medium:
+        "bg-orange-500 text-white hover:bg-orange-600 dark:bg-orange-500 dark:text-white dark:hover:bg-orange-600",
+      low: "bg-green-500 text-white hover:bg-green-600 dark:bg-green-500 dark:text-white dark:hover:bg-green-600",
     };
     return colors[priority];
   };
@@ -123,7 +140,8 @@ const ATSScoreDisplay = ({ resumeData, userId, resumeId }: ATSScoreDisplayProps)
             ATS Score Analysis
           </CardTitle>
           <CardDescription>
-            Paste a job description to analyze how well your resume matches and get improvement suggestions
+            Paste a job description to analyze how well your resume matches and
+            get improvement suggestions
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -167,23 +185,44 @@ const ATSScoreDisplay = ({ resumeData, userId, resumeId }: ATSScoreDisplayProps)
               <TrendingUp className="w-5 h-5" />
               ATS Score Analysis
             </span>
-            <Button variant="outline" size="sm" onClick={() => setShowInput(true)}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowInput(true)}
+              className="btn-reanalyze"
+            >
               Re-analyze
             </Button>
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className={`${getScoreBgColor(analysis.score)} p-6 rounded-lg text-center`}>
-              <div className="text-sm font-medium mb-2">ATS Score</div>
-              <div className={`text-5xl font-bold ${getScoreColor(analysis.score)}`}>
+            <div
+              className={`${getScoreBgColor(
+                analysis.score
+              )} p-6 rounded-lg text-center`}
+            >
+              <div className="text-sm font-medium mb-2 ats-label">ATS Score</div>
+              <div
+                className={`text-5xl font-bold ${getScoreColor(
+                  analysis.score
+                )}`}
+              >
                 {analysis.score}
               </div>
               <div className="text-sm text-gray-600 mt-2">out of 100</div>
             </div>
-            <div className={`${getScoreBgColor(analysis.matchPercentage)} p-6 rounded-lg text-center`}>
-              <div className="text-sm font-medium mb-2">Match Percentage</div>
-              <div className={`text-5xl font-bold ${getScoreColor(analysis.matchPercentage)}`}>
+            <div
+              className={`${getScoreBgColor(
+                analysis.matchPercentage
+              )} p-6 rounded-lg text-center`}
+            >
+              <div className="text-sm font-medium mb-2 ats-label">Match Percentage</div>
+              <div
+                className={`text-5xl font-bold ${getScoreColor(
+                  analysis.matchPercentage
+                )}`}
+              >
                 {analysis.matchPercentage}%
               </div>
               <div className="text-sm text-gray-600 mt-2">job alignment</div>
@@ -272,7 +311,10 @@ const ATSScoreDisplay = ({ resumeData, userId, resumeId }: ATSScoreDisplayProps)
           <CardContent>
             <div className="space-y-4">
               {analysis.suggestions.map((suggestion, index) => (
-                <div key={index} className="border-l-4 border-blue-500 pl-4 py-2">
+                <div
+                  key={index}
+                  className="border-l-4 border-blue-500 pl-4 py-2"
+                >
                   <div className="flex items-center gap-2 mb-2">
                     <Badge variant="outline">{suggestion.category}</Badge>
                     <Badge className={getPriorityBadge(suggestion.priority)}>
