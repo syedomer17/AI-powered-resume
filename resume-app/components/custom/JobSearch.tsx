@@ -1,13 +1,42 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Loader2, Search, MapPin, Building2, ExternalLink, Calendar, DollarSign, Briefcase, Mail, Zap, CheckSquare } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Loader2,
+  Search,
+  MapPin,
+  Building2,
+  ExternalLink,
+  Calendar,
+  DollarSign,
+  Briefcase,
+  Mail,
+  Zap,
+  CheckSquare,
+} from "lucide-react";
 import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 import JobStats from "./JobStats";
 import SendToHR from "./SendToHR";
@@ -38,7 +67,11 @@ interface JobSearchProps {
   resumeId?: string; // Add resume ID for sending to HR and auto-apply
 }
 
-const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchProps) => {
+const JobSearch = ({
+  userSkills = [],
+  defaultQuery = "",
+  resumeId,
+}: JobSearchProps) => {
   const { callApi } = useApiWithRateLimit();
   const [query, setQuery] = useState(defaultQuery);
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -48,7 +81,7 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
   const [remoteOnly, setRemoteOnly] = useState(false);
   const [datePosted, setDatePosted] = useState<string>("all");
   const [hasSearched, setHasSearched] = useState(false);
-  
+
   // Send to HR and Auto Apply states
   const [showSendToHR, setShowSendToHR] = useState(false);
   const [showAutoApply, setShowAutoApply] = useState(false);
@@ -90,29 +123,30 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(params),
       });
-      
+
       if (!response) {
         setLoading(false);
         return;
       }
 
       console.log("Search response:", response);
-      
+
       setJobs(response.data);
       setHasSearched(true);
     } catch (err: any) {
       console.error("Failed to search jobs:", err);
       console.error("Error response:", err.response?.data);
-      
+
       // Show more detailed error message
-      const errorMessage = err.response?.data?.error || "Failed to search jobs. Please try again.";
+      const errorMessage =
+        err.response?.data?.error || "Failed to search jobs. Please try again.";
       const errorDetails = err.response?.data?.details || "";
       const errorHint = err.response?.data?.hint || "";
-      
+
       let fullMessage = errorMessage;
       if (errorDetails) fullMessage += `\n\nDetails: ${errorDetails}`;
       if (errorHint) fullMessage += `\n\n${errorHint}`;
-      
+
       alert(fullMessage);
     } finally {
       setLoading(false);
@@ -121,12 +155,12 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
 
   const getEmploymentTypeColor = (type: string) => {
     const types: { [key: string]: string } = {
-      FULLTIME: "bg-green-100 text-green-800",
-      PARTTIME: "bg-blue-100 text-blue-800",
-      CONTRACTOR: "bg-purple-100 text-purple-800",
-      INTERN: "bg-orange-100 text-orange-800",
+      FULLTIME: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
+      PARTTIME: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
+      CONTRACTOR: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
+      INTERN: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400",
     };
-    return types[type] || "bg-gray-100 text-gray-800";
+    return types[type] || "bg-gray-100 text-gray-800 dark:bg-gray-800/30 dark:text-gray-400";
   };
 
   const formatPostedDate = (dateString?: string) => {
@@ -135,47 +169,48 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
     const now = new Date();
     const diffTime = Math.abs(now.getTime() - date.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays === 0) return "Today";
     if (diffDays === 1) return "Yesterday";
     if (diffDays < 7) return `${diffDays} days ago`;
     if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
     return `${Math.floor(diffDays / 30)} months ago`;
   };
-  
+
   // Job selection handlers
   const toggleJobSelection = (jobId: string) => {
-    setSelectedJobs(prev => 
-      prev.includes(jobId) 
-        ? prev.filter(id => id !== jobId)
+    setSelectedJobs((prev) =>
+      prev.includes(jobId)
+        ? prev.filter((id) => id !== jobId)
         : [...prev, jobId]
     );
   };
-  
+
   const selectAllJobs = () => {
-    setSelectedJobs(jobs.map(job => job.job_id));
+    setSelectedJobs(jobs.map((job) => job.job_id));
   };
-  
+
   const clearSelection = () => {
     setSelectedJobs([]);
   };
-  
+
   const getSelectedJobsData = () => {
-    return jobs.filter(job => selectedJobs.includes(job.job_id));
+    return jobs.filter((job) => selectedJobs.includes(job.job_id));
   };
 
   // Calculate statistics
   const jobStats = {
     totalJobs: jobs.length,
-    remoteJobs: jobs.filter(j => j.job_is_remote).length,
-    fullTimeJobs: jobs.filter(j => j.job_employment_type === "FULLTIME").length,
-    avgSalary: jobs.find(j => j.job_salary)?.job_salary,
+    remoteJobs: jobs.filter((j) => j.job_is_remote).length,
+    fullTimeJobs: jobs.filter((j) => j.job_employment_type === "FULLTIME")
+      .length,
+    avgSalary: jobs.find((j) => j.job_salary)?.job_salary,
   };
 
   return (
     <div className="space-y-6">
       {/* Search Header */}
-      <Card className="border-l-4 border-l-blue-500 dark:border-l-blue-400 relative overflow-hidden">
+      <Card className="border-l-4 border-l-blue-500 dark:border-l-blue-400 relative overflow-hidden job-search-card">
         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-transparent rounded-full blur-3xl" />
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-xl">
@@ -191,7 +226,7 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
         <CardContent className="space-y-4">
           {/* Skills Suggestions */}
           {userSkills.length > 0 && (
-            <div className="p-4 rounded-lg bg-muted/50 dark:bg-muted/20 border border-border">
+            <div className="p-4 rounded-lg bg-muted/50 dark:bg-muted/20 border border-border job-search-card">
               <p className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
                 <Briefcase className="w-4 h-4" />
                 Your skills - Click to search:
@@ -220,10 +255,10 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
               onKeyPress={(e) => e.key === "Enter" && handleSearch()}
               className="flex-1 h-12 text-base"
             />
-            <Button 
-              onClick={() => handleSearch()} 
+            <Button
+              onClick={() => handleSearch()}
               disabled={loading || !query.trim()}
-              className="h-12 px-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 dark:from-blue-500 dark:to-purple-500 dark:hover:from-blue-600 dark:hover:to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+              className="btn-job-search"
               size="lg"
             >
               {loading ? (
@@ -243,39 +278,63 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
           {/* Filters */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <label className="text-xs font-medium text-muted-foreground">Employment Type</label>
+              <label className="text-xs font-medium text-muted-foreground">
+                Employment Type
+              </label>
               <Select value={employmentType} onValueChange={setEmploymentType}>
-                <SelectTrigger className="h-10">
+                <SelectTrigger className="h-10 dark:select-dark">
                   <SelectValue placeholder="Employment Type" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Types</SelectItem>
-                  <SelectItem value="FULLTIME">Full-time</SelectItem>
-                  <SelectItem value="PARTTIME">Part-time</SelectItem>
-                  <SelectItem value="CONTRACTOR">Contract</SelectItem>
-                  <SelectItem value="INTERN">Internship</SelectItem>
+                <SelectContent className="dark:select-dark-content">
+                  <SelectItem value="all" className="dark:select-dark-item">
+                    All Types
+                  </SelectItem>
+                  <SelectItem
+                    value="FULLTIME"
+                    className="dark:select-dark-item"
+                  >
+                    Full-time
+                  </SelectItem>
+                  <SelectItem
+                    value="PARTTIME"
+                    className="dark:select-dark-item"
+                  >
+                    Part-time
+                  </SelectItem>
+                  <SelectItem
+                    value="CONTRACTOR"
+                    className="dark:select-dark-item"
+                  >
+                    Contract
+                  </SelectItem>
+                  <SelectItem value="INTERN" className="dark:select-dark-item">
+                    Internship
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
-
             <div className="space-y-2">
-              <label className="text-xs font-medium text-muted-foreground">Date Posted</label>
+              <label className="text-xs font-medium text-muted-foreground">
+                Date Posted
+              </label>
               <Select value={datePosted} onValueChange={setDatePosted}>
-                <SelectTrigger className="h-10">
+                <SelectTrigger className="h-10 dark:select-dark">
                   <SelectValue placeholder="Date Posted" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Time</SelectItem>
-                  <SelectItem value="today">Today</SelectItem>
-                  <SelectItem value="3days">Last 3 Days</SelectItem>
-                  <SelectItem value="week">Last Week</SelectItem>
-                  <SelectItem value="month">Last Month</SelectItem>
+                <SelectContent className="dark:select-dark-content">
+                  <SelectItem value="all" className="dark:select-dark-item">All Time</SelectItem>
+                  <SelectItem value="today" className="dark:select-dark-item">Today</SelectItem>
+                  <SelectItem value="3days" className="dark:select-dark-item">Last 3 Days</SelectItem>
+                  <SelectItem value="week" className="dark:select-dark-item">Last Week</SelectItem>
+                  <SelectItem value="month" className="dark:select-dark-item">Last Month</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-medium text-muted-foreground">Location Type</label>
+              <label className="text-xs font-medium text-muted-foreground">
+                Location Type
+              </label>
               <div className="flex items-center h-10 px-4 rounded-lg border border-input bg-background hover:bg-accent transition-colors">
                 <input
                   type="checkbox"
@@ -284,11 +343,14 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
                   onChange={(e) => setRemoteOnly(e.target.checked)}
                   className="w-4 h-4 accent-blue-600 dark:accent-blue-400 cursor-pointer"
                 />
-                <label htmlFor="remote" className="ml-2 text-sm font-medium cursor-pointer flex-1">
+                <label
+                  htmlFor="remote"
+                  className="ml-2 text-sm font-medium cursor-pointer flex-1"
+                >
                   Remote Only
                 </label>
                 {remoteOnly && (
-                  <Badge className="bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20">
+                  <Badge className="bg-purple-500/10 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400 border-purple-500/20 dark:border-purple-700/30">
                     Active
                   </Badge>
                 )}
@@ -300,19 +362,21 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
 
       {/* Results */}
       {loading && (
-        <Card className="relative overflow-hidden">
+        <Card className="relative overflow-hidden job-search-card">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-blue-500/5 animate-pulse" />
           <CardContent className="py-16">
             <div className="flex flex-col items-center justify-center gap-4">
               <Loader2 className="animate-spin w-12 h-12 text-blue-600 dark:text-blue-400" />
-              <p className="text-sm text-muted-foreground font-medium">Searching for opportunities...</p>
+              <p className="text-sm text-muted-foreground font-medium">
+                Searching for opportunities...
+              </p>
             </div>
           </CardContent>
         </Card>
       )}
 
       {!loading && hasSearched && jobs.length === 0 && (
-        <Card className="border-2 border-dashed border-muted-foreground/20">
+        <Card className="border-2 border-dashed border-muted-foreground/20 job-search-card">
           <CardContent className="py-16">
             <div className="text-center space-y-4">
               <div className="relative inline-block">
@@ -320,16 +384,22 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
                 <Search className="relative w-16 h-16 text-muted-foreground/50 mx-auto" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-lg font-semibold text-foreground">No jobs found</h3>
+                <h3 className="text-lg font-semibold text-foreground">
+                  No jobs found
+                </h3>
                 <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                  We couldn't find any jobs matching your criteria. Try adjusting your search terms or filters.
+                  We couldn't find any jobs matching your criteria. Try
+                  adjusting your search terms or filters.
                 </p>
               </div>
               <div className="flex flex-wrap gap-2 justify-center pt-4">
                 <Button variant="outline" onClick={() => setQuery("")}>
                   Clear Search
                 </Button>
-                <Button variant="outline" onClick={() => setEmploymentType("all")}>
+                <Button
+                  variant="outline"
+                  onClick={() => setEmploymentType("all")}
+                >
                   Reset Filters
                 </Button>
               </div>
@@ -350,7 +420,7 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
 
           {/* Action Buttons - Send to HR & Auto Apply */}
           {resumeId && (
-            <Card className="relative overflow-hidden border-2 border-purple-500/20 dark:border-purple-400/20">
+            <Card className="relative overflow-hidden border-2 border-purple-500/20 dark:border-purple-400/20 job-search-card">
               <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-purple-500/10 dark:from-purple-500/20 dark:via-blue-500/20 dark:to-purple-500/20" />
               <CardContent className="p-4 sm:p-6 relative">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -362,9 +432,11 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
                       AI-Powered Actions
                     </h3>
                     <p className="text-sm text-muted-foreground">
-                      {selectedJobs.length > 0 
-                        ? `${selectedJobs.length} job${selectedJobs.length > 1 ? 's' : ''} selected for actions`
-                        : 'Select jobs below or use bulk actions'}
+                      {selectedJobs.length > 0
+                        ? `${selectedJobs.length} job${
+                            selectedJobs.length > 1 ? "s" : ""
+                          } selected for actions`
+                        : "Select jobs below or use bulk actions"}
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -416,12 +488,13 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
           {/* Job Listings */}
 
           {jobs.map((job) => (
-            <Card 
-              key={job.job_id} 
-              className={`group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden ${
-                selectedJobs.includes(job.job_id) 
-                  ? 'border-2 border-blue-500 dark:border-blue-400 bg-blue-500/5 dark:bg-blue-500/10' 
-                  : 'border hover:border-blue-500/50'
+            <Card
+              key={job.job_id}
+              data-job-card
+              className={`group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden job-search-card ${
+                selectedJobs.includes(job.job_id)
+                  ? "border-2 border-blue-500 dark:border-blue-400 bg-blue-500/5 dark:bg-blue-500/10"
+                  : "border hover:border-blue-500/50 dark:hover:border-blue-400/50"
               }`}
             >
               {selectedJobs.includes(job.job_id) && (
@@ -440,7 +513,7 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
                       />
                     </div>
                   )}
-                  
+
                   {/* Company Logo */}
                   {job.employer_logo && (
                     <div className="shrink-0">
@@ -462,7 +535,9 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
                       </h3>
                       <div className="flex items-center gap-2 text-muted-foreground">
                         <Building2 className="w-4 h-4 shrink-0" />
-                        <span className="font-medium truncate">{job.employer_name}</span>
+                        <span className="font-medium truncate">
+                          {job.employer_name}
+                        </span>
                       </div>
                     </div>
 
@@ -480,23 +555,31 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
                       )}
                       <div className="flex items-center gap-1.5">
                         <Calendar className="w-4 h-4 shrink-0 text-emerald-500" />
-                        <span>{formatPostedDate(job.job_posted_at_datetime_utc)}</span>
+                        <span>
+                          {formatPostedDate(job.job_posted_at_datetime_utc)}
+                        </span>
                       </div>
                       {job.job_salary && (
                         <div className="flex items-center gap-1.5">
                           <DollarSign className="w-4 h-4 shrink-0 text-amber-500" />
-                          <span className="font-semibold">{job.job_salary}</span>
+                          <span className="font-semibold">
+                            {job.job_salary}
+                          </span>
                         </div>
                       )}
                     </div>
 
                     {/* Badges */}
                     <div className="flex flex-wrap gap-2">
-                      <Badge className={`${getEmploymentTypeColor(job.job_employment_type)} border-0`}>
+                      <Badge
+                        className={`${getEmploymentTypeColor(
+                          job.job_employment_type
+                        )} border-0 employment-badge`}
+                      >
                         {job.job_employment_type}
                       </Badge>
                       {job.job_is_remote && (
-                        <Badge className="bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20">
+                        <Badge className="bg-purple-500/10 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400 border-purple-500/20 dark:border-purple-700/30">
                           <Briefcase className="w-3 h-3 mr-1" />
                           Remote
                         </Badge>
@@ -512,7 +595,9 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
                     <div className="flex flex-wrap gap-2 pt-2">
                       <Button
                         className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 dark:from-blue-500 dark:to-purple-500 dark:hover:from-blue-600 dark:hover:to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
-                        onClick={() => window.open(job.job_apply_link, "_blank")}
+                        onClick={() =>
+                          window.open(job.job_apply_link, "_blank")
+                        }
                         size="sm"
                       >
                         Apply Now
@@ -521,7 +606,9 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
                       {job.employer_website && (
                         <Button
                           variant="outline"
-                          onClick={() => window.open(job.employer_website, "_blank")}
+                          onClick={() =>
+                            window.open(job.employer_website, "_blank")
+                          }
                           size="sm"
                           className="hover:bg-accent"
                         >
@@ -537,7 +624,7 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
           ))}
         </div>
       )}
-      
+
       {/* Send to HR Dialog */}
       {resumeId && (
         <Dialog open={showSendToHR} onOpenChange={setShowSendToHR}>
@@ -545,14 +632,14 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
             <DialogHeader>
               <DialogTitle>Send Resume to HR Contacts</DialogTitle>
             </DialogHeader>
-            <SendToHR 
-              resumeId={resumeId} 
+            <SendToHR
+              resumeId={resumeId}
               onClose={() => setShowSendToHR(false)}
             />
           </DialogContent>
         </Dialog>
       )}
-      
+
       {/* Auto Apply Dialog */}
       {resumeId && selectedJobs.length > 0 && (
         <Dialog open={showAutoApply} onOpenChange={setShowAutoApply}>
@@ -560,7 +647,7 @@ const JobSearch = ({ userSkills = [], defaultQuery = "", resumeId }: JobSearchPr
             <DialogHeader>
               <DialogTitle>Auto Apply to Selected Jobs</DialogTitle>
             </DialogHeader>
-            <AutoApply 
+            <AutoApply
               jobs={getSelectedJobsData()}
               resumeId={resumeId}
               onClose={() => {

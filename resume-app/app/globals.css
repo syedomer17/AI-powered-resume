@@ -482,6 +482,122 @@ html.dark a[href="/dashboard"] * {
   }
 }
 
+@layer utilities {
+  .btn-job-search {
+    @apply inline-flex items-center justify-center
+           font-semibold rounded-xl
+           px-6 py-3 text-base
+           bg-black text-white
+           dark:bg-white dark:text-black
+           hover:bg-gray-800 dark:hover:bg-gray-100
+           shadow-lg hover:shadow-xl
+           transition-all duration-300 active:scale-[0.98]
+           w-full sm:w-auto;
+  }
+}
+
+@layer utilities {
+  .select-dark {
+    @apply bg-background text-foreground border-border;
+  }
+
+  .select-dark-content {
+    @apply bg-popover text-popover-foreground border-border shadow-lg;
+  }
+
+  .select-dark-item {
+    @apply text-foreground hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground;
+  }
+}
+
+/* Job Search Component Dark Mode Fixes */
+.dark .job-search-card {
+  background-color: hsl(var(--card));
+  border-color: hsl(var(--border));
+  color: hsl(var(--card-foreground));
+}
+
+.dark .job-search-card h3,
+.dark .job-search-card h2,
+.dark .job-search-card h1 {
+  color: hsl(var(--foreground)) !important;
+}
+
+.dark .job-search-card p,
+.dark .job-search-card span,
+.dark .job-search-card label {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+/* Job listing text visibility in dark mode */
+html.dark [data-job-card] h3 {
+  color: hsl(var(--foreground)) !important;
+}
+
+html.dark [data-job-card] p {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+html.dark [data-job-card] span {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+/* Employment type badges in dark mode */
+html.dark .employment-badge {
+  background-color: hsl(var(--secondary)) !important;
+  color: hsl(var(--secondary-foreground)) !important;
+}
+
+/* Force proper text colors for job search elements */
+html.dark .job-search-card .text-muted-foreground {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+html.dark .job-search-card .text-foreground {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Make sure company names and job titles are visible */
+html.dark [data-job-card] .font-bold,
+html.dark [data-job-card] .font-medium {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Job meta information visibility */
+html.dark [data-job-card] .flex.items-center span {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+/* Job description text */
+html.dark [data-job-card] .line-clamp-2,
+html.dark [data-job-card] .line-clamp-3 {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+/* Search input dark mode fixes */
+html.dark .job-search-card input[type="text"],
+html.dark .job-search-card input[placeholder*="Search"] {
+  background-color: hsl(var(--input)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-color: hsl(var(--border)) !important;
+}
+
+html.dark .job-search-card input[type="text"]::placeholder,
+html.dark .job-search-card input[placeholder*="Search"]::placeholder {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+/* Skill badges dark mode */
+html.dark .job-search-card .cursor-pointer {
+  background-color: hsl(var(--secondary)) !important;
+  color: hsl(var(--secondary-foreground)) !important;
+}
+
+/* Dialog content in dark mode */
+html.dark [role="dialog"] {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+}
 
 
 
