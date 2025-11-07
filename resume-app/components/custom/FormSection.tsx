@@ -56,9 +56,17 @@ const FormSection: React.FC<FormSectionProps> = ({ resumeId, userId,resumeIndex 
             <Button 
               variant="outline" 
               size="icon"
-              className="hover:bg-blue-500/10 hover:border-blue-500/50 transition-all duration-200"
+              className="home-icon-btn hover:bg-blue-500/10 hover:border-blue-500/50 transition-all duration-200 text-black dark:text-white border-slate-200 dark:border-slate-700"
             >
-              <Home className="w-4 h-4" />
+              <Home 
+                className="w-4 h-4 text-black dark:text-white stroke-black dark:stroke-white" 
+                style={{ 
+                  color: 'var(--home-icon-color, #000000)', 
+                  stroke: 'var(--home-icon-color, #000000)',
+                  strokeWidth: 2,
+                  fill: 'none'
+                }}
+              />
             </Button>
           </Link>
           <div className="hidden sm:block h-6 w-px bg-border" />
@@ -73,9 +81,9 @@ const FormSection: React.FC<FormSectionProps> = ({ resumeId, userId,resumeIndex 
               variant="outline"
               size="sm"
               onClick={() => setActiveFormIndex(activeFormIndex - 1)}
-              className="flex-1 sm:flex-none hover:bg-accent transition-colors"
+              className="flex-1 sm:flex-none hover:bg-accent transition-colors text-foreground"
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
+              <ArrowLeft className="w-4 h-4 mr-2 text-foreground" />
               Back
             </Button>
           )}
@@ -86,7 +94,7 @@ const FormSection: React.FC<FormSectionProps> = ({ resumeId, userId,resumeIndex 
             onClick={handleNextClick}
           >
             {activeFormIndex === 8 ? 'View Resume' : 'Next'}
-            <ArrowRight className="w-4 h-4 ml-2" />
+            <ArrowRight className="w-4 h-4 ml-2 text-white" />
           </Button>
         </div>
       </div>

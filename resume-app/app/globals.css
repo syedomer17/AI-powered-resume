@@ -798,6 +798,148 @@ html.dark button[type="button"]:not([aria-label="Toggle theme"]):hover {
   background: hsl(var(--primary) / 0.6);
 }
 
+/* Resume Form Home Icon Visibility Fix */
+html:not(.dark) [data-lucide="home"] {
+  color: #000000 !important;
+  stroke: #000000 !important;
+  fill: none !important;
+}
+
+html.dark [data-lucide="home"] {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  fill: none !important;
+}
+
+/* More specific selectors for light mode home icon */
+html:not(.dark) .text-black [data-lucide="home"],
+html:not(.dark) button [data-lucide="home"],
+html:not(.dark) a button [data-lucide="home"] {
+  color: #000000 !important;
+  stroke: #000000 !important;
+  stroke-width: 2 !important;
+  fill: none !important;
+}
+
+/* Force home icon visibility in light mode with maximum specificity */
+html:not(.dark) svg[data-lucide="home"] {
+  color: #000000 !important;
+  stroke: #000000 !important;
+  stroke-width: 2px !important;
+  fill: none !important;
+}
+
+html.dark svg[data-lucide="home"] {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  stroke-width: 2px !important;
+  fill: none !important;
+}
+
+/* CSS Custom Properties for home icon */
+html:not(.dark) {
+  --home-icon-color: #000000;
+}
+
+html.dark {
+  --home-icon-color: #ffffff;
+}
+
+/* Ultimate fallback for home icon visibility */
+html:not(.dark) button[class*="outline"] svg[data-lucide="home"] {
+  color: #000000 !important;
+  stroke: #000000 !important;
+  stroke-width: 2 !important;
+}
+
+/* Specific styles for home icon button */
+.home-icon-btn {
+  background-color: white !important;
+  border-color: #e2e8f0 !important;
+}
+
+.dark .home-icon-btn {
+  background-color: hsl(var(--card)) !important;
+  border-color: hsl(var(--border)) !important;
+}
+
+.home-icon-btn svg {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+.dark .home-icon-btn svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Force visibility with very high specificity */
+button.home-icon-btn svg[data-lucide="home"] {
+  color: #000000 !important;
+  stroke: #000000 !important;
+  stroke-width: 2 !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
+
+.dark button.home-icon-btn svg[data-lucide="home"] {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  stroke-width: 2 !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
+
+/* Ensure button background doesn't interfere */
+html:not(.dark) button.home-icon-btn {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+html.dark button.home-icon-btn {
+  background-color: hsl(var(--card)) !important;
+  color: #ffffff !important;
+}
+
+/* Ensure home icon is visible in buttons and links */
+html:not(.dark) button [data-lucide="home"],
+html:not(.dark) a button [data-lucide="home"] {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+html.dark button [data-lucide="home"],
+html.dark a button [data-lucide="home"] {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Form navigation icons (Back/Next buttons) */
+html:not(.dark) [data-lucide="arrow-left"],
+html:not(.dark) [data-lucide="arrow-right"] {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+html.dark [data-lucide="arrow-left"],
+html.dark [data-lucide="arrow-right"] {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Form button icons visibility */
+html:not(.dark) button [data-lucide="arrow-left"],
+html:not(.dark) button [data-lucide="arrow-right"] {
+  color: inherit !important;
+  stroke: inherit !important;
+}
+
+html.dark button [data-lucide="arrow-left"],
+html.dark button [data-lucide="arrow-right"] {
+  color: inherit !important;
+  stroke: inherit !important;
+}
+
 /* Firefox Scrollbar */
 * {
   scrollbar-width: thin;
