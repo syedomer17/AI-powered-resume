@@ -77,11 +77,11 @@ export function LinkToolbarPlugin({
     <Toggle
       variant={"outline"}
       size="sm"
-      className="!h-8 !w-8"
+      className="!h-8 !w-8 bg-white dark:bg-background text-black dark:text-white border-border hover:bg-accent"
       aria-label="Toggle link"
       onClick={insertLink}
     >
-      <LinkIcon className="h-4 w-4" />
+      <LinkIcon className="h-4 w-4 text-black dark:text-white" />
     </Toggle>
   )
 }

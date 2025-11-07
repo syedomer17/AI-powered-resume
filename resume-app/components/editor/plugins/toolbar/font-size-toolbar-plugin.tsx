@@ -58,29 +58,29 @@ export function FontSizeToolbarPlugin() {
       <Button
         variant="outline"
         size="icon"
-        className="!h-8 !w-8"
+        className="!h-8 !w-8 bg-white dark:bg-background text-black dark:text-white border-border hover:bg-accent"
         onClick={() => updateFontSize(fontSize - 1)}
         disabled={fontSize <= MIN_FONT_SIZE}
       >
-        <Minus className="size-3" />
+        <Minus className="size-3 text-black dark:text-white" />
       </Button>
       <Input
         value={fontSize}
         onChange={(e) =>
           updateFontSize(parseInt(e.target.value) || DEFAULT_FONT_SIZE)
         }
-        className="!h-8 w-12 text-center"
+        className="!h-8 w-12 text-center bg-white dark:bg-background text-black dark:text-white border-border"
         min={MIN_FONT_SIZE}
         max={MAX_FONT_SIZE}
       />
       <Button
         variant="outline"
         size="icon"
-        className="!h-8 !w-8"
+        className="!h-8 !w-8 bg-white dark:bg-background text-black dark:text-white border-border hover:bg-accent"
         onClick={() => updateFontSize(fontSize + 1)}
         disabled={fontSize >= MAX_FONT_SIZE}
       >
-        <Plus className="size-3" />
+        <Plus className="size-3 text-black dark:text-white" />
       </Button>
     </ButtonGroup>
   )

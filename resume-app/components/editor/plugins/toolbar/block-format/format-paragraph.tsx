@@ -20,7 +20,7 @@ export function FormatParagraph() {
   }
 
   return (
-    <SelectItem value={BLOCK_FORMAT_VALUE} onPointerDown={formatParagraph}>
+    <SelectItem value={BLOCK_FORMAT_VALUE} onPointerDown={formatParagraph} className="text-black dark:text-white hover:bg-accent">
       <div className="flex items-center gap-1 font-normal">
         {blockTypeToBlockName[BLOCK_FORMAT_VALUE].icon}
         {blockTypeToBlockName[BLOCK_FORMAT_VALUE].label}

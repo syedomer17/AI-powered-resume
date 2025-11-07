@@ -63,12 +63,14 @@ export function FontFormatToolbarPlugin() {
       onValueChange={setActiveFormats}
       variant="outline"
       size="sm"
+      className="bg-white dark:bg-background"
     >
       {FORMATS.map(({ format, icon: Icon, label }) => (
         <ToggleGroupItem
           key={format}
           value={format}
           aria-label={label}
+          className="bg-white dark:bg-background text-black dark:text-white border-border hover:bg-accent"
           onClick={() => {
             activeEditor.dispatchCommand(
               FORMAT_TEXT_COMMAND,
@@ -76,7 +78,7 @@ export function FontFormatToolbarPlugin() {
             )
           }}
         >
-          <Icon className="h-4 w-4" />
+          <Icon className="h-4 w-4 text-black dark:text-white" />
         </ToggleGroupItem>
       ))}
     </ToggleGroup>

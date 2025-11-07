@@ -287,13 +287,13 @@ const Experience: React.FC<ExperienceProps> = ({
                 value={field.workType}
                 onValueChange={(value) => handleChange(index, "workType", value)}
               >
-                <SelectTrigger className="mt-1 h-11">
+                <SelectTrigger className="mt-1 h-11 bg-white dark:bg-background text-black dark:text-white border-border">
                   <SelectValue placeholder="Select work type" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Remote">Remote</SelectItem>
-                  <SelectItem value="Hybrid">Hybrid</SelectItem>
-                  <SelectItem value="In-office">In-office</SelectItem>
+                <SelectContent className="bg-white dark:bg-background text-black dark:text-white border-border">
+                  <SelectItem value="Remote" className="text-black dark:text-white hover:bg-accent">Remote</SelectItem>
+                  <SelectItem value="Hybrid" className="text-black dark:text-white hover:bg-accent">Hybrid</SelectItem>
+                  <SelectItem value="In-office" className="text-black dark:text-white hover:bg-accent">In-office</SelectItem>
                 </SelectContent>
               </Select>
             </div>

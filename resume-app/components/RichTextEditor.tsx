@@ -169,17 +169,16 @@ Generate 3–4 number points summarizing this experience in professional resume 
     <div className="space-y-2">
       <div className="flex justify-end items-center">
         <Button
-          variant="outline"
+          className="ai-generate-btn gap-2 bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-100"
           size="sm"
-          className="gap-2 text-fuchsia-600 border-fuchsia-200 hover:bg-fuchsia-50 hover:text-fuchsia-700"
           onClick={handleGenerate}
           disabled={loading}
           type="button"
         >
           {loading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Loader2 className="h-4 w-4 animate-spin text-white dark:text-black" />
           ) : (
-            <Brain className="h-4 w-4" />
+            <Brain className="h-4 w-4 text-white dark:text-black" />
           )}
           <span className="hidden sm:inline">
             {loading ? "Generating..." : "Generate from AI"}
@@ -188,12 +187,12 @@ Generate 3–4 number points summarizing this experience in professional resume 
         </Button>
       </div>
 
-      <div className="bg-background rounded-lg border shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-background rounded-lg border shadow-sm overflow-hidden">
         <LexicalComposer initialConfig={editorConfig}>
           <TooltipProvider>
             <ToolbarPlugin>
               {({ blockType }) => (
-                <div className="flex flex-wrap items-center gap-2 border-b p-2 bg-muted/20">
+                <div className="flex flex-wrap items-center gap-2 border-b p-2 bg-white dark:bg-background text-black dark:text-white">
                   {/* Block Format Dropdown */}
                   <BlockFormatDropDown>
                     <FormatParagraph />

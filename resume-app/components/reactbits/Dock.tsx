@@ -78,7 +78,7 @@ function DockItem({
       onFocus={() => isHovered.set(1)}
       onBlur={() => isHovered.set(0)}
       onClick={onClick}
-      className={`relative inline-flex items-center justify-center rounded-full bg-neutral-800/80 dark:bg-neutral-900/80 text-white border border-neutral-700/50 dark:border-neutral-600/30 shadow-xl hover:shadow-2xl backdrop-blur-sm ring-0 transition-all duration-300 cursor-pointer hover:bg-neutral-700/80 dark:hover:bg-neutral-800/80 ${className}`}
+      className={`relative inline-flex items-center justify-center rounded-full bg-neutral-800/80 dark:bg-neutral-900/80 text-white dark:text-white border border-neutral-700/50 dark:border-neutral-600/30 shadow-xl hover:shadow-2xl backdrop-blur-sm ring-0 transition-all duration-300 cursor-pointer hover:bg-neutral-700/80 dark:hover:bg-neutral-800/80 ${className}`}
       tabIndex={0}
       role="button"
       aria-haspopup="true"
@@ -141,7 +141,17 @@ type DockIconProps = {
 };
 
 function DockIcon({ children, className = '' }: DockIconProps) {
-  return <div className={`flex items-center justify-center ${className}`}>{children}</div>;
+  return (
+    <div 
+      className={`dock-item-icon flex items-center justify-center text-white dark:text-white forced-white-icon ${className}`}
+      style={{ 
+        color: 'white !important',
+        stroke: 'white !important'
+      } as React.CSSProperties}
+    >
+      {children}
+    </div>
+  );
 }
 
 export default function Dock({

@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useResumeInfo } from "@/context/ResumeInfoConext";
 import { generateSummary, SummaryResponse } from "@/service/AIModel";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
 import { useApiWithRateLimit } from "@/hooks/useApiWithRateLimit";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -112,8 +112,7 @@ const Summery: React.FC<SummeryProps> = ({ enableNext, userId, resumeId }) => {
             Your Summary
           </label>
           <Button
-            variant="outline"
-            className="border-purple-500/50 text-purple-600 dark:text-purple-400 hover:bg-purple-500/10"
+            className="ai-generate-btn bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-100 shadow-lg hover:shadow-xl transition-all duration-300"
             size="sm"
             type="button"
             onClick={handleGenerate}
@@ -121,11 +120,14 @@ const Summery: React.FC<SummeryProps> = ({ enableNext, userId, resumeId }) => {
           >
             {loading ? (
               <>
-                <Loader2 className="animate-spin w-4 h-4 mr-2" />
+                <Loader2 className="animate-spin w-4 h-4 mr-2 text-white dark:text-black" />
                 Generating...
               </>
             ) : (
-              "Generate from AI"
+              <>
+                <Sparkles className="w-4 h-4 mr-2 text-white dark:text-black" />
+                Generate from AI
+              </>
             )}
           </Button>
         </div>

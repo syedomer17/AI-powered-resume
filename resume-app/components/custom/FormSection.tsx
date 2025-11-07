@@ -81,9 +81,9 @@ const FormSection: React.FC<FormSectionProps> = ({ resumeId, userId,resumeIndex 
               variant="outline"
               size="sm"
               onClick={() => setActiveFormIndex(activeFormIndex - 1)}
-              className="flex-1 sm:flex-none hover:bg-accent transition-colors text-foreground"
+              className="back-btn flex-1 sm:flex-none hover:bg-accent transition-colors text-black dark:text-white"
             >
-              <ArrowLeft className="w-4 h-4 mr-2 text-foreground" />
+              <ArrowLeft className="w-4 h-4 mr-2 text-black dark:text-white" />
               Back
             </Button>
           )}

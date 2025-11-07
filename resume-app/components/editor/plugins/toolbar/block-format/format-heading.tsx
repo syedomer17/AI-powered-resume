@@ -23,6 +23,7 @@ export function FormatHeading({ levels = [] }: { levels: HeadingTagType[] }) {
       key={level}
       value={level}
       onPointerDown={() => formatHeading(level)}
+      className="text-black dark:text-white hover:bg-accent"
     >
       <div className="flex items-center gap-1 font-normal">
         {blockTypeToBlockName[level].icon}

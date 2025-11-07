@@ -1066,6 +1066,322 @@ html.dark .save-changes-btn * {
   stroke: #000000 !important;
 }
 
+/* Back Button Styling */
+.back-btn {
+  color: #000000 !important;
+  background-color: transparent;
+  border-color: #e2e8f0;
+}
+
+.back-btn svg {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* Dark mode for back button */
+.dark .back-btn {
+  color: #ffffff !important;
+  border-color: #374151;
+}
+
+.dark .back-btn svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Force back button text visibility with higher specificity */
+html:not(.dark) button.back-btn {
+  color: #000000 !important;
+}
+
+html:not(.dark) button.back-btn svg {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+html.dark button.back-btn {
+  color: #ffffff !important;
+}
+
+html.dark button.back-btn svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Even more specific for back button text and icon */
+html:not(.dark) .back-btn * {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+html.dark .back-btn * {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* AI Generate Button Styling */
+.ai-generate-btn {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.ai-generate-btn:hover {
+  background-color: #374151 !important;
+}
+
+.ai-generate-btn svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Dark mode for AI generate button */
+.dark .ai-generate-btn {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.dark .ai-generate-btn:hover {
+  background-color: #f3f4f6 !important;
+}
+
+.dark .ai-generate-btn svg {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* Force dark mode styling with higher specificity */
+html.dark button.ai-generate-btn {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-color: #ffffff !important;
+}
+
+html.dark button.ai-generate-btn svg {
+  color: #000000 !important;
+  stroke: #000000 !important;
+  fill: none !important;
+}
+
+/* Handle disabled state for AI generate button */
+button.ai-generate-btn:disabled {
+  opacity: 0.5;
+}
+
+.dark button.ai-generate-btn:disabled {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  opacity: 0.5;
+}
+
+/* Even more specific for dark mode */
+html.dark .ai-generate-btn {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+html.dark .ai-generate-btn * {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* Rich Text Editor Dark Mode Fixes */
+.dark .editor-scroller {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+.dark .editor {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Toolbar buttons in RichTextEditor */
+html.dark [role="toolbar"] button {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-color: hsl(var(--border)) !important;
+}
+
+html.dark [role="toolbar"] button:hover {
+  background-color: hsl(var(--accent)) !important;
+}
+
+/* Dropdown menus in toolbar */
+html.dark [role="toolbar"] [data-radix-popper-content-wrapper] {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-color: hsl(var(--border)) !important;
+}
+
+/* Select dropdowns */
+html.dark [data-radix-select-content] {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-color: hsl(var(--border)) !important;
+}
+
+html.dark [data-radix-select-item] {
+  color: hsl(var(--foreground)) !important;
+}
+
+html.dark [data-radix-select-item]:hover {
+  background-color: hsl(var(--accent)) !important;
+}
+
+/* Font family and other toolbar dropdowns */
+html.dark [role="combobox"] {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-color: hsl(var(--border)) !important;
+}
+
+/* Force RichTextEditor toolbar components to proper colors */
+/* Light mode - ensure white backgrounds and black text */
+html:not(.dark) .editor-scroller * {
+  background-color: white !important;
+  color: black !important;
+}
+
+html:not(.dark) [role="toolbar"] button,
+html:not(.dark) [role="toolbar"] [data-radix-select-trigger],
+html:not(.dark) [role="toolbar"] input {
+  background-color: white !important;
+  color: black !important;
+  border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) [role="toolbar"] svg {
+  color: black !important;
+  stroke: black !important;
+}
+
+/* Dark mode - force dark backgrounds and white text */
+html.dark .editor-scroller,
+html.dark .editor-scroller * {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+html.dark [role="toolbar"],
+html.dark [role="toolbar"] * {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+html.dark [role="toolbar"] button,
+html.dark [role="toolbar"] [data-radix-select-trigger],
+html.dark [role="toolbar"] [data-radix-toggle-group-item],
+html.dark [role="toolbar"] input {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-color: hsl(var(--border)) !important;
+}
+
+html.dark [role="toolbar"] svg {
+  color: hsl(var(--foreground)) !important;
+  stroke: hsl(var(--foreground)) !important;
+}
+
+/* Radix Select components in toolbar */
+html:not(.dark) [data-radix-select-content] {
+  background-color: white !important;
+  color: black !important;
+  border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) [data-radix-select-item] {
+  color: black !important;
+}
+
+html.dark [data-radix-select-content] {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-color: hsl(var(--border)) !important;
+}
+
+html.dark [data-radix-select-item] {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Toggle group items */
+html:not(.dark) [data-radix-toggle-group-item] {
+  background-color: white !important;
+  color: black !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.dark [data-radix-toggle-group-item] {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-color: hsl(var(--border)) !important;
+}
+
+/* Force Select dropdown styling */
+html:not(.dark) .bg-white.dark\\:bg-background {
+  background-color: white !important;
+  color: black !important;
+}
+
+html.dark .bg-white.dark\\:bg-background {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+/* ContentEditable area styling */
+html:not(.dark) [contenteditable="true"],
+html:not(.dark) .editor {
+  background-color: white !important;
+  color: black !important;
+}
+
+html.dark [contenteditable="true"],
+html.dark .editor {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Placeholder text in editor */
+html:not(.dark) .editor [data-placeholder]:before {
+  color: #6b7280 !important;
+}
+
+html.dark .editor [data-placeholder]:before {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+/* ButtonGroup styling for toolbar */
+html:not(.dark) [data-slot="button-group"] > * {
+  background-color: white !important;
+  color: black !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.dark [data-slot="button-group"] > * {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-color: hsl(var(--border)) !important;
+}
+
+/* Ultra-specific toolbar styling overrides */
+html:not(.dark) .flex.flex-wrap.items-center.gap-2.border-b.p-2 * {
+  background-color: white !important;
+  color: black !important;
+}
+
+html.dark .flex.flex-wrap.items-center.gap-2.border-b.p-2 * {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Override any remaining white backgrounds in dark mode */
+html.dark .bg-white {
+  background-color: hsl(var(--background)) !important;
+}
+
+html.dark .text-black {
+  color: hsl(var(--foreground)) !important;
+}
+
 /* Ensure home icon is visible in buttons and links */
 html:not(.dark) button [data-lucide="home"],
 html:not(.dark) a button [data-lucide="home"] {
@@ -1147,4 +1463,63 @@ html, body {
 :focus-visible {
   outline: 2px solid hsl(var(--ring));
   outline-offset: 2px;
+}
+
+/* Dock icons visibility - always white for dark dock background */
+[role="toolbar"] svg,
+[role="toolbar"] .lucide,
+[role="toolbar"] [class*="icon"] {
+  color: #ffffff !important;
+  fill: none !important;
+  stroke: #ffffff !important;
+  stroke-width: 2 !important;
+}
+
+/* Ensure dock item icons are always white */
+.dock-item-icon,
+.dock-item-icon svg,
+.dock-item-icon .lucide {
+  color: #ffffff !important;
+  fill: none !important;
+  stroke: #ffffff !important;
+  stroke-width: 2 !important;
+}
+
+/* Ultra-specific targeting for Lucide icons in dock */
+.dock-item-icon > svg,
+[role="toolbar"] > * > * > svg,
+[role="toolbar"] * svg {
+  color: white !important;
+  stroke: white !important;
+  fill: none !important;
+  stroke-width: 2 !important;
+}
+
+/* Force white icons with highest specificity */
+div[class*="dock-item-icon"] svg,
+div[class*="dock-item-icon"] .lucide,
+*[role="toolbar"] svg,
+*[role="toolbar"] .lucide {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  fill: none !important;
+  stroke-width: 2 !important;
+}
+
+/* Ultimate fallback for forced white icons */
+.forced-white-icon svg,
+.forced-white-icon .lucide,
+.forced-white-icon * {
+  color: white !important;
+  stroke: white !important;
+  fill: none !important;
+  stroke-width: 2 !important;
+}
+
+/* Even more specific targeting */
+.forced-white-icon > svg,
+.forced-white-icon > * > svg {
+  color: white !important;
+  stroke: white !important;
+  fill: none !important;
 }
