@@ -262,7 +262,9 @@ const Experience: React.FC<ExperienceProps> = ({
             className="grid grid-cols-1 sm:grid-cols-2 gap-4 border border-border p-5 mb-5 rounded-xl bg-muted/30"
           >
             <div>
-              <label className="text-sm font-medium text-foreground">Position Title</label>
+              <label className="text-sm font-medium text-foreground">
+                Position Title
+              </label>
               <Input
                 className="capitalize mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={field.title}
@@ -270,7 +272,9 @@ const Experience: React.FC<ExperienceProps> = ({
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground">Company Name</label>
+              <label className="text-sm font-medium text-foreground">
+                Company Name
+              </label>
               <Input
                 className="capitalize mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={field.companyName}
@@ -279,28 +283,49 @@ const Experience: React.FC<ExperienceProps> = ({
                 }
               />
             </div>
-            
+
             {/* Work Type Dropdown */}
             <div>
-              <label className="text-sm font-medium text-foreground">Work Type</label>
+              <label className="text-sm font-medium text-foreground">
+                Work Type
+              </label>
               <Select
                 value={field.workType}
-                onValueChange={(value) => handleChange(index, "workType", value)}
+                onValueChange={(value) =>
+                  handleChange(index, "workType", value)
+                }
               >
                 <SelectTrigger className="mt-1 h-11 bg-white dark:bg-background text-black dark:text-white border-border">
                   <SelectValue placeholder="Select work type" />
                 </SelectTrigger>
                 <SelectContent className="bg-white dark:bg-background text-black dark:text-white border-border">
-                  <SelectItem value="Remote" className="text-black dark:text-white hover:bg-accent">Remote</SelectItem>
-                  <SelectItem value="Hybrid" className="text-black dark:text-white hover:bg-accent">Hybrid</SelectItem>
-                  <SelectItem value="In-office" className="text-black dark:text-white hover:bg-accent">In-office</SelectItem>
+                  <SelectItem
+                    value="Remote"
+                    className="text-black dark:text-white hover:bg-accent"
+                  >
+                    Remote
+                  </SelectItem>
+                  <SelectItem
+                    value="Hybrid"
+                    className="text-black dark:text-white hover:bg-accent"
+                  >
+                    Hybrid
+                  </SelectItem>
+                  <SelectItem
+                    value="In-office"
+                    className="text-black dark:text-white hover:bg-accent"
+                  >
+                    In-office
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-sm font-medium text-foreground">Start Date</label>
+                <label className="text-sm font-medium text-foreground">
+                  Start Date
+                </label>
                 <Input
                   type="date"
                   className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
@@ -311,7 +336,9 @@ const Experience: React.FC<ExperienceProps> = ({
                 />
               </div>
               <div>
-                <label className="text-sm font-medium text-foreground">End Date</label>
+                <label className="text-sm font-medium text-foreground">
+                  End Date
+                </label>
                 <Input
                   type="date"
                   className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
@@ -331,10 +358,14 @@ const Experience: React.FC<ExperienceProps> = ({
                 }
                 className="w-4 h-4 accent-purple-500"
               />
-              <label className="text-sm font-medium text-foreground">Currently Working</label>
+              <label className="text-sm font-medium text-foreground">
+                Currently Working
+              </label>
             </div>
             <div className="sm:col-span-2">
-              <label className="text-sm font-medium text-foreground">Work Summary</label>
+              <label className="text-sm font-medium text-foreground">
+                Work Summary
+              </label>
               <div className="mt-1">
                 <RichTextEditor
                   value={field.workSummery}
@@ -347,7 +378,7 @@ const Experience: React.FC<ExperienceProps> = ({
                 variant="outline"
                 onClick={() => handleRemove(index)}
                 disabled={experienceList.length === 1}
-                className="flex items-center gap-1 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:text-red-800"
+                className="btn-danger-invert flex items-center gap-1"
               >
                 <Trash2 className="w-4 h-4" />
                 Remove
@@ -359,20 +390,21 @@ const Experience: React.FC<ExperienceProps> = ({
 
       <div className="flex justify-between mt-6 gap-2">
         <div className="flex gap-2">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={handleAdd}
-            className="border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 "
+            className="btn-add-invert flex items-center gap-1 "
           >
             + Add More
           </Button>
         </div>
         <Button
-          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
           onClick={handleSave}
           disabled={loading}
+          className="btn-save-invert shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
         >
-          {loading && <Loader2 className="w-4 h-4 animate-spin mr-2" />} Save
+          {loading && <Loader2 className="spinner w-4 h-4 animate-spin" />}
+          Save
         </Button>
       </div>
     </motion.div>

@@ -1123,6 +1123,7 @@ html.dark .back-btn * {
 .ai-generate-btn {
   background-color: #000000 !important;
   color: #ffffff !important;
+  border-color: #000000 !important;
 }
 
 .ai-generate-btn:hover {
@@ -1132,12 +1133,35 @@ html.dark .back-btn * {
 .ai-generate-btn svg {
   color: #ffffff !important;
   stroke: #ffffff !important;
+  fill: none !important;
+}
+
+.ai-generate-btn span {
+  color: #ffffff !important;
+}
+
+/* More specific light mode targeting */
+html:not(.dark) button.ai-generate-btn {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-color: #000000 !important;
+}
+
+html:not(.dark) button.ai-generate-btn svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  fill: none !important;
+}
+
+html:not(.dark) button.ai-generate-btn span {
+  color: #ffffff !important;
 }
 
 /* Dark mode for AI generate button */
 .dark .ai-generate-btn {
   background-color: #ffffff !important;
   color: #000000 !important;
+  border-color: #ffffff !important;
 }
 
 .dark .ai-generate-btn:hover {
@@ -1147,6 +1171,11 @@ html.dark .back-btn * {
 .dark .ai-generate-btn svg {
   color: #000000 !important;
   stroke: #000000 !important;
+  fill: none !important;
+}
+
+.dark .ai-generate-btn span {
+  color: #000000 !important;
 }
 
 /* Force dark mode styling with higher specificity */
@@ -1154,6 +1183,16 @@ html.dark button.ai-generate-btn {
   background-color: #ffffff !important;
   color: #000000 !important;
   border-color: #ffffff !important;
+}
+
+html.dark button.ai-generate-btn svg {
+  color: #000000 !important;
+  stroke: #000000 !important;
+  fill: none !important;
+}
+
+html.dark button.ai-generate-btn span {
+  color: #000000 !important;
 }
 
 html.dark button.ai-generate-btn svg {
@@ -1522,4 +1561,154 @@ div[class*="dock-item-icon"] .lucide,
   color: white !important;
   stroke: white !important;
   fill: none !important;
+}
+
+@layer utilities {
+  /* Remove button: black bg in light, white bg in dark, red text & icons */
+  .btn-danger-invert {
+    /* base */
+    @apply !rounded-xl !border !border-red-500
+           !bg-black !text-red-600
+           hover:!bg-black/90;
+
+    /* dark mode */
+    @apply dark:!bg-white dark:!text-red-600 dark:!border-red-500
+           dark:hover:!bg-white/90;
+  }
+
+  /* Make sure Lucide icons inside stay red even with global overrides */
+  .btn-danger-invert svg,
+  .btn-danger-invert [data-lucide] {
+    color: #dc2626 !important;   /* tailwind red-600 */
+    stroke: #dc2626 !important;
+  }
+}
+
+
+@layer utilities {
+  .btn-add-invert {
+    /* Light mode */
+    @apply !bg-white !text-blue-600 !border !border-black
+           !rounded-xl hover:!bg-white/90;
+
+    /* Dark mode */
+    @apply dark:!bg-black dark:!text-blue-500 dark:!border-white
+           dark:hover:!bg-black/90;
+  }
+
+  /* Force icon color (because of global overrides you have) */
+  .btn-add-invert svg,
+  .btn-add-invert [data-lucide] {
+    color: #2563eb !important;   /* blue-600 */
+    stroke: #2563eb !important;
+  }
+}
+
+@layer utilities {
+  .btn-save-invert {
+    /* LIGHT MODE */
+    background-color: #000 !important; /* black bg */
+    color: #fff !important;            /* white text */
+    border: 1px solid #000 !important;
+    border-radius: 0.75rem !important;
+  }
+
+  .btn-save-invert:hover {
+    background-color: rgba(0, 0, 0, 0.9) !important;
+  }
+
+  /* DARK MODE */
+  .dark .btn-save-invert {
+    background-color: #fff !important;
+    color: #000 !important;
+    border: 1px solid #fff !important;
+  }
+
+  .dark .btn-save-invert:hover {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+  }
+
+  /* SPINNER COLOR */
+  .btn-save-invert .spinner {
+    color: #fff !important;
+    stroke: #fff !important;
+  }
+
+  .dark .btn-save-invert .spinner {
+    color: #000 !important;
+    stroke: #000 !important;
+  }
+}
+
+@layer utilities {
+  .btn-skill-invert {
+    /* Light mode */
+    @apply !bg-white !text-black !border !border-gray-300;
+  }
+
+  .btn-skill-invert:hover {
+    @apply !bg-gray-100;
+  }
+
+  /* Dark mode */
+  .dark .btn-skill-invert {
+    @apply !bg-black !text-white !border !border-gray-600;
+  }
+
+  .dark .btn-skill-invert:hover {
+    @apply !bg-gray-900;
+  }
+
+  /* Ensure dropdown icons follow theme */
+  .btn-skill-invert svg,
+  .btn-skill-invert [data-lucide] {
+    color: inherit !important;
+    stroke: inherit !important;
+  }
+}
+
+@layer utilities {
+  .btn-share-invert {
+    /* Light mode */
+    @apply !bg-white !text-black !border !border-gray-400 rounded-xl;
+
+  }
+  .btn-share-invert:hover {
+    @apply !bg-gray-100 !border-blue-500;
+  }
+
+  /* Dark mode */
+  .dark .btn-share-invert {
+    @apply !bg-black !text-white !border-gray-600;
+  }
+  .dark .btn-share-invert:hover {
+    @apply !bg-gray-900 !border-purple-400;
+  }
+
+  /* Icons inside the button follow text color */
+  .btn-share-invert svg,
+  .btn-share-invert [data-lucide] {
+    color: inherit !important;
+    stroke: inherit !important;
+  }
+
+  /* Force icon color inside Share button */
+.btn-share-invert svg,
+.btn-share-invert [data-lucide],
+.btn-share-invert * svg {
+  color: inherit !important;
+  stroke: inherit !important;
+  fill: none !important;
+}
+
+/* Light mode icon color (black) */
+.btn-share-invert svg {
+  stroke: #000 !important;
+}
+
+/* Dark mode icon color (white) */
+.dark .btn-share-invert svg {
+  stroke: #fff !important;
+}
+
 }

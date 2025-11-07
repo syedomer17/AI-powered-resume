@@ -42,7 +42,9 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
   const { resumeInfo, setResumeInfo } = useResumeInfo();
   const { callApi } = useApiWithRateLimit();
   const [loading, setLoading] = useState(false);
-  const [customCategoryInputs, setCustomCategoryInputs] = useState<{ [key: number]: boolean }>({});
+  const [customCategoryInputs, setCustomCategoryInputs] = useState<{
+    [key: number]: boolean;
+  }>({});
 
   const [skillsList, setSkillsList] = useState<SkillType[]>([
     { id: undefined, category: "", name: "" },
@@ -204,10 +206,15 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
                   placeholder="Enter custom category"
                   className="h-11 focus:ring-2 focus:ring-purple-500/20 w-full sm:w-48"
                   value={item.category}
-                  onChange={(e) => handleChange(index, "category", e.target.value)}
+                  onChange={(e) =>
+                    handleChange(index, "category", e.target.value)
+                  }
                   onBlur={() => {
                     if (!item.category) {
-                      setCustomCategoryInputs((prev) => ({ ...prev, [index]: false }));
+                      setCustomCategoryInputs((prev) => ({
+                        ...prev,
+                        [index]: false,
+                      }));
                     }
                   }}
                   autoFocus
@@ -217,7 +224,7 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="outline"
-                      className="flex justify-between w-full sm:w-48 h-11 font-medium"
+                       className="btn-skill-invert flex justify-between w-full sm:w-48 h-11 font-medium"
                     >
                       {item.category || "Select Category"}
                       <ChevronDown className="w-4 h-4" />
@@ -229,7 +236,10 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
                         key={category}
                         onSelect={() => {
                           if (category === "Custom") {
-                            setCustomCategoryInputs((prev) => ({ ...prev, [index]: true }));
+                            setCustomCategoryInputs((prev) => ({
+                              ...prev,
+                              [index]: true,
+                            }));
                             handleChange(index, "category", "");
                           } else {
                             handleChange(index, "category", category);
@@ -254,7 +264,7 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
               size="sm"
               onClick={() => handleRemove(index)}
               disabled={skillsList.length === 1}
-              className="flex items-center gap-1 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 "
+              className="btn-danger-invert flex items-center gap-1"
             >
               <Trash2 className="w-4 h-4" />
               Remove
@@ -264,19 +274,19 @@ const Skills: React.FC<SkillsProps> = ({ enableNext, userId, resumeId }) => {
       </AnimatePresence>
 
       <div className="flex flex-wrap justify-between mt-6 gap-2">
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={handleAdd}
-          className="border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 "
+          className="btn-add-invert flex items-center gap-1 "
         >
           + Add Skill
         </Button>
         <Button
-          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
           onClick={handleSave}
           disabled={loading}
+          className="btn-save-invert shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
         >
-          {loading && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+          {loading && <Loader2 className="spinner w-4 h-4 animate-spin" />}
           Save
         </Button>
       </div>

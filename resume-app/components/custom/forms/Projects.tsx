@@ -285,15 +285,15 @@ const Projects: React.FC<ProjectsProps> = ({
         </p>
       </div>
 
-      
-
       {options && options.length > 0 && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           className="mt-4 mb-6"
         >
-          <h3 className="font-semibold mb-3 text-foreground">Generated Projects</h3>
+          <h3 className="font-semibold mb-3 text-foreground">
+            Generated Projects
+          </h3>
           <div className="space-y-2 max-h-60 overflow-auto border border-border rounded-lg p-3 bg-purple-50/50 dark:bg-purple-950/20">
             {options.map((proj, idx) => (
               <Button
@@ -321,7 +321,9 @@ const Projects: React.FC<ProjectsProps> = ({
             className="grid grid-cols-1 sm:grid-cols-2 gap-4 border border-border p-5 my-5 rounded-xl bg-muted/30"
           >
             <div>
-              <label className="text-sm font-medium text-foreground">Project Title</label>
+              <label className="text-sm font-medium text-foreground">
+                Project Title
+              </label>
               <Input
                 className="capitalize mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={field.title}
@@ -330,7 +332,9 @@ const Projects: React.FC<ProjectsProps> = ({
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground">Project Link</label>
+              <label className="text-sm font-medium text-foreground">
+                Project Link
+              </label>
               <Input
                 className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={field.link}
@@ -341,11 +345,15 @@ const Projects: React.FC<ProjectsProps> = ({
 
             {/* Tech Stack */}
             <div className="sm:col-span-2">
-              <label className="text-sm font-medium text-foreground">Tech Stack</label>
+              <label className="text-sm font-medium text-foreground">
+                Tech Stack
+              </label>
               <Input
                 className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={field.techStack}
-                onChange={(e) => handleChange(index, "techStack", e.target.value)}
+                onChange={(e) =>
+                  handleChange(index, "techStack", e.target.value)
+                }
                 placeholder="e.g., Next.js, TailwindCSS, Auth.js, MongoDB, Shadcn, Gemini AI"
               />
             </div>
@@ -353,7 +361,9 @@ const Projects: React.FC<ProjectsProps> = ({
             {/* Start and End Dates */}
             <div className="flex flex-col sm:flex-row gap-4 sm:col-span-2">
               <div className="flex-1">
-                <label className="text-sm font-medium text-foreground">Start Date</label>
+                <label className="text-sm font-medium text-foreground">
+                  Start Date
+                </label>
                 <Input
                   type="date"
                   className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
@@ -364,7 +374,9 @@ const Projects: React.FC<ProjectsProps> = ({
                 />
               </div>
               <div className="flex-1">
-                <label className="text-sm font-medium text-foreground">End Date</label>
+                <label className="text-sm font-medium text-foreground">
+                  End Date
+                </label>
                 <Input
                   type="date"
                   className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
@@ -386,12 +398,16 @@ const Projects: React.FC<ProjectsProps> = ({
                 }
                 className="w-4 h-4 accent-purple-500"
               />
-              <label className="text-sm font-medium text-foreground">Currently Working</label>
+              <label className="text-sm font-medium text-foreground">
+                Currently Working
+              </label>
             </div>
 
             {/* Description */}
             <div className="sm:col-span-2">
-              <label className="text-sm font-medium text-foreground">Description</label>
+              <label className="text-sm font-medium text-foreground">
+                Description
+              </label>
               <div className="mt-1">
                 <RichTextEditor
                   value={field.description}
@@ -407,7 +423,7 @@ const Projects: React.FC<ProjectsProps> = ({
                 size="sm"
                 onClick={() => handleRemove(index)}
                 disabled={projectList.length === 1}
-                className="flex items-center gap-1 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 "
+                className="btn-danger-invert flex items-center gap-1"
               >
                 <Trash2 className="w-4 h-4" />
                 Remove
@@ -418,19 +434,19 @@ const Projects: React.FC<ProjectsProps> = ({
       </AnimatePresence>
 
       <div className="flex justify-between mt-6">
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={handleAdd}
-          className="border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 "
+          className="btn-add-invert flex items-center gap-1 "
         >
           + Add More
         </Button>
         <Button
-          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
           onClick={handleSave}
           disabled={loading}
+          className="btn-save-invert shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
         >
-          {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+          {loading && <Loader2 className="spinner w-4 h-4 animate-spin" />}
           Save
         </Button>
       </div>

@@ -227,7 +227,9 @@ const Education: React.FC<EducationProps> = ({
             className="grid grid-cols-1 md:grid-cols-2 gap-4 border border-border p-5 mb-5 rounded-xl bg-muted/30"
           >
             <div>
-              <label className="text-sm font-medium text-foreground">University Name</label>
+              <label className="text-sm font-medium text-foreground">
+                University Name
+              </label>
               <Input
                 className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={item.universityName}
@@ -238,7 +240,9 @@ const Education: React.FC<EducationProps> = ({
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground">Degree</label>
+              <label className="text-sm font-medium text-foreground">
+                Degree
+              </label>
               <Input
                 className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={item.degree}
@@ -247,7 +251,9 @@ const Education: React.FC<EducationProps> = ({
               />
             </div>
             <div className="md:col-span-2">
-              <label className="text-sm font-medium text-foreground">Major</label>
+              <label className="text-sm font-medium text-foreground">
+                Major
+              </label>
               <Input
                 className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={item.major}
@@ -256,7 +262,9 @@ const Education: React.FC<EducationProps> = ({
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground">City</label>
+              <label className="text-sm font-medium text-foreground">
+                City
+              </label>
               <Input
                 className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={item.city}
@@ -265,7 +273,9 @@ const Education: React.FC<EducationProps> = ({
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground">Country</label>
+              <label className="text-sm font-medium text-foreground">
+                Country
+              </label>
               <Input
                 className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={item.country}
@@ -275,7 +285,9 @@ const Education: React.FC<EducationProps> = ({
             </div>
             <div className="md:col-span-2 flex flex-col md:flex-row gap-4">
               <div className="flex-1">
-                <label className="text-sm font-medium text-foreground">Start Date</label>
+                <label className="text-sm font-medium text-foreground">
+                  Start Date
+                </label>
                 <Input
                   type="date"
                   className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
@@ -286,7 +298,9 @@ const Education: React.FC<EducationProps> = ({
                 />
               </div>
               <div className="flex-1">
-                <label className="text-sm font-medium text-foreground">End Date</label>
+                <label className="text-sm font-medium text-foreground">
+                  End Date
+                </label>
                 <Input
                   type="date"
                   className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
@@ -298,7 +312,9 @@ const Education: React.FC<EducationProps> = ({
               </div>
             </div>
             <div className="md:col-span-2">
-              <label className="text-sm font-medium text-foreground">Description</label>
+              <label className="text-sm font-medium text-foreground">
+                Description
+              </label>
               <Textarea
                 className="mt-1 min-h-24 focus:ring-2 focus:ring-blue-500/20"
                 value={item.description}
@@ -311,9 +327,10 @@ const Education: React.FC<EducationProps> = ({
             <div className="md:col-span-2 flex justify-end mt-2">
               <Button
                 variant="outline"
+                size="sm"
                 onClick={() => handleRemove(index)}
                 disabled={educationalList.length === 1}
-                className="flex items-center gap-1 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50"
+                className="btn-danger-invert flex items-center gap-1"
               >
                 <Trash2 className="w-4 h-4" />
                 Remove
@@ -327,17 +344,17 @@ const Education: React.FC<EducationProps> = ({
         <Button
           variant="outline"
           onClick={handleAdd}
-          className="flex items-center gap-1 border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 "
+          className="btn-add-invert flex items-center gap-1 "
         >
           <Plus className="w-4 h-4" />
           Add More
         </Button>
         <Button
-          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
           onClick={handleSave}
           disabled={loading}
+          className="btn-save-invert shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
         >
-          {loading && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+          {loading && <Loader2 className="spinner w-4 h-4 animate-spin" />}
           Save
         </Button>
       </div>

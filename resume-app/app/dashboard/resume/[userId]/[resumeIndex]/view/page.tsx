@@ -87,7 +87,9 @@ export default function ViewPage() {
     setDownloading(true);
     try {
       // Ask the server to render the resume URL to a real PDF (preserves layout and links)
-      const res = await fetch(`/api/generate-pdf?userId=${userId}&resumeId=${resumeId}`);
+      const res = await fetch(
+        `/api/generate-pdf?userId=${userId}&resumeId=${resumeId}`
+      );
       if (!res.ok) throw new Error(`PDF API failed: ${res.status}`);
       const blob = await res.blob();
 
@@ -121,7 +123,9 @@ export default function ViewPage() {
     return (
       <div className="min-h-screen flex flex-col justify-center items-center bg-background">
         <Loader2 className="animate-spin w-12 h-12 text-primary" />
-        <p className="mt-4 text-sm text-muted-foreground animate-pulse">Loading your resume...</p>
+        <p className="mt-4 text-sm text-muted-foreground animate-pulse">
+          Loading your resume...
+        </p>
       </div>
     );
   }
@@ -133,8 +137,12 @@ export default function ViewPage() {
           <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center mx-auto">
             <span className="text-3xl">❌</span>
           </div>
-          <h2 className="text-2xl font-bold text-foreground">Resume not found</h2>
-          <p className="text-muted-foreground">The requested resume could not be loaded.</p>
+          <h2 className="text-2xl font-bold text-foreground">
+            Resume not found
+          </h2>
+          <p className="text-muted-foreground">
+            The requested resume could not be loaded.
+          </p>
         </div>
       </div>
     );
@@ -165,7 +173,8 @@ export default function ViewPage() {
                 </h2>
               </motion.div>
               <p className="text-base text-muted-foreground max-w-2xl mx-auto">
-                Download or share your professionally crafted resume with potential employers.
+                Download or share your professionally crafted resume with
+                potential employers.
               </p>
             </div>
 
@@ -176,41 +185,71 @@ export default function ViewPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.2 }}
             >
-              <Button 
-                onClick={handleDownload} 
+              <Button
+                onClick={handleDownload}
                 disabled={downloading}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 dark:from-blue-500 dark:to-purple-500 dark:hover:from-blue-600 dark:hover:to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
                 size="lg"
+                className="
+    relative overflow-hidden
+    rounded-xl px-6 py-3 font-semibold 
+    flex items-center gap-2
+    text-white dark:text-black
+    shadow-lg hover:shadow-2xl
+    transition-all duration-300
+    bg-gradient-to-r from-blue-600 to-purple-600
+    dark:from-blue-300 dark:to-purple-400
+    hover:opacity-90 hover:-translate-y-[2px]
+    backdrop-blur-md
+  "
               >
                 {downloading ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Generating PDF...
+                    <Loader2 className="h-4 w-4 animate-spin spinner" />
+                    Generating...
                   </>
                 ) : (
                   <>
-                    <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      />
                     </svg>
-                    Download as PDF
+                    Download PDF
                   </>
                 )}
               </Button>
+
               <RWebShare
                 data={{
-                  text: "Hello Everyone, This is my Resume",
+                  text: "Checkout my resume!",
                   url: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/resume/${userId}/${resumeId}/view`,
                   title: "Flamingos Resume",
                 }}
-                onClick={() => console.log("Shared successfully!")}
               >
-                <Button 
-                  variant="outline" 
+                <Button
                   size="lg"
-                  className="border-2 hover:bg-accent hover:border-blue-500/50 dark:hover:border-purple-500/50 transition-all duration-300"
+                  className="btn-share-invert px-6 py-3 font-semibold flex items-center gap-2 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-[2px]"
                 >
-                  <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                    />
                   </svg>
                   Share
                 </Button>
@@ -224,12 +263,32 @@ export default function ViewPage() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 0.25 }}
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M7 16l-4-4m0 0l4-4m-4 4h18"
+                />
               </svg>
               <span>Swipe to view full resume</span>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
               </svg>
             </motion.div>
 
@@ -254,7 +313,10 @@ export default function ViewPage() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 0.4 }}
             >
-              <p>💡 Tip: The downloaded PDF will maintain all formatting and links</p>
+              <p>
+                💡 Tip: The downloaded PDF will maintain all formatting and
+                links
+              </p>
             </motion.div>
           </motion.div>
         </AnimatePresence>

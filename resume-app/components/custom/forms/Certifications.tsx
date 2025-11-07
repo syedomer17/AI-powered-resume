@@ -32,7 +32,9 @@ const Certifications: React.FC<CertificationsProps> = ({
   const { callApi } = useApiWithRateLimit();
   const initialLoadRef = useRef(true);
 
-  const [certificationList, setCertificationList] = useState<CertificationType[]>([
+  const [certificationList, setCertificationList] = useState<
+    CertificationType[]
+  >([
     {
       id: 1,
       name: "",
@@ -279,7 +281,9 @@ const Certifications: React.FC<CertificationsProps> = ({
             className="grid grid-cols-1 sm:grid-cols-2 gap-4 border border-border p-5 my-5 rounded-xl bg-muted/30"
           >
             <div className="sm:col-span-2">
-              <label className="text-sm font-medium text-foreground">Certification Name</label>
+              <label className="text-sm font-medium text-foreground">
+                Certification Name
+              </label>
               <Input
                 className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
                 value={field.name}
@@ -289,7 +293,9 @@ const Certifications: React.FC<CertificationsProps> = ({
             </div>
 
             <div>
-              <label className="text-sm font-medium text-foreground">Certification Link (Optional)</label>
+              <label className="text-sm font-medium text-foreground">
+                Certification Link (Optional)
+              </label>
               <div className="flex gap-2 mt-1">
                 <Input
                   className="h-11 focus:ring-2 focus:ring-blue-500/20"
@@ -301,7 +307,9 @@ const Certifications: React.FC<CertificationsProps> = ({
             </div>
 
             <div>
-              <label className="text-sm font-medium text-foreground">Date</label>
+              <label className="text-sm font-medium text-foreground">
+                Date
+              </label>
               <Input
                 type="date"
                 className="mt-1 h-11 focus:ring-2 focus:ring-blue-500/20"
@@ -311,7 +319,9 @@ const Certifications: React.FC<CertificationsProps> = ({
             </div>
 
             <div className="sm:col-span-2">
-              <label className="text-sm font-medium text-foreground">Upload Image (Optional)</label>
+              <label className="text-sm font-medium text-foreground">
+                Upload Image (Optional)
+              </label>
               <div className="flex items-center gap-2 mt-1">
                 <Input
                   type="file"
@@ -344,7 +354,7 @@ const Certifications: React.FC<CertificationsProps> = ({
                 onClick={() => handleRemove(index)}
                 size="sm"
                 variant="outline"
-                className="flex items-center gap-1 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 "
+                className="btn-danger-invert flex items-center gap-1"
               >
                 <Trash2 className="h-4 w-4" />
                 Remove
@@ -354,30 +364,23 @@ const Certifications: React.FC<CertificationsProps> = ({
         ))}
       </AnimatePresence>
 
-            <div className="flex gap-2 justify-between mt-6">
+      <div className="flex gap-2 justify-between mt-6">
         <Button
           type="button"
-          onClick={handleAdd}
           variant="outline"
-          className="border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 "
+          onClick={handleAdd}
+          className="btn-add-invert flex items-center gap-1 "
         >
           + Add Certification
         </Button>
 
         <Button
-          type="button"
           onClick={handleSave}
           disabled={loading}
-          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
+          className="btn-save-invert shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
         >
-          {loading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Saving...
-            </>
-          ) : (
-            "Save"
-          )}
+          {loading && <Loader2 className="spinner w-4 h-4 animate-spin" />}
+          Save
         </Button>
       </div>
     </motion.div>
