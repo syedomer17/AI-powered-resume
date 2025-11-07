@@ -1001,6 +1001,71 @@ html.dark .next-btn * {
   stroke: #000000 !important;
 }
 
+/* Save Changes Button Styling */
+.save-changes-btn {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.save-changes-btn:hover {
+  background-color: #374151 !important;
+}
+
+.save-changes-btn svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Dark mode for save changes button */
+.dark .save-changes-btn {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.dark .save-changes-btn:hover {
+  background-color: #f3f4f6 !important;
+}
+
+.dark .save-changes-btn svg {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* Force dark mode styling with higher specificity */
+html.dark button.save-changes-btn {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-color: #ffffff !important;
+}
+
+html.dark button.save-changes-btn svg {
+  color: #000000 !important;
+  stroke: #000000 !important;
+  fill: none !important;
+}
+
+/* Handle disabled state for save button */
+button.save-changes-btn:disabled {
+  opacity: 0.5;
+}
+
+.dark button.save-changes-btn:disabled {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  opacity: 0.5;
+}
+
+/* Even more specific for dark mode */
+html.dark .save-changes-btn {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+html.dark .save-changes-btn * {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
 /* Ensure home icon is visible in buttons and links */
 html:not(.dark) button [data-lucide="home"],
 html:not(.dark) a button [data-lucide="home"] {

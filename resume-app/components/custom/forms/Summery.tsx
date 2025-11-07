@@ -181,7 +181,7 @@ const Summery: React.FC<SummeryProps> = ({ enableNext, userId, resumeId }) => {
         >
           <Button
             type="submit"
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 dark:from-blue-500 dark:to-purple-500 dark:hover:from-blue-600 dark:hover:to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 h-11 px-8"
+            className="save-changes-btn bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 h-11 px-8"
             disabled={loading}
             size="lg"
           >

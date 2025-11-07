@@ -211,13 +211,8 @@ export default function SettingsForm({ initialUser }: SettingsFormProps) {
             <Button 
               type="submit" 
               disabled={loading} 
-              className="shadow-md w-full sm:w-auto min-w-[140px]"
+              className="save-changes-btn shadow-md w-full sm:w-auto min-w-[140px] bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-100"
               size="lg"
-              style={{ 
-                backgroundColor: '#000000', 
-                color: '#ffffff',
-                border: 'none'
-              }}
             >
               {loading ? (
                 <>
