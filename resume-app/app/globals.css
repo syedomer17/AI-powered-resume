@@ -901,6 +901,106 @@ html.dark button.home-icon-btn {
   color: #ffffff !important;
 }
 
+/* Form Next/Back button styling */
+html:not(.dark) button.bg-black [data-lucide="arrow-right"],
+html:not(.dark) button.bg-black [data-lucide="arrow-left"] {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+html.dark button.dark\\:bg-white [data-lucide="arrow-right"],
+html.dark button.dark\\:bg-white [data-lucide="arrow-left"] {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* Additional specificity for form button icons */
+html:not(.dark) .bg-black .text-white {
+  color: #ffffff !important;
+}
+
+html.dark .dark\\:bg-white .dark\\:text-black {
+  color: #000000 !important;
+}
+
+/* SVG icons in form buttons */
+html:not(.dark) button.bg-black svg,
+html:not(.dark) .bg-black svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+html.dark button.dark\\:bg-white svg,
+html.dark .dark\\:bg-white svg {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* Specific styling for next button */
+.next-btn {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.next-btn:hover {
+  background-color: #374151 !important;
+}
+
+.next-btn svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Dark mode for next button */
+.dark .next-btn {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.dark .next-btn:hover {
+  background-color: #f3f4f6 !important;
+}
+
+.dark .next-btn svg {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* Force dark mode styling with higher specificity */
+html.dark button.next-btn {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-color: #ffffff !important;
+}
+
+html.dark button.next-btn svg {
+  color: #000000 !important;
+  stroke: #000000 !important;
+  fill: none !important;
+}
+
+/* Handle disabled state */
+button.next-btn:disabled {
+  opacity: 0.5;
+}
+
+.dark button.next-btn:disabled {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  opacity: 0.5;
+}
+
+/* Even more specific for dark mode */
+html.dark .next-btn {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+html.dark .next-btn * {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
 /* Ensure home icon is visible in buttons and links */
 html:not(.dark) button [data-lucide="home"],
 html:not(.dark) a button [data-lucide="home"] {

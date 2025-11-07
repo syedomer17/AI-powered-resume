@@ -88,13 +88,13 @@ const FormSection: React.FC<FormSectionProps> = ({ resumeId, userId,resumeIndex 
             </Button>
           )}
           <Button
-            className="flex-1 sm:flex-none bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 dark:from-blue-500 dark:to-purple-500 dark:hover:from-blue-600 dark:hover:to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+            className="next-btn flex-1 sm:flex-none bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-100 shadow-lg hover:shadow-xl transition-all duration-300"
             disabled={!enableNext}
             size="sm"
             onClick={handleNextClick}
           >
             {activeFormIndex === 8 ? 'View Resume' : 'Next'}
-            <ArrowRight className="w-4 h-4 ml-2 text-white" />
+            <ArrowRight className="w-4 h-4 ml-2 text-white dark:text-black" />
           </Button>
         </div>
       </div>
@@ -136,11 +136,11 @@ const FormSection: React.FC<FormSectionProps> = ({ resumeId, userId,resumeIndex 
           />
           <div className="mt-6">
             <Button
-              className="w-full bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 dark:from-emerald-500 dark:to-blue-500 dark:hover:from-emerald-600 dark:hover:to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 h-12"
+              className="next-btn w-full bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 h-12"
               onClick={() => setEnableNext(true)}
               size="lg"
             >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 mr-2 text-white dark:text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
               </svg>
