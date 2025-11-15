@@ -160,7 +160,7 @@ const AddResume = ({ userId, userEmail }: AddResumeProps) => {
                 Cancel
               </Button>
               <Button
-                className="bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-slate-200 dark:text-slate-900 w-full sm:w-auto"
+                className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 w-full sm:w-auto [&_svg]:text-white dark:[&_svg]:text-black"
                 onClick={handleCreateResume}
                 disabled={
                   loading ||

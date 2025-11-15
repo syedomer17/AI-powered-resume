@@ -1842,5 +1842,54 @@ html:not(.dark) .bg-green-500 {
   }
 }
 
+/* Dialog Close Button (X icon) Styling */
+/* Light mode - black X icon */
+html:not(.dark) [data-slot="dialog-close"],
+html:not(.dark) button[data-slot="dialog-close"] {
+  color: #000000 !important;
+  background-color: transparent !important;
+}
+
+html:not(.dark) [data-slot="dialog-close"] svg,
+html:not(.dark) button[data-slot="dialog-close"] svg,
+html:not(.dark) [data-slot="dialog-close"] * {
+  color: #000000 !important;
+  stroke: #000000 !important;
+  fill: none !important;
+}
+
+/* Dark mode - white X icon */
+html.dark [data-slot="dialog-close"],
+html.dark button[data-slot="dialog-close"] {
+  color: #ffffff !important;
+  background-color: transparent !important;
+}
+
+html.dark [data-slot="dialog-close"] svg,
+html.dark button[data-slot="dialog-close"] svg,
+html.dark [data-slot="dialog-close"] * {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  fill: none !important;
+}
+
+/* Ensure background doesn't interfere */
+html:not(.dark) [data-slot="dialog-close"]:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+html.dark [data-slot="dialog-close"]:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Extra specificity for X icon paths */
+html:not(.dark) [data-slot="dialog-close"] svg path {
+  stroke: #000000 !important;
+}
+
+html.dark [data-slot="dialog-close"] svg path {
+  stroke: #ffffff !important;
+}
+
 
 
